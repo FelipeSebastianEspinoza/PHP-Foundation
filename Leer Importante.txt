@@ -1,0 +1,6 @@
+Al hacer los edificios llamar al otro div?
+tambien igual como se llama a los edificios
+o meter todo eso en 1 solo php
+
+
+lo mas fuerza bruta seria meter todo en 1 solo php
