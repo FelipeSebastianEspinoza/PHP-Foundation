@@ -21,9 +21,14 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
     <div class="container" >
 	
 	
-        <img style=" width:100%;max-width:1356px;min-width:678px;
+    <!--
+        <img usemap="#edificiomap" style=" width:100%;max-width:1356px;min-width:678px;
 					 height:100%;max-height:1012px;min-height:506px;" src="img/mapa.jpg" name="viewArea" id="viewArea" draggable="false" />
-    
+    -->
+	<img usemap="#edificiomap" style="width:678px;
+					 height:100%;max-height:1012px;min-height:506px;" src="img/mapa.jpg" name="viewArea" id="viewArea" draggable="false" />
+   
+	
 	
 	
 	</div>

@@ -108,47 +108,34 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
   <button class="button" onclick="myFunction2()">sin nada aun</button>
   <button class="button" onclick="myFunction0()">Edificios</button>
   </center>
+  
+  
+ 
  <div class="grid-x grid-margin-x expanded">
 <div class="large-6 cell">
  
  <div id="load_tweets"></div>
 </div>
-<div class="large-2 cell"></div>
+<div class="large-2 cell" style="pointer-events:none"></div>
 <div class="large-4 cell">
 <div class="large-6 cell">
  
- <div id="load_tweets2"></div>
-
+<div id="load_tweets2"></div>
+<!--
 <h5>RANDOM MAG</h5>
 	  <div class="cell shrink">
 <img class="thumbnail" src="https://placehold.it/550x350">
 </div>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti quam voluptatum vel repellat ab similique molestias molestiae ea omnis eos, id asperiores est praesentium, voluptate officia nulla aspernatur sequi aliquam.</p>
+-->
 </div>
 </div>
- 
- 
- 
- 
- 
- 
-  
-  <script>
-$( document ).ready(function() {
- $('#load_tweets').load('pruebamap0.php').fadeIn("slow");
-});
-function myFunction() {
- $('#load_tweets').load('pruebamap.php').fadeIn("slow");
-}
-function myFunction2() {
- $('#load_tweets').load('pruebamap2.php').fadeIn("slow");
-}
-function myFunction0() {
- $('#load_tweets').load('pruebamap0.php').fadeIn("slow");
-}
-</script>
  
         </div>
+		
+
+
+		
       </div>
 	 
 	 
@@ -192,7 +179,21 @@ function myFunction0() {
 </div>
 </footer>
 	
-	
+	  <script>
+$( document ).ready(function() {
+ $('#load_tweets').load('pruebamap0.php').fadeIn("slow");
+ $('#load_tweets2').load('pruebamap01.php').fadeIn("slow");
+});
+function myFunction() {
+ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
+}
+function myFunction2() {
+ $('#load_tweets').load('pruebamap2.php').fadeIn("slow");
+}
+function myFunction0() {
+ $('#load_tweets').load('pruebamap0.php').fadeIn("slow");
+}
+</script>
  
 	
 	 
