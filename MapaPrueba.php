@@ -103,10 +103,10 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
  
  
     <center>
-  <button class="button" onclick="myFunction()">Grifos</button>
-  <button class="button" onclick="myFunction2()">Zona de seguridad</button>
-  <button class="button" onclick="myFunction2()">sin nada aun</button>
-  <button class="button" onclick="myFunction0()">Edificios</button>
+  <button class="button" onclick="MostrarGrifo()">Grifos</button>
+  <button class="button" onclick="MostrarZonadeEvacuacion()">Zona de Evacuacion</button>
+  <button class="button" onclick="MostrarZonadeSeguridad()">Zona de Seguridad</button>
+  <button class="button" onclick="MostrarEdificios()">Edificios</button>
   </center>
   
   
@@ -147,6 +147,10 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
 	
 	
 	
+    <center>
+  INDICE UV
+  </center>
+
 	
 <footer>
 <div class="grid-x grid-margin-x expanded callout secondary">
@@ -179,19 +183,26 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
 </div>
 </footer>
 	
-	  <script>
+<script>
 $( document ).ready(function() {
- $('#load_tweets').load('pruebamap0.php').fadeIn("slow");
- $('#load_tweets2').load('pruebamap01.php').fadeIn("slow");
+ $('#load_tweets').load('edificio_fun.php').fadeIn("slow");
+ $('#load_tweets2').load('edificio_fun_comp.php').fadeIn("slow");
 });
-function myFunction() {
- $('#load_tweets').load('pruebamap.php').fadeIn("slow");
+function MostrarGrifo() {
+ $('#load_tweets').load('grifo_fun.php').fadeIn("slow");
+  $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
 }
-function myFunction2() {
- $('#load_tweets').load('pruebamap2.php').fadeIn("slow");
+function MostrarZonadeEvacuacion() {
+ $('#load_tweets').load('zonadeevacuacion_fun.php').fadeIn("slow");
+   $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
 }
-function myFunction0() {
- $('#load_tweets').load('pruebamap0.php').fadeIn("slow");
+function MostrarZonadeSeguridad() {
+ $('#load_tweets').load('zonadeseguridad_fun.php').fadeIn("slow");
+   $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
+}
+function MostrarEdificios() {
+ $('#load_tweets').load('edificio_fun.php').fadeIn("slow");
+ $('#load_tweets2').load('edificio_fun_comp.php').fadeIn("slow");
 }
 </script>
  

@@ -12,7 +12,8 @@ function Gantes() {
 }
 
 function bigImg() {
- document.getElementById("edGantes").style.display = "block";
+document.getElementById("edGantes").style.display = "block";
+document.getElementById('edGantes').src='img/gantes.jpg';
 }
 
 function normalImg() {
@@ -21,13 +22,15 @@ function normalImg() {
 
  
 
-function bigImg() {
- document.getElementById("edGantes").style.display = "block";
+function casino() {
+document.getElementById("edGantes").style.display = "block";
+document.getElementById('edGantes').src='img/casino.jpg';
+}
+function CasinoOnClick() {
+ window.location = 'Edificio.php';
 }
 
-function normalImg() {
-  document.getElementById("edGantes").style.display = "none";
-}
+ 
 
 
 

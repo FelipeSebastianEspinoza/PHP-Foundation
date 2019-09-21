@@ -35,7 +35,7 @@
 			alt="EdificioGantes" onclick="Gantes()" onmouseover="bigImg()" onmouseout="normalImg()">
              
 			   <area style="cursor: pointer;"  shape="rect" coords="636,237,678,299" 
-			alt="EdificioGantes" onclick="Gantes()" onmouseover="bigImg()" onmouseout="normalImg()">
+			alt="EdificioGantes" onclick="CasinoOnClick()" onmouseover="casino()" onmouseout="normalImg()">
 			
 			
       </map>
