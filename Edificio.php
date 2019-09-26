@@ -1,3 +1,10 @@
+  <?php  
+ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
+ $id_edificio = $_POST["id"]; 
+  
+ ?>
+
+
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
   <head>
@@ -8,6 +15,8 @@
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
+  
+  
   </head>
  
  
@@ -23,21 +32,7 @@
   <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
   <!-- Your menu or Off-canvas content goes here -->
  
-    <ul class="vertical menu">
-      <li><a href="#">Foundation</a></li> 
-      <li><a href="#">Dot</a></li>
-      <li><a href="#">ZURB</a></li>
-      <li><a href="#">Com</a></li>
-      <li><a href="#">Slash</a></li>
-      <li><a href="#">Sites</a></li>
-	  <div class="cell shrink">
-<img class="thumbnail" src="https://placehold.it/550x350">
-</div>
-<div class="cell auto">
-<h5>Mike Mikerson</h5>
-<p>Duis aliquet egestas purus in blandit. Curabitur vulputate, ligula lacinia scelerisque tempor, lacus lacus ornare ante, ac egestas est urna sit amet arcu. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed molestie augue sit amet leo.</p>
-</div>
-    </ul>
+   <?php include 'BarraLateral.php'; ?>
 
   </div>
 
@@ -63,7 +58,7 @@
  <div class="top-bar" id="realEstateMenu">
 <div class="top-bar-left">
             <ul class="menu menu-hover-lines">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="MapaPrueba.php">Home</a></li>
             <li><a href="#">About Us</a></li>
             <li><a href="#">Blog</a></li>
             <li><a href="#">Services</a></li>
@@ -79,45 +74,65 @@
 </ul>
 </div>
 </div>
+</br>
  
-		
- 
- 
-          <div class="callout">
 		  
-		  
-            <h3>We&rsquo;re stoked you want to try Foundation! </h3>
-            <p>To get going, this file (index.html) includes some basic styles you can modify, play around with, or totally destroy to get going.</p>
-            <p>Once you've exhausted the fun in this document, you should check out:</p>
- 
- 
-          </div>
-		  
-		  <div class="grid-x grid-margin-x">
-		  <div class="show-for-large large-3 cell">
-<img src="https://placehold.it/400x370&amp;text=PSR1257 + 12 C" alt="picture of space">
-</div>
-<div class="medium-7 large-6 cell">
-<h1>Close Your Eyes and Open Your Mind</h1>
-<p class="subheader">There is beauty in space, and it is orderly. There is no weather, and there is regularity. It is predictable. Everything in space obeys the laws of physics. If you know these laws, and obey them, space will treat you kindly.</p>
-<button class="button">Take a Tour</button>
-<button class="button">Start a free trial</button>
-</div>
+ <?php  
+			$conn = mysqli_connect("localhost","root","","tesis");
+
+			$result = mysqli_query($conn, 'SELECT * 
+									  	   FROM edificio
+									       WHERE id_edificio ='.$id_edificio.';');
+
+			while($row = mysqli_fetch_array($result)){
+				echo '<h2>'.$row["nombre"].'</h2>'; 
+				echo '<input type="hidden" name="value" value='.$row["id_edificio"].'/>';
+				
+				echo ' <div class="grid-x grid-margin-x">'; 
+		        echo ' <div class="show-for-large large-3 cell">'; 
+				echo '</br>';
+			 	echo '<img   src="data:image/png;base64,'.base64_encode( $row["imagen"] ).'"/>';
+				echo '</div>';
+				echo '<div class="medium-7 large-6 cell">';
+				echo'</br>';
+                echo'<table>';
+                echo'<thead>';
+                echo'<tr>';
+                echo'<th width="50">Estado: </th>';
+                echo'<th style="font-weight: normal;"width="150">'.$row["estado"].'</th>';
+                echo'<th width="50">N°Departamentos: </th>';
+                echo'<th style="font-weight: normal;"width="150">'.$row["n_departamentos"].'</th>  ';
+                echo'</tr>';
+                echo'<tr>';
+                echo'<th width="50">N°Estudiantes: </th>';
+                echo'<th style="font-weight: normal;"width="150">'.$row["n_estudiantes"].'</th>';
+                echo'<th width="50">Area Total: </th>';
+                echo'<th style="font-weight: normal;"width="150">'.$row["porcentaje_hacinamiento"].'</th>  ';
+                echo'</tr>';
+                echo'<tr>';
+                echo'<th width="50">%Hacinamiento: </th>';
+                echo'<th style="font-weight: normal;"width="150">'.$row["area_total"].'</th>';
+                echo'</tr>';  	
+                echo'</thead>';
+                echo'</table>';
+                echo'</div>';
+			}
+		  ?>
 
 <div class="medium-5 large-3 cell">
 <div class="callout secondary">
 <form>
 <div class="grid-x">
 <div class="small-12 cell">
-<label>Find Your Dream Planet
-<input type="text" placeholder="Search destinations">
+<label>Ir Al Piso:
+                <select>
+                  <option value="husker">Primer Piso</option>
+                  <option value="starbuck">Segundo Piso</option>
+                  <option value="hotdog">Tercer Piso</option>
+                  <option value="apollo">Cuarto Piso</option>
+                </select>
 </label>
-</div>
-<div class="small-12 cell">
-<label>Number of Moons
-<input type="number" placeholder="Moons required">
-</label>
-<button type="submit" class="button">Search Now!</button>
+ IR
 </div>
 </div>
 </form>
@@ -128,11 +143,12 @@
 		  
 		  
 		  
-		  <ul class="tabs" data-active-collapse="true" data-tabs id="collapsing-tabs">
-  <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Tab 1</a></li>
-  <li class="tabs-title"><a href="#panel2c">Tab 2</a></li>
-  <li class="tabs-title"><a href="#panel3c">Tab 3</a></li>
-  <li class="tabs-title"><a href="#panel4c">Tab 4</a></li>
+<ul class="tabs" data-active-collapse="true" data-tabs id="collapsing-tabs">
+  <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Protocolos</a></li>
+  <li class="tabs-title"><a href="#panel2c">Riesgos</a></li>
+  <li class="tabs-title"><a href="#panel3c">Accidentes</a></li>
+  <li class="tabs-title"><a href="#panel4c">Extintores</a></li>
+  <li class="tabs-title"><a href="#panel4c">Redes Humedas</a></li>
 </ul>
 
 <div class="tabs-content" data-tabs-content="collapsing-tabs">
@@ -142,38 +158,50 @@
   <div class="tabs-panel" id="panel2c">
     <p>Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
   </div>
+  
   <div class="tabs-panel" id="panel3c">
     <table>
   <thead>
     <tr>
-      <th width="200">Table Header</th>
-      <th>Table Header</th>
-      <th width="150">Table Header</th>
-      <th width="150">Table Header</th>
+      <th width="200">ID</th>
+      <th>Fecha</th>
+      <th width="150">Tipo</th>
+      <th width="150">Numero</th>
+	  <th width="150">Persona</th>
+	  <th width="150">Descripción</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>Content Goes Here</td>
-      <td>This is longer content Donec id elit non mi porta gravida at eget metus.</td>
-      <td>Content Goes Here</td>
-      <td>Content Goes Here</td>
-    </tr>
-    <tr>
-      <td>Content Goes Here</td>
-      <td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>
-      <td>Content Goes Here</td>
-      <td>Content Goes Here</td>
-    </tr>
-    <tr>
-      <td>Content Goes Here</td>
-      <td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>
-      <td>Content Goes Here</td>
-      <td>Content Goes Here</td>
-    </tr>
+  <?php  
+			$conn = mysqli_connect("localhost","root","","tesis");
+
+			$result = mysqli_query($conn, 'SELECT * 
+									  	   FROM accidente
+									       WHERE id_edificio ='.$id_edificio.';');
+		    while($row = mysqli_fetch_array($result)){
+
+  
+ 					   
+    echo '<tr>';
+      echo '<td>'.$row["id_accidente"].'</td>';
+      echo '<td>'.$row["fecha"].'</td>';
+      echo '<td>'.$row["tipo"].'</td>';
+      echo '<td>'.$row["numero"].'</td>';
+	  echo '<td>' ;
+	  echo  utf8_encode($row["persona"]);
+	  echo '</td>';
+	  echo '<td>' ;
+	  echo  utf8_encode($row["descripcion"]);
+      echo '</td>';
+    echo '</tr>';
+				}
+		  ?>
+ 
+   
   </tbody>
 </table>
   </div>
+  
   <div class="tabs-panel" id="panel4c">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
   </div>

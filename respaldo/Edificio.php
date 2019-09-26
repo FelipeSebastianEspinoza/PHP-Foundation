@@ -23,21 +23,7 @@
   <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
   <!-- Your menu or Off-canvas content goes here -->
  
-    <ul class="vertical menu">
-      <li><a href="#">Foundation</a></li> 
-      <li><a href="#">Dot</a></li>
-      <li><a href="#">ZURB</a></li>
-      <li><a href="#">Com</a></li>
-      <li><a href="#">Slash</a></li>
-      <li><a href="#">Sites</a></li>
-	  <div class="cell shrink">
-<img class="thumbnail" src="https://placehold.it/550x350">
-</div>
-<div class="cell auto">
-<h5>Mike Mikerson</h5>
-<p>Duis aliquet egestas purus in blandit. Curabitur vulputate, ligula lacinia scelerisque tempor, lacus lacus ornare ante, ac egestas est urna sit amet arcu. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed molestie augue sit amet leo.</p>
-</div>
-    </ul>
+   <?php include 'BarraLateral.php'; ?>
 
   </div>
 
@@ -63,7 +49,7 @@
  <div class="top-bar" id="realEstateMenu">
 <div class="top-bar-left">
             <ul class="menu menu-hover-lines">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="MapaPrueba.php">Home</a></li>
             <li><a href="#">About Us</a></li>
             <li><a href="#">Blog</a></li>
             <li><a href="#">Services</a></li>

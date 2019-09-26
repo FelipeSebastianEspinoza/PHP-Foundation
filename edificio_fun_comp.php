@@ -5,11 +5,14 @@
 </div>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti quam voluptatum vel repellat ab similique molestias molestiae ea omnis eos, id asperiores est praesentium, voluptate officia nulla aspernatur sequi aliquam.</p>
  
-	 
+<form method="POST" action="Edificio.php" id="EdificioGantes">
+<input type="hidden" name="id" value="1" />
+</form>	
+<form method="POST" action="Edificio.php" id="Casino">
+<input type="hidden" name="id" value="2" />
+</form>	  
 <script> 
-function Gantes() {
-   
-}
+ 
 
 function bigImg() {
 document.getElementById("edGantes").style.display = "block";
@@ -17,19 +20,21 @@ document.getElementById('edGantes').src='img/gantes.jpg';
 }
 
 function normalImg() {
-  document.getElementById("edGantes").style.display = "none";
+ document.getElementById("edGantes").style.display = "block";
+ document.getElementById('edGantes').src='img/edificionormal.jpg';
 }
-
- 
 
 function casino() {
 document.getElementById("edGantes").style.display = "block";
 document.getElementById('edGantes').src='img/casino.jpg';
 }
-function CasinoOnClick() {
- window.location = 'Edificio.php';
+ 
+function GantesOnClick() {
+document.getElementById("EdificioGantes").submit();  
 }
-
+function CasinoOnClick() {
+document.getElementById("Casino").submit();  
+}
  
 
 

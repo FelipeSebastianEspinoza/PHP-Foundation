@@ -32,7 +32,7 @@
 	
 	  <map name="edificiomap">
             <area style="cursor: pointer;"  shape="rect" coords="199,167,322,194" 
-			alt="EdificioGantes" onclick="Gantes()" onmouseover="bigImg()" onmouseout="normalImg()">
+			alt="EdificioGantes" onclick="GantesOnClick()" onmouseover="bigImg()" onmouseout="normalImg()">
              
 			   <area style="cursor: pointer;"  shape="rect" coords="636,237,678,299" 
 			alt="EdificioGantes" onclick="CasinoOnClick()" onmouseover="casino()" onmouseout="normalImg()">

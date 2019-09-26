@@ -12,47 +12,13 @@
  
  
  <body>
-
- 
- 
- 
- 
- 
  
   <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
   <!-- Your menu or Off-canvas content goes here -->
  
-    <ul class="vertical menu">
-      <li><a href="#">Foundation</a></li> 
-      <li><a href="#">Dot</a></li>
-      <li><a href="#">ZURB</a></li>
-      <li><a href="#">Com</a></li>
-      <li><a href="#">Slash</a></li>
-      <li><a href="#">Sites</a></li>
-	  <div class="cell shrink">
-<img class="thumbnail" src="https://placehold.it/550x350">
-</div>
-<div class="cell auto">
-<h5>Mike Mikerson</h5>
-<p>Duis aliquet egestas purus in blandit. Curabitur vulputate, ligula lacinia scelerisque tempor, lacus lacus ornare ante, ac egestas est urna sit amet arcu. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed molestie augue sit amet leo.</p>
-</div>
-    </ul>
+ <?php include 'BarraLateral.php'; ?>
 
-  </div>
-
-
-  
-  
-  
-  
-
-
-
-
-
-
-
-
+   </div>
 
   <div class="off-canvas-content" data-off-canvas-content>
      <div class="grid-x grid-padding-x">
@@ -62,7 +28,7 @@
  <div class="top-bar" id="realEstateMenu">
 <div class="top-bar-left">
             <ul class="menu menu-hover-lines">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="MapaPrueba.php">Home</a></li>
             <li><a href="#">About Us</a></li>
             <li><a href="#">Blog</a></li>
             <li><a href="#">Services</a></li>
@@ -79,19 +45,38 @@
 </div>
 </div>
  
-		
  
  
-          <div class="callout">
-		  
-		  
-            <h3>We&rsquo;re stoked you want to try Foundation! </h3>
-            <p>To get going, this file (index.html) includes some basic styles you can modify, play around with, or totally destroy to get going.</p>
-            <p>Once you've exhausted the fun in this document, you should check out:</p>
  
  
-          </div>
+
+ 
+  
+  
+ 
+ 
+  
+  
+ 
+ <div class="grid-x grid-margin-x expanded">
+<div class="large-6 cell">
+ 
+ <div id="load_tweets"></div>
+</div>
+<div class="large-2 cell" style="pointer-events:none"></div>
+<div class="large-4 cell">
+<div class="large-6 cell">
+ 
+<div id="load_tweets2"></div>
+ 
+</div>
+</div>
+ 
         </div>
+		
+
+
+		
       </div>
 	 
 	 
@@ -103,6 +88,10 @@
 	
 	
 	
+    <center>
+  INDICE UV
+  </center>
+
 	
 <footer>
 <div class="grid-x grid-margin-x expanded callout secondary">
@@ -135,7 +124,7 @@
 </div>
 </footer>
 	
-	
+ 
  
 	
 	 
@@ -151,6 +140,7 @@
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
    </div> 
+  </div> 
   </body>
 </html>
 
@@ -305,10 +295,7 @@ $menu-hover-lines-border-width: 3px;
       }
 
       .container {
-        margin: 0 auto;
-        min-width: 880px;
-        padding: 0 40px;
-        width: 80%;
+        
       }
 
       .glyph {
