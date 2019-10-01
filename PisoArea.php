@@ -1,9 +1,9 @@
   <?php  
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
- $id_edificio = $_POST["id"]; 
- 
+ $id_area = $_POST["id_area"]; 
+ $id_piso = $_POST["id_piso"]; 
+ $id_edificio = $_POST["id_edificio"]; 
  ?>
-
 
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -15,38 +15,19 @@
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
-  
-  
   </head>
  
  
  <body>
  
-
- 
- 
- 
- 
  
  
   <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
  
-   <?php include 'BarraLateral.php'; ?>
+ <?php include 'BarraLateral.php'; ?>
 
   </div>
-
-
-  
-  
-  
-  
-
-
-
-
-
-
-
+ 
 
 
   <div class="off-canvas-content" data-off-canvas-content>
@@ -73,10 +54,12 @@
 </ul>
 </div>
 </div>
-</br>
  
-		  
- <?php  
+	
+
+
+
+ <?php /*  
 			$conn = mysqli_connect("localhost","root","","tesis");
 
 			$result = mysqli_query($conn, 'SELECT * 
@@ -116,204 +99,80 @@
                 echo'</table>';
                 echo'</div>';
 			}
-		  ?>
+		*/  ?>
+
+
+
+
+
+
+
+
+
+
+	
+ 
+ </br>
+ <div class="row column">
+ <hr>
+<?php
+$conn = mysqli_connect("localhost","root","","tesis");
+$result = mysqli_query($conn, 'SELECT * FROM area_del_edificio  
+                                   WHERE id_area ='.$id_area.';');
+while($row = mysqli_fetch_array($result)){   
+echo' <h4 style="margin: 0;" class="text-center">'.$row["nombre"].'</h4>'; 
+									   
+?>
+<hr>
+</div>
+<div class="callout">
+<div class="grid-x grid-margin-x">
+
+ 
+<div class="show-for-large large-3 cell">  
+<div class="callout">
+<?php
+echo '<img src="https://placehold.it/400x370&amp;text=Pegasi B" alt="image of a planet called Pegasi B">';
+}									   
+?>
+</div>
+</div>
+
+<div class="medium-7 large-6 cell">
+ 
+
+</div>
 
 <div class="medium-5 large-3 cell">
  
- <?php 
- 
-    $result = mysqli_query($conn, 'SELECT * FROM piso
-                                   WHERE id_edificio ='.$id_edificio.';');
-			    if($result==null){
-				    echo'';
-			    }else{
-                    echo'<div class="callout secondary">';
-                    echo'<form action="piso.php" method="post">';
-                    echo'<div class="grid-x">';
-                    echo'<div class="small-12 cell">';
-                    echo'<label>Ir Al Piso:';
-                    echo'<select class="form-control form-control-sm" name="id_piso">';
- 
-                    while($row=mysqli_fetch_assoc($result)) { 
-                        echo "<option value='$row[id_piso]'>$row[nombre]</option>";  
-				    } 
-				 }	 
-                echo'</select>';
-				echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
-				echo'<input type="submit" class="button primary"value="IR"></input>';
-        echo'</label>';
-        echo'</div>';
-        echo'</div>';
-        echo'</form>';
-        echo'</div>';
- ?> 
- 
 </div>
 </div>
- 	  
+
+
+			
+			 
+ 
+          </div>
 		  
-<ul class="tabs" data-active-collapse="true" data-tabs id="collapsing-tabs">
-  <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Protocolos</a></li>
-  <li class="tabs-title"><a href="#panel2c">Riesgos</a></li>
-  <li class="tabs-title"><a href="#panel3c">Accidentes</a></li>
-  <li class="tabs-title"><a href="#panel4c">Extintores</a></li>
-  <li class="tabs-title"><a href="#panel5c">Redes Humedas</a></li>
-</ul>
-
-<div class="tabs-content" data-tabs-content="collapsing-tabs">
-  <div class="tabs-panel is-active" id="panel1c">
-  <table>
-  <thead>
-    <tr>
-      <th width="200">Nombre</th>
-      <th width="150">Estado</th>
-	  <th width="150">Descripción</th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT a.estado,p.nombre,p.descripcion
-									  	   FROM protocolo p,asigna a
-									       WHERE p.id_protocolo=a.id_protocolo
-										   AND a.id_edificio ='.$id_edificio.';');
-		    while($row = mysqli_fetch_array($result)){
-
+		
+		  
+		  
+		  
   
- 					   
-      echo '<tr>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-      echo '<td>'.$row["estado"].'</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["descripcion"]);
-      echo '</td>';
-      echo '</tr>';
-				}
-		  ?>
- 
-   
-  </tbody>
-</table>
-  </div>
-  <div class="tabs-panel" id="panel2c">
-     <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM riesgo r,edificio_riesgo d  
-									       WHERE r.id_riesgo=d.id_riesgo   
-										   AND d.id_edificio ='.$id_edificio.'    ;');
-		    while($row = mysqli_fetch_array($result)){
- 	   
-    echo '<tr>';
-	echo '<img   src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
-    echo '</tr>';
-	 
-				}
-		  ?>
-  </div>
-  
-  
-  
-  <div class="tabs-panel" id="panel3c">
-    <table>
-  <thead>
-    <tr>
-      <th width="200">ID</th>
-      <th>Fecha</th>
-      <th width="150">Tipo</th>
-      <th width="150">Numero</th>
-	  <th width="150">Persona</th>
-	  <th width="150">Descripción</th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT * 
-									  	   FROM accidente
-									       WHERE id_edificio ='.$id_edificio.'
-										   ORDER BY fecha DESC;');
-		    while($row = mysqli_fetch_array($result)){
-
-  
- 					   
-    echo '<tr>';
-      echo '<td>'.$row["id_accidente"].'</td>';
-      echo '<td>'.$row["fecha"].'</td>';
-      echo '<td>'.$row["tipo"].'</td>';
-      echo '<td>'.$row["numero"].'</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["persona"]);
-	  echo '</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["descripcion"]);
-      echo '</td>';
-      echo '</tr>';
-				}
-		  ?>
- 
-   
-  </tbody>
-</table>
-  </div>
-  
-  <div class="tabs-panel" id="panel4c">
-  <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT e.nombre
-									  	   FROM extintor e,piso p
-									       WHERE e.id_piso=p.id_piso
-										   AND p.id_edificio ='.$id_edificio.'    ;');
-		    while($row = mysqli_fetch_array($result)){
- 	   
-      echo '<tr>';
-	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-      echo '</tr>';
-	 
-				}
-		  ?>
-  </div>
-  
-    <div class="tabs-panel" id="panel5c">
- <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT r.nombre
-									  	   FROM red_humeda r,piso p
-									       WHERE r.id_piso=p.id_piso
-										   AND p.id_edificio ='.$id_edificio.'    ;');
-		    while($row = mysqli_fetch_array($result)){
- 	   
-      echo '<tr>';
-	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-      echo '</tr>';
-	 
-				}
-		  ?>
-  </div>
-  
-</div>
         </div>
       </div>
 	 
 	 
-	 
-	 
-	
+ 
+  
+ 
+ 
 	
 
 	
 	
 	
-	
+</br>	
 <footer>
 <div class="grid-x grid-margin-x expanded callout secondary">
 <div class="large-4 cell">

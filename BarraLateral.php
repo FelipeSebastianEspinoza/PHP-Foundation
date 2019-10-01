@@ -7,6 +7,7 @@
       <li><a href="#">Administrar Zonas de Evacuación</a></li>
       <li><a href="#">Ver Acidentes</a></li>
       <li><a href="#">Ver Enfermedades Profesionales</a></li>
+	  <li><a href="#">Administrar Protocolos</a></li>
 	  <div class="cell shrink">
 <img class="thumbnail" src="https://placehold.it/550x350">
 </div>

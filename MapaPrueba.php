@@ -100,13 +100,7 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
 <div class="large-6 cell">
  
 <div id="load_tweets2"></div>
-<!--
-<h5>RANDOM MAG</h5>
-	  <div class="cell shrink">
-<img class="thumbnail" src="https://placehold.it/550x350">
-</div>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti quam voluptatum vel repellat ab similique molestias molestiae ea omnis eos, id asperiores est praesentium, voluptate officia nulla aspernatur sequi aliquam.</p>
--->
+
 </div>
 </div>
  

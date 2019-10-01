@@ -1,9 +1,9 @@
   <?php  
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
- $id_edificio = $_POST["id"]; 
+ $id_piso = $_POST["id_piso"]; 
+ $id_edificio = $_POST["id_edificio"]; 
  
  ?>
-
 
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -15,23 +15,16 @@
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
-  
-  
   </head>
  
  
  <body>
  
-
- 
- 
- 
- 
  
  
   <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
  
-   <?php include 'BarraLateral.php'; ?>
+ <?php include 'BarraLateral.php'; ?>
 
   </div>
 
@@ -73,247 +66,115 @@
 </ul>
 </div>
 </div>
-</br>
  
+		
+ 
+ </br>
+ <div class="row column">
+ <hr>
+<h4 style="margin: 0;" class="text-center">Áreas ubicadas en este piso</h4>
+<hr>
+</div>
+          <div class="callout">
+		 <div class="grid-x grid-margin-x">
+         <div class="show-for-large large-3 cell">  
 		  
- <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT * 
-									  	   FROM edificio
-									       WHERE id_edificio ='.$id_edificio.';');
-
-			while($row = mysqli_fetch_array($result)){
-				echo '<h2>'.$row["nombre"].'</h2>'; 
-				echo '<input type="hidden" name="value" value='.$row["id_edificio"].'/>';
-				
-				echo ' <div class="grid-x grid-margin-x">'; 
-		        echo ' <div class="show-for-large large-3 cell">'; 
-				echo '</br>';
-			 	echo '<img class="thumbnail"  src="data:image/png;base64,'.base64_encode( $row["imagen"] ).'"/>';
-				echo '</div>';
-				echo '<div class="medium-7 large-6 cell">';
-				echo'</br>';
-                echo'<table>';
-                echo'<thead>';
-                echo'<tr>';
-                echo'<th width="50">Estado: </th>';
-                echo'<th style="font-weight: normal;"width="150">'.$row["estado"].'</th>';
-                echo'<th width="50">N°Departamentos: </th>';
-                echo'<th style="font-weight: normal;"width="150">'.$row["n_departamentos"].'</th>  ';
-                echo'</tr>';
-                echo'<tr>';
-                echo'<th width="50">N°Estudiantes: </th>';
-                echo'<th style="font-weight: normal;"width="150">'.$row["n_estudiantes"].'</th>';
-                echo'<th width="50">Area Total: </th>';
-                echo'<th style="font-weight: normal;"width="150">'.$row["porcentaje_hacinamiento"].'</th>  ';
-                echo'</tr>';
-                echo'<tr>';
-                echo'<th width="50">%Hacinamiento: </th>';
-                echo'<th style="font-weight: normal;"width="150">'.$row["area_total"].'</th>';
-                echo'</tr>';  	
-                echo'</thead>';
-                echo'</table>';
-                echo'</div>';
-			}
-		  ?>
-
-<div class="medium-5 large-3 cell">
- 
- <?php 
- 
-    $result = mysqli_query($conn, 'SELECT * FROM piso
-                                   WHERE id_edificio ='.$id_edificio.';');
+           <?php
+echo'</div>';
+echo'<div class="grid-x grid-margin-x expanded ">';
+		   
+		   $conn = mysqli_connect("localhost","root","","tesis");
+           $result = mysqli_query($conn, 'SELECT nombre,descripcion,imagen,id_area FROM area_del_edificio  
+                                   WHERE id_piso ='.$id_piso.';');
 			    if($result==null){
 				    echo'';
 			    }else{
-                    echo'<div class="callout secondary">';
-                    echo'<form action="piso.php" method="post">';
-                    echo'<div class="grid-x">';
-                    echo'<div class="small-12 cell">';
-                    echo'<label>Ir Al Piso:';
-                    echo'<select class="form-control form-control-sm" name="id_piso">';
  
                     while($row=mysqli_fetch_assoc($result)) { 
-                        echo "<option value='$row[id_piso]'>$row[nombre]</option>";  
+                     // echo '<img   src="data:image/png;base64,'.base64_encode( $row["imagen"] ).'"/>';
+ 
+ 
+ 
+echo'<div class="large-4 cell">';
+echo'<div class="media-object ">';
+echo'<div class="media-object-section">';
+
+echo'<form action="PisoArea.php" method="post">'; 
+echo '<input type=image class="thumbnail"
+ 
+  style=" max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  display: block;
+  margin: 0 auto;"  
+  
+  src="data:image/png;base64,'.base64_encode( $row["imagen"] ).'"/>';
+echo '<input type="hidden" name="id_area" value='.$row["id_area"].' />';
+echo '<input type="hidden" name="id_piso" value='.$id_piso.' />';
+echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
+echo'</form>';
+
+
+echo'</div>';
+echo'<div class="media-object-section">';
+echo'<h5>';
+echo utf8_encode($row["nombre"]);
+echo'</h5>';
+echo'<p>';
+echo utf8_encode($row["descripcion"]);
+echo'</p>';
+echo'</div>';
+echo'</div>';
+echo'</div>';
+
 				    } 
 				 }	 
-                echo'</select>';
-				echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
-				echo'<input type="submit" class="button primary"value="IR"></input>';
-        echo'</label>';
-        echo'</div>';
-        echo'</div>';
-        echo'</form>';
-        echo'</div>';
+ 
  ?> 
+<div class="large-4 cell">
+</br>
+ <form action="Edificio.php" method="post"> 
+ <input type="hidden" name="id" value="<?php echo $id_edificio ?>"/>
+ <input type="submit" class="button primary"value="Volver Al Edificio"></input>
+ </form>
+</div>
+ 
  
 </div>
-</div>
- 	  
-		  
-<ul class="tabs" data-active-collapse="true" data-tabs id="collapsing-tabs">
-  <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Protocolos</a></li>
-  <li class="tabs-title"><a href="#panel2c">Riesgos</a></li>
-  <li class="tabs-title"><a href="#panel3c">Accidentes</a></li>
-  <li class="tabs-title"><a href="#panel4c">Extintores</a></li>
-  <li class="tabs-title"><a href="#panel5c">Redes Humedas</a></li>
-</ul>
-
-<div class="tabs-content" data-tabs-content="collapsing-tabs">
-  <div class="tabs-panel is-active" id="panel1c">
-  <table>
-  <thead>
-    <tr>
-      <th width="200">Nombre</th>
-      <th width="150">Estado</th>
-	  <th width="150">Descripción</th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT a.estado,p.nombre,p.descripcion
-									  	   FROM protocolo p,asigna a
-									       WHERE p.id_protocolo=a.id_protocolo
-										   AND a.id_edificio ='.$id_edificio.';');
-		    while($row = mysqli_fetch_array($result)){
-
-  
- 					   
-      echo '<tr>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-      echo '<td>'.$row["estado"].'</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["descripcion"]);
-      echo '</td>';
-      echo '</tr>';
-				}
-		  ?>
  
-   
-  </tbody>
-</table>
-  </div>
-  <div class="tabs-panel" id="panel2c">
-     <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM riesgo r,edificio_riesgo d  
-									       WHERE r.id_riesgo=d.id_riesgo   
-										   AND d.id_edificio ='.$id_edificio.'    ;');
-		    while($row = mysqli_fetch_array($result)){
- 	   
-    echo '<tr>';
-	echo '<img   src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
-    echo '</tr>';
-	 
-				}
-		  ?>
-  </div>
-  
-  
-  
-  <div class="tabs-panel" id="panel3c">
-    <table>
-  <thead>
-    <tr>
-      <th width="200">ID</th>
-      <th>Fecha</th>
-      <th width="150">Tipo</th>
-      <th width="150">Numero</th>
-	  <th width="150">Persona</th>
-	  <th width="150">Descripción</th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT * 
-									  	   FROM accidente
-									       WHERE id_edificio ='.$id_edificio.'
-										   ORDER BY fecha DESC;');
-		    while($row = mysqli_fetch_array($result)){
-
-  
- 					   
-    echo '<tr>';
-      echo '<td>'.$row["id_accidente"].'</td>';
-      echo '<td>'.$row["fecha"].'</td>';
-      echo '<td>'.$row["tipo"].'</td>';
-      echo '<td>'.$row["numero"].'</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["persona"]);
-	  echo '</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["descripcion"]);
-      echo '</td>';
-      echo '</tr>';
-				}
-		  ?>
  
-   
-  </tbody>
-</table>
-  </div>
-  
-  <div class="tabs-panel" id="panel4c">
-  <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
 
-			$result = mysqli_query($conn, 'SELECT e.nombre
-									  	   FROM extintor e,piso p
-									       WHERE e.id_piso=p.id_piso
-										   AND p.id_edificio ='.$id_edificio.'    ;');
-		    while($row = mysqli_fetch_array($result)){
- 	   
-      echo '<tr>';
-	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-      echo '</tr>';
-	 
-				}
-		  ?>
-  </div>
-  
-    <div class="tabs-panel" id="panel5c">
- <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT r.nombre
-									  	   FROM red_humeda r,piso p
-									       WHERE r.id_piso=p.id_piso
-										   AND p.id_edificio ='.$id_edificio.'    ;');
-		    while($row = mysqli_fetch_array($result)){
- 	   
-      echo '<tr>';
-	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-      echo '</tr>';
-	 
-				}
-		  ?>
-  </div>
-  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 </div>
+
+
+			
+			 
+ 
+          </div>
+ 
         </div>
       </div>
 	 
 	 
-	 
-	 
-	
+ 
+  
+ 
+ 
 	
 
 	
 	
 	
-	
+</br>	
 <footer>
 <div class="grid-x grid-margin-x expanded callout secondary">
 <div class="large-4 cell">
