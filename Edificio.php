@@ -1,7 +1,8 @@
   <?php  
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
  $id_edificio = $_POST["id"]; 
- 
+ session_start();
+						 
  ?>
 
 
@@ -34,45 +35,43 @@
    <?php include 'BarraLateral.php'; ?>
 
   </div>
-
-
-  
-  
-  
-  
-
-
-
-
-
-
-
-
+ 
 
   <div class="off-canvas-content" data-off-canvas-content>
      <div class="grid-x grid-padding-x">
         <div class="large-12 cell">
 
  
- <div class="top-bar" id="realEstateMenu">
-<div class="top-bar-left">
-            <ul class="menu menu-hover-lines">
-            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Products</a></li>
-            <li><a href="#">Contact</a></li>
-            </ul>
-</div>
-<div class="top-bar-right">
-<ul class="menu">
-<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>          
-<li><a href="#">My Account</a></li>
-<li><a class="button">Login</a></li>
-</ul>
-</div>
-</div>
+  <div class="top-bar" id="realEstateMenu">
+                <div class="top-bar-left">
+                    <ul class="menu menu-hover-lines">
+                        <li class="active"><a href="MapaPrueba.php">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="top-bar-right">
+                    <ul class="menu">
+					    <?php 
+
+						if(isset($_SESSION['usuario'])){
+							echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
+						    echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
+						}else{
+							echo '<li><a href="index.php" class="button secondary">Login</a></li>';
+						}
+	
+						?>
+
+                    </ul>
+                </div>
+            </div>
+
+
+
 </br>
  
 		  
@@ -106,14 +105,21 @@
                 echo'<th width="50">N°Estudiantes: </th>';
                 echo'<th style="font-weight: normal;"width="150">'.$row["n_estudiantes"].'</th>';
                 echo'<th width="50">Area Total: </th>';
+				if(isset($_SESSION['usuario'])){
                 echo'<th style="font-weight: normal;"width="150">'.$row["porcentaje_hacinamiento"].'</th>  ';
                 echo'</tr>';
                 echo'<tr>';
                 echo'<th width="50">%Hacinamiento: </th>';
+				}
                 echo'<th style="font-weight: normal;"width="150">'.$row["area_total"].'</th>';
                 echo'</tr>';  	
                 echo'</thead>';
                 echo'</table>';
+				
+				if(isset($_SESSION['usuario'])){
+				echo '<button type="button" class="success button">Modificar</button>';
+				}
+				
                 echo'</div>';
 			}
 		  ?>
@@ -168,6 +174,11 @@
       <th width="200">Nombre</th>
       <th width="150">Estado</th>
 	  <th width="150">Descripción</th>
+	    <?php  
+		if(isset($_SESSION['usuario'])){
+	      echo  '<th width="150">Modificar</th>';
+		}
+	    ?>
     </tr>
   </thead>
   <tbody>
@@ -190,13 +201,24 @@
 	  echo '<td>' ;
 	  echo  utf8_encode($row["descripcion"]);
       echo '</td>';
+	  
+	  if(isset($_SESSION['usuario'])){
+		  echo '<td>' ;
+	      echo '<button type="button" class="success button">Modificar</button>';
+      echo '</td>'; 
+		  
+	  }
+	  
+	  
       echo '</tr>';
+	  
 				}
 		  ?>
  
    
   </tbody>
 </table>
+ 
   </div>
   <div class="tabs-panel" id="panel2c">
      <?php  
@@ -210,6 +232,9 @@
  	   
     echo '<tr>';
 	echo '<img   src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
+	 if(isset($_SESSION['usuario'])){
+	      echo '<button type="button" class="success button">Modificar</button>'; 
+	  }
     echo '</tr>';
 	 
 				}
@@ -225,9 +250,21 @@
       <th width="200">ID</th>
       <th>Fecha</th>
       <th width="150">Tipo</th>
-      <th width="150">Numero</th>
-	  <th width="150">Persona</th>
-	  <th width="150">Descripción</th>
+      
+	   <?php  
+		if(isset($_SESSION['usuario'])){
+	      echo  '  <th width="150">Numero</th>';
+	      echo  ' <th width="150">Persona</th>';
+		  echo  ' <th width="150">Descripción</th>';
+		}
+	    ?>
+	  
+	   
+	  	    <?php  
+		if(isset($_SESSION['usuario'])){
+	      echo  '<th width="150">Modificar</th>';
+		}
+	    ?>
     </tr>
   </thead>
   <tbody>
@@ -243,16 +280,27 @@
   
  					   
     echo '<tr>';
+	 if(isset($_SESSION['usuario'])){ 
       echo '<td>'.$row["id_accidente"].'</td>';
+	 }
       echo '<td>'.$row["fecha"].'</td>';
       echo '<td>'.$row["tipo"].'</td>';
       echo '<td>'.$row["numero"].'</td>';
 	  echo '<td>' ;
+	   if(isset($_SESSION['usuario'])){ 
 	  echo  utf8_encode($row["persona"]);
+	   }
 	  echo '</td>';
 	  echo '<td>' ;
+	   if(isset($_SESSION['usuario'])){ 
 	  echo  utf8_encode($row["descripcion"]);
+	   }
       echo '</td>';
+	  	 if(isset($_SESSION['usuario'])){ 
+		  echo '<td>' ;
+	    echo '<button type="button" class="success button">Modificar</button>'; 
+      echo '</td>';
+	  }
       echo '</tr>';
 				}
 		  ?>

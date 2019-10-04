@@ -9,54 +9,45 @@
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
   </head>
- 
- 
- <body>
- 
 
+  <body>
+    <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
+        <?php include 'BarraLateral.php'; ?>
+    </div>
  
- 
- 
- 
- 
- 
-  <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
- 
-<?php include 'BarraLateral.php'; ?>
-  
-
-  </div>
-
-
-
-
-
-
-
   <div class="off-canvas-content" data-off-canvas-content>
      <div class="grid-x grid-padding-x">
         <div class="large-12 cell">
-
  
- <div class="top-bar" id="realEstateMenu">
-<div class="top-bar-left">
-            <ul class="menu menu-hover-lines">
-            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Products</a></li>
-            <li><a href="#">Contact</a></li>
-            </ul>
-</div>
-<div class="top-bar-right">
-<ul class="menu">
-<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>          
-<li><a href="#">My Account</a></li>
-<li><a class="button">Login</a></li>
-</ul>
-</div>
-</div>
+            <div class="top-bar" id="realEstateMenu">
+                <div class="top-bar-left">
+                    <ul class="menu menu-hover-lines">
+                        <li class="active"><a href="MapaPrueba.php">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="top-bar-right">
+                    <ul class="menu">
+					    <?php 
+						
+						session_start();
+						if(isset($_SESSION['usuario'])){
+							echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
+						    echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
+						}else{
+							echo '<li><a href="index.php" class="button secondary">Login</a></li>';
+						}
+	
+						?>
+ 
+                        
+                    </ul>
+                </div>
+            </div>
  
  
         
@@ -71,88 +62,61 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
 }, 5000); // refresh every 10000 milliseconds
 */</script>
  
- 
- 
-
- 
-  
-  
- 
- 
- 
-    <center>
+  <center>
   <button class="button" onclick="MostrarEdificios()">Edificios</button>
   <button class="button" onclick="MostrarGrifo()">Grifos</button>
   <button class="button" onclick="MostrarZonadeEvacuacion()">Zona de Evacuacion</button>
   <button class="button" onclick="MostrarZonadeSeguridad()">Zona de Seguridad</button>
- 
   </center>
   
   
  
- <div class="grid-x grid-margin-x expanded">
-<div class="large-6 cell">
- 
- <div id="load_tweets"></div>
-</div>
-<div class="large-2 cell" style="pointer-events:none"></div>
-<div class="large-4 cell">
-<div class="large-6 cell">
- 
-<div id="load_tweets2"></div>
-
-</div>
-</div>
- 
+<div class="grid-x grid-margin-x expanded">
+    <div class="large-6 cell">
+        <div id="load_tweets"></div>
+    </div>
+    <div class="large-2 cell" style="pointer-events:none"></div>
+        <div class="large-4 cell">
+            <div class="large-6 cell">
+                <div id="load_tweets2"></div>
+            </div>
         </div>
+</div>
 		
-
-
-		
-      </div>
+        </div>
 	 
-	 
-	 
-	 
-	
-	
-
-	
-	
-	
-    <center>
+ 
+  <center>
   INDICE UV
   </center>
 
 	
 <footer>
 <div class="grid-x grid-margin-x expanded callout secondary">
-<div class="large-4 cell">
-<h5>FLICKR IMAGES</h5>
- 
-</div>
-<div class="large-4 cell">
-<h5>FLICKR IMAGES</h5>
- 
-</div>
-<div class="large-4 cell">
-<h5>RANDOM MAG</h5>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti quam voluptatum vel repellat ab similique molestias molestiae ea omnis eos, id asperiores est praesentium, voluptate officia nulla aspernatur sequi aliquam.</p>
-</div>
+    <div class="large-4 cell">
+        <h5>FLICKR IMAGES</h5>
+    </div>
+    <div class="large-4 cell">
+        <h5>FLICKR IMAGES</h5>
+    </div>
+    <div class="large-4 cell">
+        <h5>RANDOM MAG</h5>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti quam voluptatum vel repellat ab similique molestias molestiae ea omnis eos, id asperiores est praesentium, voluptate officia nulla aspernatur sequi aliquam.</p>
+    </div>
 </div>
 <div class="grid-x grid-margin-y expanded">
-<div class="medium-6 cell">
-<ul class="menu">
-<li><a href="#">Legal</a></li>
-<li><a href="#">Partner</a></li>
-<li><a href="#">Explore</a></li>
-</ul>
-</div>
-<div class="medium-6 cell">
-<ul class="menu align-right">
-<li class="menu-text">Copyright © 2099 Random Mag</li>
-</ul>
-</div>
+    <div class="medium-6 cell">
+        <ul class="menu">
+            <li><a href="#">Legal</a></li>
+            <li><a href="#">Partner</a></li>
+            <li><a href="#">Explore</a></li>
+        </ul>
+    </div>
+    <div class="medium-6 cell">
+        <ul class="menu align-right">
+            <li class="menu-text">Copyright © 2099 Random Mag</li>
+        </ul>
+    </div>
 </div>
 </footer>
 	
@@ -179,15 +143,6 @@ function MostrarEdificios() {
 }
 </script>
  
-	
-	 
-	 
-	 
-	 
-	 
-	 
- 
-
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>

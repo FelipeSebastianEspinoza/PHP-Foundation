@@ -1,3 +1,9 @@
+  <?php  
+ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
+ 
+ 
+ ?>
+
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
   <head>
@@ -13,12 +19,15 @@
  
  <body>
  
+ 
+ 
   <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
-  <!-- Your menu or Off-canvas content goes here -->
  
  <?php include 'BarraLateral.php'; ?>
 
-   </div>
+  </div>
+
+ 
 
   <div class="off-canvas-content" data-off-canvas-content>
      <div class="grid-x grid-padding-x">
@@ -45,54 +54,105 @@
 </div>
 </div>
  
+		
+ 
+ </br>
+ <div class="row column">
+ <hr>
+<h4 style="margin: 0;" class="text-center">Áreas ubicadas en este piso</h4>
+<hr>
+</div>
+          <div class="callout">
+		 <div class="grid-x grid-margin-x">
+         <div class="show-for-large large-3 cell">  
+		  
+           <?php
+echo'</div>';
+echo'<div class="grid-x grid-margin-x expanded ">';
+		   
+		   $conn = mysqli_connect("localhost","root","","tesis");
+           $result = mysqli_query($conn, 'SELECT * 
+		   FROM edificio ;');
+			    if($result==null){
+				    echo'';
+			    }else{
+ 
+                    while($row=mysqli_fetch_assoc($result)) { 
+ 
+echo'<div class="large-4 cell">';
+echo'<div class="media-object ">';
+echo'<div class="media-object-section">';
+
+echo'<form action="PisoArea.php" method="post">'; 
+echo '<input type=image class="thumbnail"
+ 
+  style=" max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  display: block;
+  margin: 0 auto;"  
+  
+  src="data:image/png;base64,'.base64_encode( $row["imagen"] ).'"/>';
+echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />';
+echo'</form>';
+echo'<h5>';
+echo utf8_encode($row["nombre"]);
+echo'</h5>';
+ 
+echo'</div>';
+echo'<div class="media-object-section">';
+echo'</div>';
+echo'</div>';
+echo'</div>';
+
+				    } 
+				 }	 
+ 
+ ?> 
+<div class="large-4 cell">
+</br>
+ <form action="Edificio.php" method="post"> 
+ <input type="hidden" name="id" value="<?php echo $id_edificio ?>"/>
+ <input type="submit" class="button primary"value="Volver Al Edificio"></input>
+ </form>
+</div>
  
  
+</div>
  
  
 
  
-  
-  
  
  
-  
-  
  
- <div class="grid-x grid-margin-x expanded">
-<div class="large-6 cell">
  
- <div id="load_tweets"></div>
-</div>
-<div class="large-2 cell" style="pointer-events:none"></div>
-<div class="large-4 cell">
-<div class="large-6 cell">
  
-<div id="load_tweets2"></div>
+ 
+ 
  
 </div>
-</div>
+
+
+			
+			 
+ 
+          </div>
  
         </div>
-		
-
-
-		
       </div>
 	 
 	 
-	 
-	 
-	
+ 
+  
+ 
+ 
 	
 
 	
 	
 	
-    <center>
-  INDICE UV
-  </center>
-
-	
+</br>	
 <footer>
 <div class="grid-x grid-margin-x expanded callout secondary">
 <div class="large-4 cell">
@@ -124,7 +184,7 @@
 </div>
 </footer>
 	
- 
+	
  
 	
 	 
@@ -140,7 +200,6 @@
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
    </div> 
-  </div> 
   </body>
 </html>
 
@@ -295,7 +354,10 @@ $menu-hover-lines-border-width: 3px;
       }
 
       .container {
-        
+        margin: 0 auto;
+        min-width: 880px;
+        padding: 0 40px;
+        width: 80%;
       }
 
       .glyph {

@@ -2,7 +2,8 @@
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
  $id_area = $_POST["id_area"]; 
  $id_piso = $_POST["id_piso"]; 
- $id_edificio = $_POST["id_edificio"]; 
+ $id_edificio = $_POST["id_edificio"];
+  session_start();
  ?>
 
 <!doctype html>
@@ -35,25 +36,35 @@
         <div class="large-12 cell">
 
  
- <div class="top-bar" id="realEstateMenu">
-<div class="top-bar-left">
-            <ul class="menu menu-hover-lines">
-            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Products</a></li>
-            <li><a href="#">Contact</a></li>
-            </ul>
-</div>
-<div class="top-bar-right">
-<ul class="menu">
-<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>          
-<li><a href="#">My Account</a></li>
-<li><a class="button">Login</a></li>
-</ul>
-</div>
-</div>
+ 
+  <div class="top-bar" id="realEstateMenu">
+                <div class="top-bar-left">
+                    <ul class="menu menu-hover-lines">
+                        <li class="active"><a href="MapaPrueba.php">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="top-bar-right">
+                    <ul class="menu">
+					    <?php 
+
+						if(isset($_SESSION['usuario'])){
+							echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
+						    echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
+						}else{
+							echo '<li><a href="index.php" class="button secondary">Login</a></li>';
+						}
+	
+						?>
+
+                    </ul>
+                </div>
+            </div>
+
  
 	
 
@@ -130,22 +141,80 @@ echo' <h4 style="margin: 0;" class="text-center">'.$row["nombre"].'</h4>';
 
  
 <div class="show-for-large large-3 cell">  
-<div class="callout">
 <?php
-echo '<img src="https://placehold.it/400x370&amp;text=Pegasi B" alt="image of a planet called Pegasi B">';
-}									   
+echo '<input type=image class="thumbnail"
+ 
+  style=" max-width: 400px;
+  max-height: 400px;
+  width: auto;
+  display: block;
+  margin: 0 auto;"  
+  
+  src="data:image/png;base64,'.base64_encode( $row["imagen"] ).'"/>';
+									   
 ?>
 </div>
-</div>
 
-<div class="medium-7 large-6 cell">
+<div class="medium-2 large-1 cell">
  
 
 </div>
 
-<div class="medium-5 large-3 cell">
- 
+<div class="medium-10 large-8 cell">
+<?php
+  echo'<table>';
+                echo'<thead>';
+                echo'<tr>';
+                echo'<th width="50">Estado: </th>';
+                echo'<th style="font-weight: normal;"width="150">'.$row["estado"].'</th>';
+                echo'<th width="50">N°Extintores: </th>';
+                echo'<th style="font-weight: normal;"width="150">'.$row["n_extintores"].'</th>  ';
+                echo'</tr>';
+                echo'<tr>';
+                echo'<th width="50">Area Real: </th>';
+                echo'<th style="font-weight: normal;"width="150">'.$row["area_real"].'</th>';
+				if(isset($_SESSION['usuario'])){
+                echo'<th width="50">Confort: </th>';	
+                echo'<th style="font-weight: normal;"width="150">'.$row["confort"].'</th>  ';
+                echo'</tr>';
+                echo'<tr>';
+                echo'<th width="50">%Hacinamiento: </th>';
+				echo'<th style="font-weight: normal;"width="150">'.$row["porcentaje_hacinamiento"].'</th>';
+				echo'</tr>'; 
+				}
+                echo'<tr>';
+                echo'<th width="50">Departamento: </th>';
+				echo'<th style="font-weight: normal;"width="150">';
+			    echo utf8_encode($row["departamento"]);
+				echo'</th>';
+				echo'</tr>'; 
+                
+				echo'<tr>';
+                echo'<th width="50">Descripción: </th>';
+				echo'<th style="font-weight: normal;"width="150">';
+				echo utf8_encode($row["descripcion"]);
+				echo'</th>';
+				echo'</tr>'; 
+
+				
+                echo'</thead>';
+                echo'</table>';
+				if(isset($_SESSION['usuario'])){
+				echo '<button type="button" class="success button">Modificar</button>';
+				}
+				
+				
+				
+}									   
+?>
+</br>
+ <form action="piso.php" method="post"> 
+ <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>
+ <input type="hidden" name="id_piso" value="<?php echo $id_piso ?>"/>
+ <input type="submit" class="button primary"value="Volver a Áreas"></input>
+ </form>
 </div>
+
 </div>
 
 
