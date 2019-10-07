@@ -1,6 +1,10 @@
   <?php  
  session_start();
-						 
+if (!isset($_SESSION['usuario'])){
+	echo "<script>
+           window.location.replace('index.php');					
+		  </script>";
+}			 
  ?>
  
  <!doctype html>
@@ -127,7 +131,7 @@ muestra_oculta('nuevoriesgo');
 		    while($row = mysqli_fetch_array($result)){
 
   
- echo'<form action="MPRiesgos.php" method="post">';	 
+ echo'<form action="MRiesgos.php" method="post">';	 
  echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />'; 
       echo '<tr>';
 	  echo '<td>' ;
@@ -187,7 +191,7 @@ include("guardar.php");
  
 if(isset($_POST['submitriesgo'])){
  
-    $campos = array("id_protocolo"=> NULL ,
+    $campos = array("id_riesgo"=> NULL ,
 	"nombre"=>$_POST['nombre'],
 	"descripcion"=>$_POST['descripcion'],
 	"imagen"=>$_POST['ARCHIVO']); 

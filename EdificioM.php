@@ -251,9 +251,7 @@
  	   
     echo '<tr>';
 	echo '<img   src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
-	 if(isset($_SESSION['usuario'])){
-	      echo '<button type="button" class="success button">Modificar</button>'; 
-	  }
+ 
     echo '</tr>';
 	 
 				}

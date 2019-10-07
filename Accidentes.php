@@ -1,8 +1,12 @@
   <?php  
- 
  session_start();
- $id_riesgo = $_POST["id_riesgo"]; 				 
+if (!isset($_SESSION['usuario'])){
+	echo "<script>
+           window.location.replace('index.php');					
+		  </script>";
+}			 
  ?>
+ 
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
   <head>
@@ -14,7 +18,6 @@
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
   </head>
- 
  
  <body>
     <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
@@ -53,71 +56,105 @@
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Protocolos</h4>
+                <h4 style="margin: 0;" class="text-center">Accidentes</h4>
                 <hr>
             </div>
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
               
- 
+<insertar>
+<div class="titulo_boton">
+  <a style='cursor: pointer;' onClick="muestra_oculta('nuevoriesgo')" title="" class="success button">Añadir Riesgo</a>
+</div>
+
+<div id="nuevoriesgo">
+  <table>
+  <thead>
+    <tr>
+      <th width="100">Nombre</th>
+      <th width="50">Icono</th>
+	  <th width="400">Descripción</th>
+      <th width="100">Registrar</th>
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	
+    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre del riesgo" Required >	</td>
+    <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" > </td>
+	<td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
+    <td><button class="success button" type="submit" name="submitriesgo">Registrar</button></td>
+  
+    </form>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<script>
+function muestra_oculta(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
+window.onload = function(){ 
+muestra_oculta('nuevoriesgo'); 
+}
+</script>
+<insertar>
 
 				 
   <table>
   <thead>
     <tr>
-      <th width="200">Nombre</th>
-      <th width="100">Icono</th>
+      <th width="200">Icono</th>
+	  <th width="200">Nombre</th>
 	  <th width="400">Descripción</th>
       <th width="150">Modificar</th>
     </tr>
   </thead> 
-  
-   
   <tbody>
    
   
   
   <?php  
  
-	
-	
-	
-	
 			$conn = mysqli_connect("localhost","root","","tesis");
 
 			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM riesgo
-										   WHERE id_riesgo='.$id_riesgo.';');
+									  	   FROM riesgo;');
 		    while($row = mysqli_fetch_array($result)){
 
   
- 	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
-      echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />'; 
-	  echo '<tr>';
+ echo'<form action="MRiesgos.php" method="post">';	 
+ echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />'; 
+      echo '<tr>';
+	  echo '<td>' ;
 	  
-	  echo '<td>' ;
-	  echo '<input type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required>';
-	  echo '</td>';
-
-	  echo '<td>' ;
-	   echo '<img class="thumbnail"  src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
-	 echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 
+	  echo '<img class="thumbnail"  src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
 	  echo '</td>';
 	  
+	  echo '<td>' ;
+	  echo  utf8_encode($row["nombre"]);
+      echo '</td>';
 	  
 	  echo '<td>' ;
-	   ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
+	  echo  utf8_encode($row["descripcion"]);
       echo '</td>';
 	   
 	  echo '<td>' ;
 	   if(isset($_SESSION['usuario'])){ 
-      echo'<button class="success button" type="submit" name="submitmodificarriesgo">Registrar</button> ';
+     echo'<input type="submit" class="success button"value="Modificar"></input>';
 	   }
       echo '</td>';
  
       echo '</tr>';
-      echo '</form>';
+ echo'</form>';
 				}
 		  ?>
  
@@ -133,17 +170,8 @@
           </div>
         </div>
       </div>
-	 
-	 
- 
-  
  
  
-	
-
-	
-	
-	
 </br>	
 <?php include 'Footer.php'; ?>
  
@@ -161,17 +189,16 @@
 <?php
 include("guardar.php");
  
-if(isset($_POST['submitmodificarriesgo'])){
+if(isset($_POST['submitriesgo'])){
  
-    $campos = array("id_riesgo"=> $_POST['id_riesgo'] ,
+    $campos = array("id_riesgo"=> NULL ,
 	"nombre"=>$_POST['nombre'],
 	"descripcion"=>$_POST['descripcion'],
 	"imagen"=>$_POST['ARCHIVO']); 
  
     $nuevo = new GuardarRiesgo("tesis"); 
-    $nuevo->ModificarRiesgo($campos);
+    $nuevo->NuevoRiesgo($campos);
 }
- 
 ?>
  
  

@@ -1,12 +1,12 @@
   <?php  
- 
  session_start();
 if (!isset($_SESSION['usuario'])){
 	echo "<script>
            window.location.replace('index.php');					
 		  </script>";
-}						 
+}			 
  ?>
+ 
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
   <head>
@@ -18,7 +18,6 @@ if (!isset($_SESSION['usuario'])){
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
   </head>
- 
  
  <body>
     <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
@@ -57,7 +56,7 @@ if (!isset($_SESSION['usuario'])){
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Protocolos</h4>
+                <h4 style="margin: 0;" class="text-center">Extintores</h4>
                 <hr>
             </div>
             <div class="callout">
@@ -66,25 +65,55 @@ if (!isset($_SESSION['usuario'])){
               
 <insertar>
 <div class="titulo_boton">
-  <a style='cursor: pointer;' onClick="muestra_oculta('nuevoprotocolo')" title="" class="success button">Añadir Protocolo</a>
+  <a style='cursor: pointer;' onClick="muestra_extintor('nuevoextintor')" title="" class="success button">Añadir Extintor</a>
 </div>
 
-<div id="nuevoprotocolo">
+<div id="nuevoextintor">
   <table>
   <thead>
     <tr>
-      <th width="100">Nombre</th>
-      <th width="350">Descripción</th>
-      <th width="100">Registrar</th>
+      <th width="150">Seleccione el edificio en el cual está el extintor</th>
+      <th width="100">Seleccione el piso en el cual se encuentra</th>
+ 
     </tr>
   </thead>
   <tbody>  
     <tr>
 	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
-	
-    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre del protocolo" Required >	</td>
-    <td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
-    <td><button class="success button" type="submit" name="submitprotocolo">Registrar</button></td>
+	<?php 
+		    $conn = mysqli_connect("localhost","root","","tesis");
+			$result = mysqli_query($conn, 'SELECT id_edificio,nombre
+			                               FROM edificio ;');
+			 				   
+		         echo' <tr><td><select class="form-control form-control-sm" id="lista1" name="id_edificio">';
+                    while($row=mysqli_fetch_assoc($result)) { 
+                        echo "<option value='$row[id_edificio]'>$row[nombre]</option>";  
+				    } 
+                echo'</td></select>';
+			 ?>
+		 
+			
+			 <td><div id="select2lista"></div></td> </tr>
+			<table>
+  <thead>
+    <tr>
+      <th width="150">Nombre</th>
+      <th width="100">Fecha de Carga</th>
+      <th width="100">Fecha de Vencimiento</th>
+      <th width="600">Ubicación</th>
+      <th width="150">Estado</th>
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre del riesgo" Required ></td>
+    <td><input type="date" id="inputFechaCarga" name="fecha_carga" class="form-control"  Required ></td>
+    <td><input type="date" id="inputFechaVenc" name="fecha_venc" class="form-control"  Required ></td>
+	<td><textarea  type="text" id="inputUbicacion" rows="5" cols="55"name="ubicacion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
+	<td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="Escriba el estado" Required ></td>
+    <td><button class="success button" type="submit" name="submitextintor">Registrar</button></td>
+  
+ 
   
     </form>
     </tr>
@@ -94,17 +123,9 @@ if (!isset($_SESSION['usuario'])){
 
 
 
-<script>
-function muestra_oculta(id){
-if (document.getElementById){  
-var el = document.getElementById(id);  
-el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
-}
-}
-window.onload = function(){ 
-muestra_oculta('nuevoprotocolo'); 
-}
-</script>
+ 
+ 
+
 <insertar>
 
 				 
@@ -112,38 +133,45 @@ muestra_oculta('nuevoprotocolo');
   <thead>
     <tr>
       <th width="200">Nombre</th>
-	  <th width="400">Descripción</th>
-      <th width="150">Modificar</th>
+	  <th width="200">Fecha de Carga</th>
+	  <th width="200">Fecha Vencimiento</th>
+	  <th width="400">Ubicación</th>
+	  <th width="200">Estado</th>
+ 
     </tr>
   </thead> 
-  
-   
   <tbody>
    
   
   
   <?php  
  
-	
-	
-	
-	
 			$conn = mysqli_connect("localhost","root","","tesis");
 
 			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM protocolo;');
+									  	   FROM extintor;');
 		    while($row = mysqli_fetch_array($result)){
 
   
- echo'<form action="MProtocolos.php" method="post">';	 
- echo '<input type="hidden" name="id_protocolo" value='.$row["id_protocolo"].' />'; 
+ echo'<form action="MRiesgos.php" method="post">';	 
+ echo '<input type="hidden" name="id_riesgo" value='.$row["id_extintor"].' />'; 
       echo '<tr>';
+ 
+	  
 	  echo '<td>' ;
 	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-
+      echo '</td>';
 	  echo '<td>' ;
-	  echo  utf8_encode($row["descripcion"]);
+	  echo  utf8_encode($row["fecha_carga"]);
+      echo '</td>';
+	  echo '<td>' ;
+	  echo  utf8_encode($row["fecha_venc"]);
+      echo '</td>';
+	  echo '<td>' ;
+	  echo  utf8_encode($row["ubicacion"]);
+      echo '</td>';
+	  echo '<td>' ;
+	  echo  utf8_encode($row["estado"]);
       echo '</td>';
 	   
 	  echo '<td>' ;
@@ -161,25 +189,18 @@ muestra_oculta('nuevoprotocolo');
   </tbody>
 </table>
 
-
- 
-          
+            <div class="row column">
+                <hr>
+                <h4 style="margin: 0;" class="text-center">Extintores a vencer</h4>
+                <hr>
+            </div>
                 </div>
                 </div>
           </div>
         </div>
       </div>
-	 
-	 
- 
-  
  
  
-	
-
-	
-	
-	
 </br>	
 <?php include 'Footer.php'; ?>
  
@@ -197,14 +218,46 @@ muestra_oculta('nuevoprotocolo');
 <?php
 include("guardar.php");
  
-if(isset($_POST['submitprotocolo'])){
+if(isset($_POST['submitextintor'])){
  
-    $campos = array("id_protocolo"=> NULL ,
-	"nombre"=>$_POST['nombre'],"descripcion"=>$_POST['descripcion']); 
+    $campos = array("id_extintor"=> NULL ,
+	"nombre"=>$_POST['nombre'],
+    "fecha_carga"=>$_POST['fecha_carga'],
+    "fecha_venc"=>$_POST['fecha_venc'],
+    "id_piso"=>$_POST['id_piso']); 
  
-    $nuevo = new GuardarProtocolo("tesis"); 
-    $nuevo->NuevoProtocolo($campos);
+    $nuevo = new GuardarRiesgo("tesis"); 
+    $nuevo->NuevoRiesgo($campos);
 }
 ?>
+ <script type="text/javascript">
+function muestra_extintor(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
+window.onload = function(){ 
+muestra_extintor('nuevoextintor'); 
+}
+$(document).ready(function(){
+		$('#lista1').val(1);
+		recargarLista();
+
+		$('#lista1').change(function(){
+			recargarLista();
+		});
+	})
  
+function recargarLista(){
+		$.ajax({
+			type:"POST",
+			url:"datos.php",
+			data:"id_edificio=" + $('#lista1').val(),
+			success:function(r){
+				$('#select2lista').html(r);
+			}
+		});
+	}
+</script>
  

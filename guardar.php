@@ -66,7 +66,7 @@
 	
 	}
 	
-	 function ModificarAsignacionProtocolo($form_data){
+    function ModificarAsignacionProtocolo($form_data){
         $fields = array_keys($form_data);
 		$id = htmlentities($_POST['id_edificio']);
 		$id_protocolo = $_POST['id_protocolo'];
@@ -180,7 +180,146 @@
 	
 	}
    
+    function ModificarRiesgo($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_riesgo = $_POST['id_riesgo'];
+		$nombre = htmlentities($_POST['nombre']);
+		$descripcion =htmlentities($_POST['descripcion']);
+
+		$nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_archivo=($_FILES['ARCHIVO']['type']);
+        $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));
+		
+        $consulta = "UPDATE `riesgo` SET `nombre`='$nombre',
+		`descripcion`='$descripcion',`icono`='$imageData'  
+		WHERE `id_riesgo`='$id_riesgo'"; 
+ 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('riesgos.php');					
+			      </script>"; 
+		}
+	
+	}
+	 
+	function AsignarRiesgo($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_edificio = htmlentities($_POST['id_edificio']);
+		$id_riesgo =htmlentities($_POST['id_riesgo']);
+ 
+	 
+        $consulta = "INSERT INTO `edificio_riesgo` (`id_edificio`,`id_riesgo`) VALUES 
+		('$id_edificio','$id_riesgo');";
+         
+		 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible quitar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha quitado con éxito'); 
+                     window.location.replace('Edificio.php?');					
+			      </script>"; 
+		}
+	
+	}
+
+	function QuitarRiesgo($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_edificio = htmlentities($_POST['id_edificio']);
+		$id_riesgo =htmlentities($_POST['id_riesgo']);
+ 
+	 
+        $consulta = "DELETE FROM `edificio_riesgo` 
+		             WHERE id_edificio ='$id_edificio' AND id_riesgo='$id_riesgo'";
+ 
+         
+		 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible asignar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha asignado con éxito'); 
+                     window.location.replace('Edificio.php?');					
+			      </script>"; 
+		}
+	
+	} 	
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+ 
+ 
+ 
+ 
+ class GuardarAccidente{
+ 
+	private $id_accidente;
+	private $fecha;
+	private $tipo;
+    private $numero;
+    private $persona;
+    private $descripcion;
+    private $id_edificio;
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevoAccidente($form_data){
+        $fields = array_keys($form_data);
+		
+		$fecha = htmlentities($_POST['fecha']);
+		$tipo = htmlentities($_POST['tipo']);
+		$numero = htmlentities($_POST['numero']);
+		$persona = htmlentities($_POST['persona']);
+		$descripcion =htmlentities($_POST['descripcion']);
+		$id_edificio =htmlentities($_POST['id_edificio']);		
+ 
+        $consulta = "INSERT INTO `accidente` (`id_accidente`,`fecha`,`tipo`,`numero`
+		                                      ,`persona`,`descripcion`,`id_edificio`)
+		VALUES (NULL,'$fecha','$tipo','$numero','$persona','$descripcion','$id_edificio');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('Error al añadir');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha añadido con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	
+	}
    
+     
 	 
 	 
  

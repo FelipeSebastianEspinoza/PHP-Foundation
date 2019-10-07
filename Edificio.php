@@ -280,17 +280,7 @@ $id_edificio=$_POST['id_edificio'];
  ?>
 </div>
 
-<script>
-function muestra_oculta(id){
-if (document.getElementById){  
-var el = document.getElementById(id);  
-el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
-}
-}
-window.onload = function(){ 
-muestra_oculta('nuevoprotocolo'); 
-}
-</script>
+ 
 <insertar>
 
 
@@ -299,20 +289,71 @@ muestra_oculta('nuevoprotocolo');
   <div class="tabs-panel" id="panel2c">
      <?php  
 			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT *
+   	
+			$result = mysqli_query($conn, 'SELECT r.id_riesgo,r.icono,d.id_edificio,d.id_riesgo
 									  	   FROM riesgo r,edificio_riesgo d  
 									       WHERE r.id_riesgo=d.id_riesgo   
 										   AND d.id_edificio ='.$id_edificio.'    ;');
 		    while($row = mysqli_fetch_array($result)){
- 	   
-    echo '<tr>';
-	echo '<img   src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
+ echo ' <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
  
-    echo '</tr>';
+	echo '<img   src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
+	if(isset($_SESSION['usuario'])){
+    echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
+    echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />';
+   echo' <input type="submit" name="submitquitarriesgo" class="alert button"value="Quitar"></input> ';  
+	}
+  echo '</form>';
 	 
 				}
 		  ?>
+		  
+   
+	<insertar>
+<div class="titulo_boton">
+<?php 				if(isset($_SESSION['usuario'])){?>
+  </br><a style='cursor: pointer;' onClick="riesgos_ocultos('nuevoriesgo')" title="" class="success button">Asignar Riesgo</a>
+<?php 			}?>
+  </div>
+
+<div id="nuevoriesgo">
+<?php 
+  	    	    
+                echo'<table>';
+                echo'<thead>';
+                $result = mysqli_query($conn, 'SELECT *
+			                                   FROM riesgo ;');
+			    if($result==null){
+				    echo'';
+			    }else{	
+				 echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	
+			        echo'<tr>';
+			        echo'<th style="font-weight: normal;"width="50">';
+					echo "Riesgo";
+                    echo'<select class="form-control form-control-sm" name="id_riesgo">';
+ 
+                    while($row=mysqli_fetch_assoc($result)) { 
+                        echo "<option value='$row[id_riesgo]'>$row[nombre]</option>";  
+				    } 
+				 }	 
+                echo'</select>';
+ 
+				
+			    echo'<th style="font-weight: normal;"width="50">';
+               echo'</br><input type="submit" name="submitriesgo" class="button primary"value="Asignar"></input>';
+				echo'</th>';
+				echo'</th>';
+                echo'</thead>';
+                echo'</table>';
+				echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
+                echo '</form>';	 
+ ?>
+</div>
+
+ 
+<insertar>	  
+		  
+		  
   </div>
   
   
@@ -321,8 +362,8 @@ muestra_oculta('nuevoprotocolo');
     <table>
   <thead>
     <tr>
-      <th width="200">ID</th>
-      <th>Fecha</th>
+      <th width="50">ID</th>
+      <th width="100">Fecha</th>
       <th width="150">Tipo</th>
       
 	   <?php  
@@ -374,6 +415,44 @@ muestra_oculta('nuevoprotocolo');
    
   </tbody>
 </table>
+<insertar>
+<div class="titulo_boton">
+  <a style='cursor: pointer;' onClick="accidentes_ocultos('nuevoaccidente')" title="" class="success button">Añadir Accidente</a>
+</div>
+
+<div id="nuevoaccidente">
+  <table>
+  <thead>
+    <tr>
+      <th width="100">Fecha</th>
+      <th width="100">Tipo</th>
+      <th width="100">Número</th>
+	  <th width="300">Persona</th>
+      <th width="600">Descripción</th>
+	  <th width="100"> </th>
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	
+    <td><input type="date" id="inputFecha" name="fecha" class="form-control" placeholder="" Required >	</td>
+    <td><input type="text" id="inputTipo" name="tipo" class="form-control" placeholder="" Required >	</td>
+    <td><input type="text" id="inputNumero" name="numero" class="form-control" placeholder="" Required >	</td>
+    <td><input type="text" id="inputPersona" name="persona" class="form-control" placeholder="Escriba el nombre" Required >	</td>
+    <td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
+    <td><button class="success button" type="submit" name="submitaccidente">Registrar</button></td>
+  
+    </form>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+ 
+<insertar>
+
+
   </div>
   
   <div class="tabs-panel" id="panel4c">
@@ -450,6 +529,63 @@ if(isset($_POST['submitprotocolo'])){
     $nuevo = new GuardarProtocolo("tesis"); 
     $nuevo->AsignarProtocolo($campos);
 } 
+if(isset($_POST['submitriesgo'])){
  
+    $campos = array("id_riesgo"=> $_POST['id_riesgo'] ,
+	"id_edificio"=> $_POST['id_edificio']); 
+ 
+    $nuevo = new GuardarRiesgo("tesis"); 
+    $nuevo->AsignarRiesgo($campos);
+} 
+ 
+if(isset($_POST['submitquitarriesgo'])){
+ 
+    $campos = array("id_riesgo"=> $_POST['id_riesgo'] ,
+	"id_edificio"=> $_POST['id_edificio']); 
+ 
+    $nuevo = new GuardarRiesgo("tesis"); 
+    $nuevo->QuitarRiesgo($campos);
+} 
+
+
+if(isset($_POST['submitaccidente'])){
+ 
+    $campos = array("id_riesgo"=> $_POST['id_riesgo'] ,
+ 	"id_edificio"=> $_POST['id_edificio']); 
+ 
+     $nuevo = new GuardarAccidente("tesis"); 
+     $nuevo->NuevoAccidente($campos);
+} 
+
 ?>
+<script>
+
+function muestra_oculta(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
+
+function riesgos_ocultos(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
+
+function accidentes_ocultos(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
+ 
+
+window.onload = function(){ 
+muestra_oculta('nuevoprotocolo'); 
+riesgos_ocultos('nuevoriesgo'); 
+accidentes_ocultos('nuevoaccidente'); 
+}
+</script>
  

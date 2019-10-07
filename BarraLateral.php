@@ -3,10 +3,11 @@
     <ul class="vertical menu">
 	  <li><a href="Protocolos.php">Administrar Protocolos</a></li>
       <li><a href="Riesgos.php">Administrar Riesgos</a></li>
-      <li><a href="#">Administrar Grifos</a></li>
+	  <li><a href="Extintores.php">Administrar Extintores</a></li>
+	  <li><a href="Accidentes.php">Administrar Accidentes</a></li>
+ 
       <li><a href="#">Administrar Zonas de Seguridad</a></li>
       <li><a href="#">Administrar Zonas de Evacuación</a></li>
-      <li><a href="#">Ver Acidentes</a></li>
       <li><a href="#">Ver Enfermedades Profesionales</a></li>
  
 	  <div class="cell shrink">
