@@ -100,7 +100,7 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
         <h5>FLICKR IMAGES</h5>
     </div>
     <div class="large-4 cell">
-        <h5>RANDOM MAG</h5>
+        <h5>RANDOM 5MAG</h5>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti quam voluptatum vel repellat ab similique molestias molestiae ea omnis eos, id asperiores est praesentium, voluptate officia nulla aspernatur sequi aliquam.</p>
     </div>
 </div>

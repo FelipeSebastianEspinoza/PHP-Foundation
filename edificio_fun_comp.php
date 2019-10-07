@@ -1,9 +1,9 @@
- <h5>RANDOM MAG</h5>
+ <h5>nombre edificio</h5>
 	  <div class="cell shrink">
 <!--<img class="thumbnail" src="https://placehold.it/550x350">   -->
  <img class="thumbnail" id="edGantes" src="img/edificionormal.jpg">
 </div>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti quam voluptatum vel repellat ab similique molestias molestiae ea omnis eos, id asperiores est praesentium, voluptate officia nulla aspernatur sequi aliquam.</p>
+<p>descripcion edificio</p>
  
 <form method="POST" action="Edificio.php" id="EdificioGantes">
 <input type="hidden" name="id" value="1" />
