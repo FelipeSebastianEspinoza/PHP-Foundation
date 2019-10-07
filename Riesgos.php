@@ -188,7 +188,9 @@ include("guardar.php");
 if(isset($_POST['submitriesgo'])){
  
     $campos = array("id_protocolo"=> NULL ,
-	"nombre"=>$_POST['nombre'],"descripcion"=>$_POST['descripcion']); 
+	"nombre"=>$_POST['nombre'],
+	"descripcion"=>$_POST['descripcion'],
+	"imagen"=>$_POST['ARCHIVO']); 
  
     $nuevo = new GuardarRiesgo("tesis"); 
     $nuevo->NuevoRiesgo($campos);

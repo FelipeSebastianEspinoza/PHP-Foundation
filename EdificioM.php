@@ -2,10 +2,14 @@
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
  
  session_start();
- $id_edificio = $_SESSION['id_edi'];
+  if(!empty($_POST['id_edificio'])) {
+        $id_edificio = $_POST['id_edificio'];
+		
+  }else{
+	 $_POST['id_edificio']=$_SESSION['id_edificio'];
+  
+  }
  
- 
- 		 
  ?>
 
 
@@ -79,7 +83,13 @@
  <?php  
   echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
 			$conn = mysqli_connect("localhost","root","","tesis");
-            
+ 
+ 		 	 if(!empty($id_edificio)) {
+              $id_edificio = $_SESSION['id_edificio'];
+             }else{
+	           $id_edificio = $_SESSION['id_edificio'];
+             }	 
+			 
 			$result = mysqli_query($conn, 'SELECT * 
 									  	   FROM edificio
 									       WHERE id_edificio ='.$id_edificio.';');
@@ -189,9 +199,10 @@
   </thead>
   <tbody>
   <?php  
+   echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
 			$conn = mysqli_connect("localhost","root","","tesis");
 
-			$result = mysqli_query($conn, 'SELECT a.estado,p.nombre,p.descripcion
+			$result = mysqli_query($conn, 'SELECT p.id_protocolo,a.estado,p.nombre,p.descripcion,a.id_edificio
 									  	   FROM protocolo p,asigna a
 									       WHERE p.id_protocolo=a.id_protocolo
 										   AND a.id_edificio ='.$id_edificio.';');
@@ -209,8 +220,10 @@
 	  
 	  if(isset($_SESSION['usuario'])){
 	  echo '<td>' ;
-	  echo '<button type="button" class="success button">Cambiar</button>';
-      echo '</td>';   
+     echo'<button class="success button" type="submit" name="submitprotocolo">Cambiar</button> ';
+        echo '<input type="hidden" name="id_protocolo" value='.$row["id_protocolo"].'/>';
+		echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].'/>';
+	  echo '</td>';   
 	  }
 	  
 	  echo '<td>' ;
@@ -218,7 +231,7 @@
       echo '</td>';
  
       echo '</tr>';
-	  
+	  echo '</form>';
 				}
 		  ?>
  
@@ -379,8 +392,7 @@ include("guardar.php");
  
 if(isset($_POST['submitedificio'])){
  
-  
-	    $campos = array("id_edificio"=> $_POST['id_edificio'] , 
+    $campos = array("id_edificio"=> $_POST['id_edificio'] , 
 	"nombre"=>$_POST['nombre'],"estado"=>$_POST['estado'],
 	"n_departamentos"=>$_POST['n_departamentos'],"n_estudiantes"=>$_POST['n_estudiantes'],
 	"porcentaje_hacinamiento"=>$_POST['porcentaje_hacinamiento'],"area_total"=>$_POST['area_total'],
@@ -388,9 +400,14 @@ if(isset($_POST['submitedificio'])){
  
     $nuevo = new GuardarEdificio("tesis"); 
     $nuevo->ModificarEdificio($campos);
- 
- 
- 
 }
+if(isset($_POST['submitprotocolo'])){
  
+    $campos = array("id_edificio"=> $_POST['id_edificio'],
+                    "id_protocolo"=>$_POST['id_protocolo'],
+                    "estado"=>$_POST['estado']); 				
+ 
+    $nuevo = new GuardarProtocolo("tesis"); 
+    $nuevo-> ModificarAsignacionProtocolo($campos);
+} 
 ?>

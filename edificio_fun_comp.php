@@ -6,10 +6,15 @@
 <p>descripcion edificio</p>
  
 <form method="POST" action="Edificio.php" id="EdificioGantes">
-<input type="hidden" name="id" value="1" />
+<input type="hidden" name="id_edificio" value="1" />
+ 
+
+
+
 </form>	
 <form method="POST" action="Edificio.php" id="Casino">
-<input type="hidden" name="id" value="2" />
+<input type="hidden" name="id_edificio" value="2" />
+ 
 </form>	  
 <script> 
  

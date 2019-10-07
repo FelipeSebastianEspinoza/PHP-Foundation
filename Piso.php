@@ -144,7 +144,7 @@ echo'</div>';
 <div class="large-4 cell">
 </br>
  <form action="Edificio.php" method="post"> 
- <input type="hidden" name="id" value="<?php echo $id_edificio ?>"/>
+ <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>
  <input type="submit" class="button primary"value="Volver Al Edificio"></input>
  </form>
 </div>

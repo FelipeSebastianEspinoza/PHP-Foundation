@@ -65,6 +65,38 @@
 		}
 	
 	}
+	
+	 function ModificarAsignacionProtocolo($form_data){
+        $fields = array_keys($form_data);
+		$id = htmlentities($_POST['id_edificio']);
+		$id_protocolo = $_POST['id_protocolo'];
+		$id_edificio = $_POST['id_edificio'];
+		$estado = htmlentities($_POST['estado']);
+ 
+        $consulta = "UPDATE `asigna` SET `estado`='$estado'
+	                 WHERE `id_edificio`='$id_edificio' 
+		             AND `id_protocolo`='$id_protocolo'"; 
+ 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('MapaPrueba.php');					
+			      </script>"; 
+		}
+	
+	}
+	
+	
+	
+	
 	 
 	function AsignarProtocolo($form_data){
         $fields = array_keys($form_data);
@@ -127,8 +159,8 @@
 		
 		
 		
-        $consulta = "INSERT INTO `riesgo` (`id_riesgo`,`nombre`,`descripcion`,`icono`) VALUES 
-		(NULL,'$nombre','$descripcion');";
+        $consulta = "INSERT INTO `riesgo` (`id_riesgo`,`nombre`,`descripcion`,`icono`)
+		VALUES (NULL,'$nombre','$descripcion','$imageData');";
     
 		 
 		 
@@ -142,7 +174,7 @@
 		}else{
 			echo "<script>
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('protocolos.php');					
+                    window.location.replace('Riesgos.php');					
 			      </script>"; 
 		}
 	
@@ -220,8 +252,11 @@
 					 
 				  </script>";
 		}else{
+		 
+ 
 			echo "<script>
 					alert('Se ha modificado con éxito'); 
+					 
                     window.location.replace('Edificio.php');					
 			      </script>"; 
 		}

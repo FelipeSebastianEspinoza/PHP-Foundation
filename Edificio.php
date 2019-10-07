@@ -1,21 +1,26 @@
   <?php  
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
-  
-  
-  
+ 
   session_start();
   
-  if(isset($_SESSION['id_edi']) && !empty($_SESSION['id_edi'])) {
-  $id_edi=$_POST['id'];
+ if (isset($_SESSION['usuario'])){
+ 
+ 
+   if(!empty($_POST['id_edificio'])) {//si no esta vacio
+$_SESSION['id_edificio']=$_POST['id_edificio'];
+$id_edificio=$_POST['id_edificio'];
+}else{
+	 $_POST['id_edificio']=$_SESSION['id_edificio'];
+     $id_edificio=$_POST['id_edificio'];
+}
+
+
+
+
+
+}else{
+	$id_edificio=$_POST['id_edificio'];
 } 
-  
-  
-  $_SESSION['id_edi'] = $_POST["id"]; 
-  if($_SESSION['id_edi']==null){
-  $_SESSION['id_edi'] = $_POST["id"]; 
-  }
-  $id_edificio= $_SESSION['id_edi'];
-  
  ?>
 
 
@@ -117,7 +122,7 @@
                 echo'<tr>';
                 echo'<th width="50">N°Estudiantes: </th>';
                 echo'<th style="font-weight: normal;"width="150">'.$row["n_estudiantes"].'</th>';
-                echo'<th width="50">Area Total: </th>';
+                echo'<th width="50">% Hacinamiento: </th>';
 				if(isset($_SESSION['usuario'])){
                 echo'<th style="font-weight: normal;"width="150">'.$row["porcentaje_hacinamiento"].'</th>  ';
                 echo'</tr>';
@@ -131,7 +136,7 @@
 				
 				if(isset($_SESSION['usuario'])){
 				    echo'<form action="EdificioM.php" method="post">';
-					echo '<input type="hidden" name="id" value='.$id_edificio.' />';
+					echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
 					echo'<input type="submit" class="success button"value="Modificar"></input>';
 				    echo'</form>';
 				}
