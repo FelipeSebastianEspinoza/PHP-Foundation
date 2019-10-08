@@ -15,9 +15,6 @@ $id_edificio=$_POST['id_edificio'];
 }
 
 
-
-
-
 }else{
 	$id_edificio=$_POST['id_edificio'];
 } 

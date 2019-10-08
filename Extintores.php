@@ -106,12 +106,14 @@ if (!isset($_SESSION['usuario'])){
   </thead>
   <tbody>  
     <tr>
+	 <input  type="hidden" id="id_piso" name="id_piso" class="form-control"   Required > 
+
     <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre del riesgo" Required ></td>
     <td><input type="date" id="inputFechaCarga" name="fecha_carga" class="form-control"  Required ></td>
     <td><input type="date" id="inputFechaVenc" name="fecha_venc" class="form-control"  Required ></td>
 	<td><textarea  type="text" id="inputUbicacion" rows="5" cols="55"name="ubicacion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
 	<td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="Escriba el estado" Required ></td>
-    <td><button class="success button" type="submit" name="submitextintor">Registrar</button></td>
+    <td><button onclick="TomarIdPiso()" class="success button" type="submit" name="submitextintor"  >Registrar</button></td>
   
  
   
@@ -120,12 +122,7 @@ if (!isset($_SESSION['usuario'])){
   </tbody>
 </table>
 </div>
-
-
-
  
- 
-
 <insertar>
 
 				 
@@ -147,14 +144,12 @@ if (!isset($_SESSION['usuario'])){
   <?php  
  
 			$conn = mysqli_connect("localhost","root","","tesis");
-
 			$result = mysqli_query($conn, 'SELECT *
 									  	   FROM extintor;');
 		    while($row = mysqli_fetch_array($result)){
-
   
- echo'<form action="MRiesgos.php" method="post">';	 
- echo '<input type="hidden" name="id_riesgo" value='.$row["id_extintor"].' />'; 
+ echo'<form action="MExtintores.php" method="post">';	 
+ echo '<input type="hidden" name="id_extintor" value='.$row["id_extintor"].' />'; 
       echo '<tr>';
  
 	  
@@ -226,8 +221,8 @@ if(isset($_POST['submitextintor'])){
     "fecha_venc"=>$_POST['fecha_venc'],
     "id_piso"=>$_POST['id_piso']); 
  
-    $nuevo = new GuardarRiesgo("tesis"); 
-    $nuevo->NuevoRiesgo($campos);
+    $nuevo = new GuardarExtintor("tesis"); 
+    $nuevo->NuevoExtintor($campos);
 }
 ?>
  <script type="text/javascript">
@@ -239,11 +234,11 @@ el.style.display = (el.style.display == 'none') ? 'block' : 'none';
 }
 window.onload = function(){ 
 muestra_extintor('nuevoextintor'); 
+ 
 }
 $(document).ready(function(){
 		$('#lista1').val(1);
 		recargarLista();
-
 		$('#lista1').change(function(){
 			recargarLista();
 		});
@@ -252,12 +247,23 @@ $(document).ready(function(){
 function recargarLista(){
 		$.ajax({
 			type:"POST",
-			url:"datos.php",
+			url:"datos_del_piso.php",
 			data:"id_edificio=" + $('#lista1').val(),
 			success:function(r){
 				$('#select2lista').html(r);
+ 
 			}
 		});
 	}
+	
+	
+ 
+function TomarIdPiso() {
+ var select = document.getElementById("lista2");
+  console.log(select.value);
+ document.getElementById("id_piso").value = select.value;
+}
+	
+	
 </script>
  

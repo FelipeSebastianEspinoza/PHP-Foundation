@@ -1,7 +1,7 @@
-  <?php  
+ <?php  
  
  session_start();
- $id_riesgo = $_POST["id_riesgo"]; 				 
+ $id_extintor = $_POST["id_extintor"]; 				 
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -53,7 +53,7 @@
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Riesgos</h4>
+                <h4 style="margin: 0;" class="text-center">Exintores</h4>
                 <hr>
             </div>
             <div class="callout">
@@ -66,10 +66,11 @@
   <table>
   <thead>
     <tr>
-      <th width="200">Nombre</th>
-      <th width="100">Icono</th>
-	  <th width="400">Descripción</th>
-      <th width="150">Modificar</th>
+      <th width="250">Nombre</th>
+      <th width="150">Fecha de Carga</th>
+	  <th width="150">Fecha de Vencimiento</th>
+      <th width="450">Ubicación</th>
+	  <th width="150">Estado</th>
     </tr>
   </thead> 
   
@@ -79,41 +80,44 @@
   
   
   <?php  
- 
-	
-	
-	
-	
+
 			$conn = mysqli_connect("localhost","root","","tesis");
 
 			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM riesgo
-										   WHERE id_riesgo='.$id_riesgo.';');
+									  	   FROM extintor
+										   WHERE id_extintor='.$id_extintor.';');
 		    while($row = mysqli_fetch_array($result)){
 
   
  	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
-      echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />'; 
+      echo '<input type="hidden" name="id_extintor" value='.$row["id_extintor"].' />';
+      $id_piso = $row["id_piso"] ; 
 	  echo '<tr>';
 	  
 	  echo '<td>' ;
 	  echo '<input type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required>';
 	  echo '</td>';
-
+	  
 	  echo '<td>' ;
-	   echo '<img class="thumbnail"  src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
-	 echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 
+	  echo '<input type="text" id="fecha_carga"name="fecha_carga" class="form-control" value="'.$row["fecha_carga"].'" Required>';
 	  echo '</td>';
 	  
+	  echo '<td>' ;
+	  echo '<input type="text" id="fecha_venc"name="fecha_venc" class="form-control" value="'.$row["fecha_venc"].'" Required>';
+	  echo '</td>';
+  
+	  echo '<td>' ;
+	   ?> <textarea name="ubicacion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['ubicacion']) ?></textarea><?php
+      echo '</td>';
+	  
+      echo '<td>' ;
+	  echo '<input type="text" id="estado"name="estado" class="form-control" value="'.$row["estado"].'" Required>';
+	  echo '</td>';
 	  
 	  echo '<td>' ;
-	   ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
-      echo '</td>';
-	   
-	  echo '<td>' ;
-	   if(isset($_SESSION['usuario'])){ 
-      echo'<button class="success button" type="submit" name="submitmodificarriesgo">Registrar</button> ';
-	   }
+ 
+      echo'<button class="success button" type="submitmodificarextintor" name="submitmodificarriesgo">Registrar</button> ';
+ 
       echo '</td>';
  
       echo '</tr>';
@@ -126,8 +130,53 @@
 </table>
 
 
+<?php 
+		    $conn = mysqli_connect("localhost","root","","tesis");
+			$result = mysqli_query($conn, 'SELECT e.id_edificio
+			                               FROM edificio e, piso p 
+										   WHERE p.id_piso='.$id_piso.' 
+										   AND p.id_edificio=e.id_edificio;');
+	 
+		       
+                   while($row2=mysqli_fetch_assoc($result)) { 
+                     $id_edificio2 = $row2["id_edificio"] ; 
+                
+				    } 
+ 
+			 ?>
+
+  
+ <?php 
+ 
+		    $conn = mysqli_connect("localhost","root","","tesis");
+			$result = mysqli_query($conn, 'SELECT id_edificio,nombre
+			                               FROM edificio ;');
+			 	 		   
+		         echo' <tr><td><select class="form-control form-control-sm" id="lista1" name="id_edificio">';
+                    while($row3=mysqli_fetch_assoc($result)) { 
+              
+					if( $id_edificio2 == $row3[id_edificio]){
+						 echo "<option value='$row3[id_edificio]'Selected>$row3[nombre]</option>";  
+					}else{
+						 echo "<option value='$row3[id_edificio]'>$row3[nombre]</option>";  
+					}	
+				 
+				    } 
+                echo'</td></select>';
+		       
+			 
+			 ?>
+		 
+			
+			 <td><div id="select2lista"></div></td> </tr>
+
  
           
+		  
+		  
+		  
+		  
+		  
                 </div>
                 </div>
           </div>
@@ -161,17 +210,46 @@
 <?php
 include("guardar.php");
  
-if(isset($_POST['submitmodificarriesgo'])){
+if(isset($_POST['submitmodificarextintor'])){
  
-    $campos = array("id_riesgo"=> $_POST['id_riesgo'] ,
+    $campos = array("id_extintor"=> $_POST['id_extintor'] ,
 	"nombre"=>$_POST['nombre'],
-	"descripcion"=>$_POST['descripcion'],
-	"imagen"=>$_POST['ARCHIVO']); 
+	"fecha_carga"=>$_POST['fecha_carga'],
+    "fecha_venc"=>$_POST['fecha_venc'],
+	"ubicacion"=>$_POST['ubicacion'],
+	"estado"=>$_POST['estado']); 
  
-    $nuevo = new GuardarRiesgo("tesis"); 
-    $nuevo->ModificarRiesgo($campos);
+    $nuevo = new GuardarExtintor("tesis"); 
+    $nuevo->ModificarExtintor($campos);
 }
  
 ?>
  
+ <script>
+ $(document).ready(function(){
+	 
+		recargarLista();
+		$('#lista1').change(function(){
+			recargarLista();
+		});
+	})
  
+function recargarLista(){
+		 var select1 = document.getElementById("lista1");
+		 select2=(select1.value);
+		 select3= <?php echo $id_piso;  ?>;
+         console.log(select2);
+		$.ajax({
+			type:"POST",
+			url:"Mdatos_del_piso.php",
+			//data:"id_edificio=" + $('#lista1').val(), 
+ 
+              data: {"id_edificio": select2,"id_piso": select3},
+			  
+			success:function(r){
+				$('#select2lista').html(r);
+ 
+			}
+		});
+	}
+ </script>

@@ -333,6 +333,95 @@
  
  
  
+ class GuardarExtintor{
+ 
+	private $id_extintor;
+	private $nombre;
+	private $fecha_carga;
+    private $fecha_venc;
+    private $ubicacion;
+    private $estado;
+    private $id_piso;
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevoExtintor($form_data){
+        $fields = array_keys($form_data);
+		
+		$nombre = htmlentities($_POST['nombre']);
+		$fecha_carga =htmlentities($_POST['fecha_carga']);
+		$fecha_venc =htmlentities($_POST['fecha_venc']);
+        $ubicacion =htmlentities($_POST['ubicacion']);
+        $estado =htmlentities($_POST['estado']);	
+        $id_piso =htmlentities($_POST['id_piso']);
+ 
+        $consulta = "INSERT INTO `extintor` (`id_extintor`,`nombre`,`fecha_carga`,
+		`fecha_venc`,`ubicacion`,`estado`,`id_piso`)
+		VALUES (NULL,'$nombre','$fecha_carga','$fecha_venc',
+		'$ubicacion','$estado','$id_piso');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Extintores.php');					
+			      </script>"; 
+		}
+	
+	}
+	function ModificarExtintor($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_extintor = $_POST['id_extintor'];
+		$nombre = htmlentities($_POST['nombre']);
+		$fecha_carga = htmlentities($_POST['fecha_carga']);
+        $fecha_venc = htmlentities($_POST['fecha_venc']);
+        $ubicacion = htmlentities($_POST['ubicacion']);
+        $estado = htmlentities($_POST['estado']);
+        $id_piso = htmlentities($_POST['id_piso']);
+
+        $consulta = "UPDATE `extintor` SET `nombre`='$nombre',
+		`fecha_carga`='$fecha_carga',`fecha_venc`='$fecha_venc',
+		`ubicacion`='$ubicacion',`estado`='$estado'
+		WHERE `id_extintor`='$id_extintor'"; 
+ 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('riesgos.php');					
+			      </script>"; 
+		}
+	
+	}
+   
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+ 
+ 
+ 
+ 
+ 
+ 
  class GuardarEdificio{
  
 	private $id_edificio;
