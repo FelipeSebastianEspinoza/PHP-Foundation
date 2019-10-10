@@ -1,8 +1,8 @@
   <?php  
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
- //$id_area = $_POST["id_area"]; 
- //$id_piso = $_POST["id_piso"]; 
- //$id_edificio = $_POST["id_edificio"];
+ $id_area = $_POST["id_area"]; 
+ $id_piso = $_POST["id_piso"]; 
+ $id_edificio = $_POST["id_edificio"];
   session_start();
  if (isset($_SESSION['usuario'])){
  
@@ -10,27 +10,13 @@
    if(!empty($_POST['id_piso'])) {//si no esta vacio
 $_SESSION['id_piso']=$_POST['id_piso'];
 $id_piso=$_POST['id_piso'];
-
-$_SESSION['id_area']=$_POST['id_area'];
-$id_area=$_POST['id_area'];
-
-$_SESSION['id_edificio']=$_POST['id_edificio'];
-$id_edificio=$_POST['id_edificio'];
 }else{
 	 $_POST['id_piso']=$_SESSION['id_piso'];
      $id_piso=$_POST['id_piso'];
-	 
-	  $_POST['id_area']=$_SESSION['id_area'];
-     $id_area=$_POST['id_area'];
-	 
-	  $_POST['id_edificio']=$_SESSION['id_edificio'];
-     $id_edificio=$_POST['id_edificio'];
 }
  
 }else{
 	$id_piso=$_POST['id_piso'];
-    $id_edificio = $_POST["id_edificio"];
-	$id_area = $_POST["id_area"]; 
 }
   
   
@@ -103,11 +89,14 @@ $id_edificio=$_POST['id_edificio'];
 
 
 
-  
-
-
-
  
+
+
+
+
+
+
+
 
 	
  
@@ -118,10 +107,10 @@ $id_edificio=$_POST['id_edificio'];
 $conn = mysqli_connect("localhost","root","","tesis");
 $result = mysqli_query($conn, 'SELECT * FROM area_del_edificio  
                                    WHERE id_area ='.$id_area.';');
-while($row = mysqli_fetch_array($result)){  
-echo'<form action="MPisoArea.php" method="post">';	  
-echo' <h4 style="margin: 0;" class="text-center">'.$row["nombre"].'</h4>'; 
-									   
+while($row = mysqli_fetch_array($result)){
+ echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
+ 
+echo '<h4><input style="margin: 0;" class="text-center"type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required></h4>';									   
 ?>
 <hr>
 </div>
@@ -140,7 +129,7 @@ echo '<input type=image class="thumbnail"
   margin: 0 auto;"  
   
   src="data:image/png;base64,'.base64_encode( $row["imagen"] ).'"/>';
-									   
+ echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 							   
 ?>
 </div>
 
@@ -154,34 +143,55 @@ echo '<input type=image class="thumbnail"
   echo'<table>';
                 echo'<thead>';
                 echo'<tr>';
+				
                 echo'<th width="50">Estado: </th>';
-                echo'<th style="font-weight: normal;"width="150">'.$row["estado"].'</th>';
-                echo'<th width="50">N°Extintores: </th>';
-                echo'<th style="font-weight: normal;"width="150">'.$row["n_extintores"].'</th>  ';
-                echo'</tr>';
+                echo'<th style="font-weight: normal;"width="150">';  
+				echo '<input type="text" id="estado"name="estado" class="form-control" value="'.$row["estado"].'" Required>';
+                echo '</th>';
+				
+				echo'<th width="50">N°Extintores: </th>';
+                echo'<th style="font-weight: normal;"width="150">';  
+				echo '<input type="text" id="n_extintores"name="n_extintores" class="form-control" value="'.$row["n_extintores"].'" Required>';
+                echo '</th>';
+
+			    echo'</tr>';
+				
                 echo'<tr>';
                 echo'<th width="50">Area Real: </th>';
-                echo'<th style="font-weight: normal;"width="150">'.$row["area_real"].'</th>';
+                echo'<th style="font-weight: normal;"width="150">';  
+				echo '<input type="text" id="area_real"name="area_real" class="form-control" value="'.$row["area_real"].'" Required>';
+                echo '</th>';
+				
+				
 				if(isset($_SESSION['usuario'])){
                 echo'<th width="50">Confort: </th>';	
-                echo'<th style="font-weight: normal;"width="150">'.$row["confort"].'</th>  ';
+                echo'<th style="font-weight: normal;"width="150">';  
+				echo'<input type="text" id="confort"name="confort" class="form-control" value="'.$row["confort"].'" Required>';
+                echo'</th>';
                 echo'</tr>';
                 echo'<tr>';
                 echo'<th width="50">%Hacinamiento: </th>';
-				echo'<th style="font-weight: normal;"width="150">'.$row["porcentaje_hacinamiento"].'</th>';
+			    echo'<th style="font-weight: normal;"width="150">';  
+				echo '<input type="text" id="porcentaje_hacinamiento"name="porcentaje_hacinamiento" class="form-control" value="'.$row["porcentaje_hacinamiento"].'" Required>';
+                echo '</th>';
 				echo'</tr>'; 
 				}
                 echo'<tr>';
                 echo'<th width="50">Departamento: </th>';
-				echo'<th style="font-weight: normal;"width="150">';
-			    echo utf8_encode($row["departamento"]);
+ 
+                echo '<td>' ;
+	            ?> <textarea name="departamento" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['departamento']) ?></textarea><?php
+                echo '</td>';
 				echo'</th>';
 				echo'</tr>'; 
                 
 				echo'<tr>';
                 echo'<th width="50">Descripción: </th>';
-				echo'<th style="font-weight: normal;"width="150">';
-				echo utf8_encode($row["descripcion"]);
+	 
+                echo '<td>' ;
+	            ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
+                echo '</td>';
+ 
 				echo'</th>';
 				echo'</tr>'; 
 
@@ -189,58 +199,27 @@ echo '<input type=image class="thumbnail"
                 echo'</thead>';
                 echo'</table>';
 				if(isset($_SESSION['usuario'])){
-		  ?>
-		  <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>
-		  <input type="hidden" name="id_piso" value="<?php echo $id_piso ?>"/>
-		  <input type="hidden" name="id_area" value="<?php echo $id_area ?>"/>
-		  <?php
-		  
-		  
-			 echo'<input type="submit" class="success button"value="Modificar"></input>';
+				 echo'<button class="success button" type="submit" name="submitModificarArea">Registrar</button> ';
 				}
 				
- echo'</form>';			
+				
 				
 }									   
 ?>
- 
-
-
-
 </br>
- <form action="piso.php" method="post"> 
+ 
  <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>
  <input type="hidden" name="id_piso" value="<?php echo $id_piso ?>"/>
- <input type="submit" class="button primary"value="Volver a Áreas"></input>
+ <input type="hidden" name="id_area" value="<?php echo $id_area ?>"/>
  </form>
 </div>
 
 </div>
-
-
-			
-			 
  
           </div>
-		  
-		
-		  
-		  
-		  
-  
         </div>
       </div>
-	 
-	 
  
-  
- 
- 
-	
-
-	
-	
-	
 </br>	
 <?php include 'Footer.php'; ?>
  
@@ -253,5 +232,21 @@ echo '<input type=image class="thumbnail"
    </div> 
   </body>
 </html>
-
+<?php
+include("guardar.php");
+ 
+if(isset($_POST['submitModificarArea'])){
+ 
+    $campos = array("id_area"=> $_POST['id_area'] ,
+	"nombre"=>$_POST['nombre'],"estado"=>$_POST['estado'],
+	"n_extintores"=>$_POST['n_extintores'],"descripcion"=>$_POST['descripcion']
+	,"area_real"=>$_POST['area_real'],"confort"=>$_POST['confort']
+	,"departamento"=>$_POST['departamento'],"porcentaje_hacinamiento"=>$_POST['porcentaje_hacinamiento']
+	,"imagen"=>$_POST['ARCHIVO']); 
+ 
+    $nuevo = new GuardarArea("tesis"); 
+    $nuevo->ModificarPiso($campos);
+}
+ 
+?>
  

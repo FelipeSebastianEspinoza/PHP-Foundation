@@ -116,12 +116,12 @@
 	  
 	  echo '<td>' ;
  
-      echo'<button class="success button" type="submitmodificarextintor" name="submitmodificarriesgo">Registrar</button> ';
+      echo'<button onclick="TomarIdPiso()" class="success button" type="submitmodificarextintor" name="submitmodificarextintor">Registrar</button> ';
  
       echo '</td>';
  
       echo '</tr>';
-      echo '</form>';
+    
 				}
 		  ?>
  
@@ -169,9 +169,10 @@
 		 
 			
 			 <td><div id="select2lista"></div></td> </tr>
+ <input  type="hidden" id="id_piso" name="id_piso" class="form-control"   > 
 
  
-          
+  <?php    echo '</form>';  ?>
 		  
 		  
 		  
@@ -217,8 +218,9 @@ if(isset($_POST['submitmodificarextintor'])){
 	"fecha_carga"=>$_POST['fecha_carga'],
     "fecha_venc"=>$_POST['fecha_venc'],
 	"ubicacion"=>$_POST['ubicacion'],
-	"estado"=>$_POST['estado']); 
- 
+	"estado"=>$_POST['estado'],
+	"id_piso"=>$_POST['id_piso']); 
+  
     $nuevo = new GuardarExtintor("tesis"); 
     $nuevo->ModificarExtintor($campos);
 }
@@ -252,4 +254,18 @@ function recargarLista(){
 			}
 		});
 	}
+	
+	
+ 
+function TomarIdPiso() {
+ var select = document.getElementById("lista2");
+  console.log(select.value);
+ document.getElementById("id_piso").value = select.value;
+}
+	
+	
+	
+	
+	
+	
  </script>

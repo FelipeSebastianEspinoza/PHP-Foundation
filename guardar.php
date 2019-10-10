@@ -377,6 +377,8 @@
 		}
 	
 	}
+	
+	
 	function ModificarExtintor($form_data){
         $fields = array_keys($form_data);
 		
@@ -390,27 +392,24 @@
 
         $consulta = "UPDATE `extintor` SET `nombre`='$nombre',
 		`fecha_carga`='$fecha_carga',`fecha_venc`='$fecha_venc',
-		`ubicacion`='$ubicacion',`estado`='$estado'
+		`ubicacion`='$ubicacion',`estado`='$estado',
+	    `id_piso`='$id_piso'
 		WHERE `id_extintor`='$id_extintor'"; 
- 
-		 
+  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
         if($resultado_cons == false){
 			echo "<script> 
-					 alert('No es posible modificar');
-					 
+					 alert('No es posible modificar');	 
 				  </script>";
 		}else{
 			echo "<script>
 					alert('Se ha modificado con éxito'); 
-                    window.location.replace('riesgos.php');					
+                    window.location.replace('Extintores.php');					
 			      </script>"; 
 		}
-	
 	}
-   
- 
+
     public function cerrarBD(){
 		$this->con->close();
 	}
@@ -502,6 +501,187 @@
 	}
  
  } 
+ 
+ 
+ 
+ 
+class GuardarPiso{
+ 
+	private $id_piso;
+	private $nombre;
+    private $id_edificio;
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevoPiso($form_data){
+        $fields = array_keys($form_data);
+		
+		$nombre = htmlentities($_POST['nombre']);
+		$id_edificio =htmlentities($_POST['id_edificio']);
+
+        $consulta = "INSERT INTO `piso` (`id_piso`,`nombre`,`id_edificio`) VALUES 
+		(NULL,'$nombre','$id_edificio');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	}
+   
+    function ModificarPiso($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_piso = $_POST['id_piso'];
+		$nombre = htmlentities($_POST['nombre']);
+ 
+        $consulta = "UPDATE `piso` SET `nombre` ='$nombre' 
+		WHERE `id_piso`='$id_piso'"; 
+ 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');	 
+					 alert('$id_piso');
+					 alert('$nombre');						 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	
+	}
+	
+    
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+
+ 
+class GuardarArea{
+ 
+	private $id_area;
+	private $nombre;
+    private $estado;
+    private $n_extintores;
+    private $descripcion;
+    private $area_real;
+    private $confort;
+    private $departamento;
+    private $porcentaje_hacinamiento;
+    private $imagen;
+
+
+
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevaArea($form_data){
+        $fields = array_keys($form_data);
+ 
+		$nombre = htmlentities($_POST['nombre']);
+        $estado = htmlentities($_POST['estado']);
+		$n_extintores = htmlentities($_POST['n_extintores']);
+		$descripcion = htmlentities($_POST['descripcion']);
+		$area_real = htmlentities($_POST['area_real']);
+		$confort = htmlentities($_POST['confort']);
+		$departamento = htmlentities($_POST['departamento']);
+		$porcentaje_hacinamiento = htmlentities($_POST['porcentaje_hacinamiento']);
+		$id_piso =htmlentities($_POST['id_piso']);
+		
+		
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_archivo=($_FILES['ARCHIVO']['type']);
+        $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));
+		
+		 
+
+        $consulta = "INSERT INTO `area_del_edificio` 
+		(`id_area`,`nombre`,`estado`,`n_extintores`,`descripcion`,`area_real`,`confort`
+		,`departamento`,`porcentaje_hacinamiento`,`imagen`,`id_piso`) VALUES 
+		(NULL,'$nombre','$estado','$n_extintores','$descripcion','$area_real','$confort'
+		,'$departamento','$porcentaje_hacinamiento','$imagen','$id_piso');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	}
+   
+    function ModificarPiso($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_area =htmlentities($_POST['id_area']);
+		$nombre = htmlentities($_POST['nombre']);
+        $estado = htmlentities($_POST['estado']);
+		$n_extintores = htmlentities($_POST['n_extintores']);
+		$descripcion = htmlentities($_POST['descripcion']);
+		$area_real = htmlentities($_POST['area_real']);
+		$confort = htmlentities($_POST['confort']);
+		$departamento = htmlentities($_POST['departamento']);
+		$porcentaje_hacinamiento = htmlentities($_POST['porcentaje_hacinamiento']);
+		$id_piso =htmlentities($_POST['id_piso']);
+		
+		
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_archivo=($_FILES['ARCHIVO']['type']);
+        $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));
+ 
+        $consulta = "UPDATE `area_del_edificio` SET `nombre` ='$nombre',`estado` ='$estado',
+		`n_extintores` ='$n_extintores',`descripcion` ='$descripcion',`area_real` ='$area_real' 
+        ,`confort` ='$confort' 	,`departamento` ='$departamento' ,`porcentaje_hacinamiento` ='$porcentaje_hacinamiento'		
+		WHERE `id_area`='$id_area'"; 
+ 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');	 					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('PisoArea.php');					
+			      </script>"; 
+		}
+	
+	}
+	
+    
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+
  
  
 ?>

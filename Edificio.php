@@ -1,4 +1,4 @@
-  <?php  
+   <?php  
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
  
   session_start();
@@ -169,8 +169,39 @@ $id_edificio=$_POST['id_edificio'];
         echo'</div>';
         echo'</div>';
         echo'</form>';
+		
+		
+		?>
+ 		
+  <insertar>
+        <div class="titulo_boton">
+<?php 	 if(isset($_SESSION['usuario'])){?>
+  </br><a style='cursor: pointer;' onClick="piso_oculto('nuevopiso')" title="" class="success button">Nuevo Piso</a>
+<?php 	 }?>
+        </div>
+<div id="nuevopiso">	 
+	<?php 	
+	if(isset($_SESSION['usuario'])){
+		echo'</br>';
+                echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	
+				echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
+			    echo'<label>Nombre del Piso:';
+                echo'<input type="text" id="nombre" name="nombre" class="form-control" value="">';
+                echo'<input type="submit" name="submitpiso" class="button success"value="Registrar"></input>';
+                echo'</form>';}
+	 echo'</div>';
+	 
+		
         echo'</div>';
  ?> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
 </div>
 </div>
@@ -413,10 +444,14 @@ $id_edificio=$_POST['id_edificio'];
   </tbody>
 </table>
 <insertar>
+<?php
+if(isset($_SESSION['usuario'])){?>
 <div class="titulo_boton">
   <a style='cursor: pointer;' onClick="accidentes_ocultos('nuevoaccidente')" title="" class="success button">Añadir Accidente</a>
 </div>
-
+<?php
+}
+?>
 <div id="nuevoaccidente">
   <table>
   <thead>
@@ -553,7 +588,17 @@ if(isset($_POST['submitaccidente'])){
      $nuevo = new GuardarAccidente("tesis"); 
      $nuevo->NuevoAccidente($campos);
 } 
-
+if(isset($_POST['submitpiso'])){
+ 
+    $campos = array("id_piso"=> Null,
+	"nombre"=> $_POST['nombre'] , 
+ 	"id_edificio"=> $_POST['id_edificio']); 
+ 
+     $nuevo = new GuardarPiso("tesis"); 
+     $nuevo->NuevoPiso($campos);
+} 
+ 
+?>
 ?>
 <script>
 
@@ -577,12 +622,18 @@ var el = document.getElementById(id);
 el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
 }
 }
- 
+ function piso_oculto(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
 
 window.onload = function(){ 
 muestra_oculta('nuevoprotocolo'); 
 riesgos_ocultos('nuevoriesgo'); 
 accidentes_ocultos('nuevoaccidente'); 
+piso_oculto('nuevopiso'); 
 }
 </script>
  
