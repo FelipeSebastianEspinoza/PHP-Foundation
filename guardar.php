@@ -574,7 +574,7 @@ class GuardarPiso{
  }
 
  
-class GuardarArea{
+  class GuardarArea{
  
 	private $id_area;
 	private $nombre;
@@ -585,7 +585,7 @@ class GuardarArea{
     private $confort;
     private $departamento;
     private $porcentaje_hacinamiento;
-    private $imagen;
+    private $imageData;
 
 
 
@@ -618,7 +618,7 @@ class GuardarArea{
 		(`id_area`,`nombre`,`estado`,`n_extintores`,`descripcion`,`area_real`,`confort`
 		,`departamento`,`porcentaje_hacinamiento`,`imagen`,`id_piso`) VALUES 
 		(NULL,'$nombre','$estado','$n_extintores','$descripcion','$area_real','$confort'
-		,'$departamento','$porcentaje_hacinamiento','$imagen','$id_piso');";
+		,'$departamento','$porcentaje_hacinamiento','$imageData','$id_piso');";
  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
@@ -629,7 +629,7 @@ class GuardarArea{
 		}else{
 			echo "<script>
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('Edificio.php');					
+                    window.location.replace('Piso.php');					
 			      </script>"; 
 		}
 	}
@@ -682,6 +682,131 @@ class GuardarArea{
  
  }
 
+
+ 
+  class GuardarSalida{
+ 
+	private $id_salida;
+	private $nombre;
+    private $estado;
+    private $n_extintores;
+    private $descripcion;
+    private $area_real;
+    private $confort;
+    private $departamento;
+    private $porcentaje_hacinamiento;
+    private $imageData;
+
+
+
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevaSalida($form_data){
+        $fields = array_keys($form_data);
+ 
+		$nombre = htmlentities($_POST['nombre']);
+        $estado = htmlentities($_POST['estado']);
+		$n_extintores = htmlentities($_POST['n_extintores']);
+		$descripcion = htmlentities($_POST['descripcion']);
+		$area_real = htmlentities($_POST['area_real']);
+		$confort = htmlentities($_POST['confort']);
+		$departamento = htmlentities($_POST['departamento']);
+		$porcentaje_hacinamiento = htmlentities($_POST['porcentaje_hacinamiento']);
+		$id_piso =htmlentities($_POST['id_piso']);
+		
+		 
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_archivo=($_FILES['ARCHIVO']['type']);
+        $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));
+		
+		 
+
+        $consulta = "INSERT INTO `salida_de_emergencia` 
+		(`id_salida`,`nombre`,`estado`,`n_extintores`,`descripcion`,`area_real`,`confort`
+		,`departamento`,`porcentaje_hacinamiento`,`imagen`,`id_piso`) VALUES 
+		(NULL,'$nombre','$estado','$n_extintores','$descripcion','$area_real','$confort'
+		,'$departamento','$porcentaje_hacinamiento','$imageData' ,'$id_piso');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Piso.php');					
+			      </script>"; 
+		}
+	}
+   
+    function ModificarSalida($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_salida =htmlentities($_POST['id_salida']);
+		$nombre = htmlentities($_POST['nombre']);
+        $estado = htmlentities($_POST['estado']);
+		$n_extintores = htmlentities($_POST['n_extintores']);
+		$descripcion = htmlentities($_POST['descripcion']);
+		$area_real = htmlentities($_POST['area_real']);
+		$confort = htmlentities($_POST['confort']);
+		$departamento = htmlentities($_POST['departamento']);
+		$porcentaje_hacinamiento = htmlentities($_POST['porcentaje_hacinamiento']);
+		$id_piso =htmlentities($_POST['id_piso']);
+		
+		
+	     $nombre_archivo=($_FILES['ARCHIVO']['name']);
+         $tipo_archivo=($_FILES['ARCHIVO']['type']);
+       $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));   
+ 
+        $consulta = "UPDATE `salida_de_emergencia` SET `nombre` ='$nombre',`estado` ='$estado',
+		`n_extintores` ='$n_extintores',`descripcion` ='$descripcion',`area_real` ='$area_real' 
+        ,`confort` ='$confort' 	,`departamento` ='$departamento' ,
+		`porcentaje_hacinamiento` ='$porcentaje_hacinamiento',
+        `imagen` ='$imageData' 		 	
+       		
+		WHERE `id_salida`='$id_salida'"; 
+ 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');	 					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Piso.php');					
+			      </script>"; 
+		}
+	
+	}
+	
+    
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
 ?>
