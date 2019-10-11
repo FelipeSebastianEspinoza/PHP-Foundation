@@ -190,11 +190,17 @@
 		$nombre_archivo=($_FILES['ARCHIVO']['name']);
         $tipo_archivo=($_FILES['ARCHIVO']['type']);
         $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));
-		
-        $consulta = "UPDATE `riesgo` SET `nombre`='$nombre',
-		`descripcion`='$descripcion',`icono`='$imageData'  
-		WHERE `id_riesgo`='$id_riesgo'"; 
- 
+			
+			if($nombre_archivo==null){
+              $consulta = "UPDATE `riesgo` SET `nombre`='$nombre',
+		     `descripcion`='$descripcion' 
+		      WHERE `id_riesgo`='$id_riesgo'"; 
+			}else{
+			 $consulta = "UPDATE `riesgo` SET `nombre`='$nombre',
+		     `descripcion`='$descripcion',`icono`='$imageData'  
+		      WHERE `id_riesgo`='$id_riesgo'"; 	
+				
+			}
 		 
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
@@ -653,11 +659,20 @@ class GuardarPiso{
         $tipo_archivo=($_FILES['ARCHIVO']['type']);
         $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));
  
+ 
+ 
+     if($nombre_archivo==null){
         $consulta = "UPDATE `area_del_edificio` SET `nombre` ='$nombre',`estado` ='$estado',
 		`n_extintores` ='$n_extintores',`descripcion` ='$descripcion',`area_real` ='$area_real' 
         ,`confort` ='$confort' 	,`departamento` ='$departamento' ,`porcentaje_hacinamiento` ='$porcentaje_hacinamiento'		
 		WHERE `id_area`='$id_area'"; 
- 
+	 }else{
+		$consulta = "UPDATE `area_del_edificio` SET `nombre` ='$nombre',`estado` ='$estado',
+		`n_extintores` ='$n_extintores',`descripcion` ='$descripcion',`area_real` ='$area_real' 
+        ,`confort` ='$confort' 	,`departamento` ='$departamento' ,`porcentaje_hacinamiento` ='$porcentaje_hacinamiento'
+,  `imagen` ='$imageData' 			
+		WHERE `id_area`='$id_area'";  
+	 }
 		 
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
@@ -763,14 +778,24 @@ class GuardarPiso{
          $tipo_archivo=($_FILES['ARCHIVO']['type']);
        $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));   
  
+ 
+ 
+     if($nombre_archivo==null){
         $consulta = "UPDATE `salida_de_emergencia` SET `nombre` ='$nombre',`estado` ='$estado',
 		`n_extintores` ='$n_extintores',`descripcion` ='$descripcion',`area_real` ='$area_real' 
         ,`confort` ='$confort' 	,`departamento` ='$departamento' ,
-		`porcentaje_hacinamiento` ='$porcentaje_hacinamiento',
-        `imagen` ='$imageData' 		 	
-       		
+		`porcentaje_hacinamiento` ='$porcentaje_hacinamiento' 
+ 	 		
 		WHERE `id_salida`='$id_salida'"; 
- 
+	 }else{
+		 $consulta = "UPDATE `salida_de_emergencia` SET `nombre` ='$nombre',`estado` ='$estado',
+		`n_extintores` ='$n_extintores',`descripcion` ='$descripcion',`area_real` ='$area_real' 
+        ,`confort` ='$confort' 	,`departamento` ='$departamento' ,
+		`porcentaje_hacinamiento` ='$porcentaje_hacinamiento',
+		  `imagen` ='$imageData' 	
+		WHERE `id_salida`='$id_salida'";  
+		 
+	 }
 		 
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
