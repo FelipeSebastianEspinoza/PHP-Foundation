@@ -4,11 +4,9 @@
 	  <li><a href="Protocolos.php">Administrar Protocolos</a></li>
       <li><a href="Riesgos.php">Administrar Riesgos</a></li>
 	  <li><a href="Extintores.php">Administrar Extintores</a></li>
+	  <li><a href="RedHumeda.php">Administrar Redes Húmedas</a></li>
 	  <li><a href="Accidentes.php">Administrar Accidentes</a></li>
- 
-      <li><a href="#">Administrar Zonas de Seguridad</a></li>
-      <li><a href="#">Administrar Zonas de Evacuación</a></li>
-      <li><a href="#">Ver Enfermedades Profesionales</a></li>
+      <li><a href="EnfermedadesProfesionales">Ver Enfermedades Profesionales</a></li>
  
 	  <div class="cell shrink">
 <img class="thumbnail" src="https://placehold.it/550x350">

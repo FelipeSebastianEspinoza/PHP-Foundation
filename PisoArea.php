@@ -169,6 +169,8 @@ echo '<input type=image class="thumbnail"
                 echo'<tr>';
                 echo'<th width="50">%Hacinamiento: </th>';
 				echo'<th style="font-weight: normal;"width="150">'.$row["porcentaje_hacinamiento"].'</th>';
+				echo'<th><th>'; 
+				echo'</th></th>'; 
 				echo'</tr>'; 
 				}
                 echo'<tr>';
@@ -176,6 +178,8 @@ echo '<input type=image class="thumbnail"
 				echo'<th style="font-weight: normal;"width="150">';
 			    echo utf8_encode($row["departamento"]);
 				echo'</th>';
+				echo'<th><th>'; 
+				echo'</th></th>'; 
 				echo'</tr>'; 
                 
 				echo'<tr>';
@@ -183,6 +187,8 @@ echo '<input type=image class="thumbnail"
 				echo'<th style="font-weight: normal;"width="150">';
 				echo utf8_encode($row["descripcion"]);
 				echo'</th>';
+				echo'<th><th>'; 
+				echo'</th></th>'; 
 				echo'</tr>'; 
 
 				

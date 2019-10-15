@@ -87,7 +87,38 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
 	 
  
   <center>
-  INDICE UV
+    <?php
+        require 'simple_html_dom.php';
+		$html = file_get_html('https://www.woespana.es/Chile/Concepcion/IndiceUV.htm/');
+		
+		$calendario = $html->find('div[class=zent_r2]');
+		 
+		foreach ($calendario as $cal){
+			echo "<div>";
+ 
+			$mes0 = $cal->find('td',1);
+			$mes1 = $cal->find('td',2);
+			$mes2 = $cal->find('td',3);
+			$mes3 = $cal->find('td',4);
+			$mes4 = $cal->find('td',5);
+			$mes5 = $cal->find('td',6);
+			$mes6 = $cal->find('td',7);
+	        $mes7 = $cal->find('td',8);
+			echo $mes0;
+			echo $mes1;
+			echo $mes2;
+			echo $mes3;
+			echo $mes4;
+			echo $mes5;
+			echo $mes6;	
+			echo $mes7;			
+			echo "</div>";
+		} 
+		 
+		 
+		
+		
+    ?>
   </center>
 
 	

@@ -424,6 +424,83 @@
  
  
  
+ class GuardarRedHumeda{
+ 
+	private $id_redhumeda;
+	private $nombre;
+    private $ubicacion;
+    private $estado;
+    private $id_piso;
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevaRedHumeda($form_data){
+        $fields = array_keys($form_data);
+		
+		$nombre = htmlentities($_POST['nombre']);
+        $ubicacion =htmlentities($_POST['ubicacion']);
+        $estado =htmlentities($_POST['estado']);	
+        $id_piso =htmlentities($_POST['id_piso']);
+ 
+        $consulta = "INSERT INTO `red_humeda` (`id_redhumeda`,`nombre`, 
+	    `ubicacion`,`estado`,`id_piso`)
+		VALUES (NULL,'$nombre','$ubicacion','$estado','$id_piso');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('RedHumeda.php');					
+			      </script>"; 
+		}
+	
+	}
+ 
+	 
+	function ModificarRedHumeda($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_redhumeda = $_POST['id_redhumeda'];
+		$nombre = htmlentities($_POST['nombre']);
+        $ubicacion = htmlentities($_POST['ubicacion']);
+        $estado = htmlentities($_POST['estado']);
+        $id_piso = htmlentities($_POST['id_piso']);
+
+        $consulta = "UPDATE `red_humeda` SET `nombre`='$nombre', 
+		`ubicacion`='$ubicacion',`estado`='$estado',
+	    `id_piso`='$id_piso'
+		WHERE `id_redhumeda`='$id_redhumeda'"; 
+  
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');	 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('RedHumeda.php');					
+			      </script>"; 
+		}
+	}
+
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+ 
+ 
+ 
+ 
  
  
  
@@ -511,7 +588,7 @@
  
  
  
-class GuardarPiso{
+ class GuardarPiso{
  
 	private $id_piso;
 	private $nombre;
@@ -824,7 +901,109 @@ class GuardarPiso{
  
  
  
+ class GuardarLaboratorio{
  
+	private $id_laboratorio;
+	private $nombre;
+    private $encargado;
+    private $descripcion;
+    private $reglamento;
+    private $equipamiento;
+    private $imageData;
+    private $id_piso;
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevoLaboratorio($form_data){
+        $fields = array_keys($form_data);
+ 
+		$nombre = htmlentities($_POST['nombre']);
+        $encargado = htmlentities($_POST['encargado']);
+		$descripcion = htmlentities($_POST['descripcion']);
+		$reglamento = htmlentities($_POST['reglamento']);
+		$equipamiento = htmlentities($_POST['equipamiento']);
+		$id_piso =htmlentities($_POST['id_piso']);
+ 
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_archivo=($_FILES['ARCHIVO']['type']);
+        $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));
+		
+		 
+
+        $consulta = "INSERT INTO `laboratorio` 
+		(`id_laboratorio`,`nombre`,`encargado`,`descripcion`,`reglamento`,`equipamiento`,
+		`imagen`,`id_piso`) VALUES 
+		(NULL,'$nombre','$encargado','$descripcion','$reglamento','$equipamiento' 
+		 ,'$imageData' ,'$id_piso');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Piso.php');					
+			      </script>"; 
+		}
+	}
+   
+    function ModificarLaboratorio($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_laboratorio =htmlentities($_POST['id_laboratorio']);
+		$nombre = htmlentities($_POST['nombre']);
+        $encargado = htmlentities($_POST['encargado']);
+		$descripcion = htmlentities($_POST['descripcion']);
+		$reglamento = htmlentities($_POST['reglamento']);
+		$equipamiento = htmlentities($_POST['equipamiento']);
+		$id_piso =htmlentities($_POST['id_piso']);
+		
+		
+	     $nombre_archivo=($_FILES['ARCHIVO']['name']);
+         $tipo_archivo=($_FILES['ARCHIVO']['type']);
+       $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));   
+ 
+ 
+ 
+     if($nombre_archivo==null){
+        $consulta = "UPDATE `laboratorio` SET `nombre` ='$nombre',`encargado` ='$encargado',
+		`descripcion` ='$descripcion',`reglamento` ='$reglamento' 
+        ,`equipamiento` ='$equipamiento' 
+		WHERE `id_salida`='$id_salida'"; 
+	 }else{
+		 $consulta = "UPDATE `laboratorio` SET `nombre` ='$nombre',`encargado` ='$encargado',
+		`reglamento` ='$reglamento',`equipamiento` ='$equipamiento' 
+		`imagen` ='$imageData' 	
+		 WHERE `id_salida`='$id_salida'";   
+	 }
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');	 					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Piso.php');					
+			      </script>"; 
+		}
+	
+	}
+	
+    
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
  
  
  

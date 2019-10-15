@@ -174,6 +174,8 @@ echo '<input type=image class="thumbnail"
 			    echo'<th style="font-weight: normal;"width="150">';  
 				echo '<input type="text" id="porcentaje_hacinamiento"name="porcentaje_hacinamiento" class="form-control" value="'.$row["porcentaje_hacinamiento"].'" Required>';
                 echo '</th>';
+				echo'<th><th>'; 
+				echo'</th></th>'; 
 				echo'</tr>'; 
 				}
                 echo'<tr>';
@@ -183,6 +185,8 @@ echo '<input type=image class="thumbnail"
 	            ?> <textarea name="departamento" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['departamento']) ?></textarea><?php
                 echo '</td>';
 				echo'</th>';
+				echo'<th><th>'; 
+				echo'</th></th>'; 
 				echo'</tr>'; 
                 
 				echo'<tr>';
@@ -193,6 +197,8 @@ echo '<input type=image class="thumbnail"
                 echo '</td>';
  
 				echo'</th>';
+				echo'<th><th>'; 
+				echo'</th></th>'; 
 				echo'</tr>'; 
 
 				
