@@ -174,20 +174,20 @@ echo '<input type=image class="thumbnail"
 				echo'<th style="font-weight: normal;"width="600">';
 		 
 	 
-				echo'<textarea rows="10" cols="10" readonly>';
+				//echo'<textarea rows="10" cols="10" readonly>';
 				echo utf8_encode($row["descripcion"]);
-				echo'</textarea>';
+				//echo'</textarea>';
 	 
 				echo'</th>';
 				echo'</tr>'; 
                 
 				echo'<tr>';
                 echo'<th width="50">Reglamento: </th>';
-				echo'<th style="font-weight: normal;"width="600">';
+			    echo'<th style="font-weight: normal;"width="600">';
 		 
-				echo'<textarea rows="10" cols="10" readonly>';
+			    echo'<p rows="10" cols="10">';
 				echo utf8_encode($row["reglamento"]);
-				echo'</textarea>';
+			    echo'</p>';
 		 
 				echo'</th>';
 				echo'</tr>'; 
@@ -197,9 +197,9 @@ echo '<input type=image class="thumbnail"
                 echo'<th width="50">Equipamiento: </th>';
 				echo'<th style="font-weight: normal;"width="600">';
 		 
-				echo'<textarea rows="10" cols="10" readonly>';
+				//echo'<textarea rows="10" cols="10" readonly>';
 				echo utf8_encode($row["equipamiento"]);
-				echo'</textarea>';
+				//echo'</textarea>';
 	 
 				echo'</th>';
 				echo'</tr>'; 
@@ -223,7 +223,17 @@ echo '<input type=image class="thumbnail"
 }									   
 ?>
  
+  <style>
+ p {
+  display: block;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  margin-left: 0;
+  margin-right: 0;
+  max-width: 2em;
  
+}
+ </style>
  
 
 

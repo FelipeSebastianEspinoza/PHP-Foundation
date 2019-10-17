@@ -86,8 +86,13 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
         </div>
 	 
  
-  <center>
-    <?php
+ 
+ 
+ 
+ 
+<!--
+<center>
+    <?php /*
         require 'simple_html_dom.php';
 		$html = file_get_html('https://www.woespana.es/Chile/Concepcion/IndiceUV.htm/');
 		
@@ -118,8 +123,9 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
 		 
 		
 		
-    ?>
+    */?>
   </center>
+  --> 
 
 	
 <footer>
