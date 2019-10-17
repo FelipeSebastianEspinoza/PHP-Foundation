@@ -1,6 +1,6 @@
-<center><div class="card" style="width: 300px;">
+<center><div class="card" style="width: 300px; ">
   <div class="card-divider">
-    <center>ÍNDICE UV</center> 
+    ÍNDICE UV 
   </div>
     <center>Concepción</center> 
    
@@ -57,7 +57,7 @@
 		}
     ?>
  
-  
+  <img src="img/uviscale.jpg" alt="Italian Trulli">
  
 </div></center>
  
