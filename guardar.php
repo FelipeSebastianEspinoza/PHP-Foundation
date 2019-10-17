@@ -974,12 +974,12 @@
         $consulta = "UPDATE `laboratorio` SET `nombre` ='$nombre',`encargado` ='$encargado',
 		`descripcion` ='$descripcion',`reglamento` ='$reglamento' 
         ,`equipamiento` ='$equipamiento' 
-		WHERE `id_salida`='$id_salida'"; 
+		WHERE `id_laboratorio`='$id_laboratorio'"; 
 	 }else{
 		 $consulta = "UPDATE `laboratorio` SET `nombre` ='$nombre',`encargado` ='$encargado',
 		`reglamento` ='$reglamento',`equipamiento` ='$equipamiento' 
 		`imagen` ='$imageData' 	
-		 WHERE `id_salida`='$id_salida'";   
+		 WHERE `id_laboratorio`='$id_laboratorio'";   
 	 }
 		 
         $resultado_cons = mysqli_query($this->con,$consulta);

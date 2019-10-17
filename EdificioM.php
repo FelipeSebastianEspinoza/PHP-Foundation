@@ -176,10 +176,10 @@
 		  
 <ul class="tabs" data-active-collapse="true" data-tabs id="collapsing-tabs">
   <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Protocolos</a></li>
-  <li class="tabs-title"><a href="#panel2c">Riesgos</a></li>
+<!--<li class="tabs-title"><a href="#panel2c">Riesgos</a></li>-->
   <li class="tabs-title"><a href="#panel3c">Accidentes</a></li>
-  <li class="tabs-title"><a href="#panel4c">Extintores</a></li>
-  <li class="tabs-title"><a href="#panel5c">Redes Humedas</a></li>
+<!--<li class="tabs-title"><a href="#panel4c">Extintores</a></li>-->
+<!--<li class="tabs-title"><a href="#panel5c">Redes Humedas</a></li>-->
 </ul>
 
 <div class="tabs-content" data-tabs-content="collapsing-tabs">

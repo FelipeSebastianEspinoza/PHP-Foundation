@@ -18,11 +18,7 @@ $id_piso=$_POST['id_piso'];
 }else{
 	$id_piso=$_POST['id_piso'];
 }
-  
-  
-  
-  
-  
+ 
  ?>
 
 <!doctype html>
@@ -187,7 +183,7 @@ echo'<tr>';
                 echo'</thead>';
                 echo'</table>';
 				if(isset($_SESSION['usuario'])){
-				 echo'<button class="success button" type="submit" name="submitModificarSalida">Registrar</button> ';
+				 echo'<button class="success button" type="submit" name="submitModificarLaboratorio">Registrar</button> ';
 				}
 				
 				
@@ -223,18 +219,17 @@ echo'<tr>';
 <?php
 include("guardar.php");
  
-if(isset($_POST['submitModificarSalida'])){
+if(isset($_POST['submitModificarLaboratorio'])){
  
-    $campos = array("id_salida"=> $_POST['id_salida'] ,
-	"nombre"=>$_POST['nombre'],"estado"=>$_POST['estado'],
+    $campos = array("id_laboratorio"=> $_POST['id_laboratorio'] ,
+	"nombre"=>$_POST['nombre'],"encargado"=>$_POST['encargado'],
 	"n_extintores"=>$_POST['n_extintores'],"descripcion"=>$_POST['descripcion']
-	,"area_real"=>$_POST['area_real'],"confort"=>$_POST['confort']
-	,"departamento"=>$_POST['departamento'],
-	"porcentaje_hacinamiento"=>$_POST['porcentaje_hacinamiento'],
+	,"descripcion"=>$_POST['descripcion'],"reglamento"=>$_POST['reglamento']
+	,"equipamiento"=>$_POST['equipamiento'],
 	 "imagen"=>$_POST['ARCHIVO']); 
  
-    $nuevo = new GuardarSalida("tesis"); 
-    $nuevo->ModificarSalida($campos);
+    $nuevo = new GuardarLaboratorio("tesis"); 
+    $nuevo->ModificarLaboratorio($campos);
 }
  
 ?>
