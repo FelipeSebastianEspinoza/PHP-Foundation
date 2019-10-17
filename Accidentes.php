@@ -197,7 +197,7 @@ Haga click en el nombre de la columna para ordenar de manera ascendente o descen
       </div>
  
 </br>	
- 
+ <?php include 'Footer.php';	?>
 
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
@@ -211,7 +211,7 @@ Haga click en el nombre de la columna para ordenar de manera ascendente o descen
 </html>
 
 <?php
- include 'Footer.php';	
+  
  
  
  

@@ -362,10 +362,7 @@
         $ubicacion =htmlentities($_POST['ubicacion']);
         $estado =htmlentities($_POST['estado']);	
         $id_piso =htmlentities($_POST['id_piso']);
-  
-        $fecha_carga = date("d/m/Y", strtotime($fecha_carga));
-        $fecha_venc = date("d/m/Y", strtotime($fecha_venc))
-
+ 
         $consulta = "INSERT INTO `extintor` (`id_extintor`,`nombre`,`fecha_carga`,
 		`fecha_venc`,`ubicacion`,`estado`,`id_piso`)
 		VALUES (NULL,'$nombre','$fecha_carga','$fecha_venc',
