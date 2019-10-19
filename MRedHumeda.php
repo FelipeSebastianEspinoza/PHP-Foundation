@@ -1,6 +1,11 @@
  <?php  
  
  session_start();
+ if (!isset($_SESSION['usuario'])){
+	echo "<script>
+           window.location.replace('index.php');					
+		  </script>";
+}
  $id_redhumeda = $_POST["id_redhumeda"]; 				 
  ?>
  <!doctype html>

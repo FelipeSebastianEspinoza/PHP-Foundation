@@ -1,6 +1,11 @@
  <?php  
  
  session_start();
+ if (!isset($_SESSION['usuario'])){
+	echo "<script>
+           window.location.replace('index.php');					
+		  </script>";
+}
  $id_extintor = $_POST["id_extintor"]; 				 
  ?>
  <!doctype html>
@@ -99,11 +104,11 @@
 	  echo '</td>';
 	  
 	  echo '<td>' ;
-	  echo '<input type="text" id="fecha_carga"name="fecha_carga" class="form-control" value="'.$row["fecha_carga"].'" Required>';
+	  echo '<input type="date" id="fecha_carga"name="fecha_carga" class="form-control" value="'.$row["fecha_carga"].'" Required>';
 	  echo '</td>';
 	  
 	  echo '<td>' ;
-	  echo '<input type="text" id="fecha_venc"name="fecha_venc" class="form-control" value="'.$row["fecha_venc"].'" Required>';
+	  echo '<input type="date" id="fecha_venc"name="fecha_venc" class="form-control" value="'.$row["fecha_venc"].'" Required>';
 	  echo '</td>';
   
 	  echo '<td>' ;

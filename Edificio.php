@@ -2,11 +2,8 @@
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
  
   session_start();
-  
-
  
  if (isset($_SESSION['usuario'])){
- 
  
    if(!empty($_POST['id_edificio'])) {//si no esta vacio
 $_SESSION['id_edificio']=$_POST['id_edificio'];
@@ -126,8 +123,7 @@ $id_edificio=$_POST['id_edificio'];
 				}
                 echo'<th><th><th><th>';
 			    echo' </th></th></th></th>';
- 
-				
+
                 echo'</thead>';
                 echo'</table>';
 				
@@ -137,7 +133,6 @@ $id_edificio=$_POST['id_edificio'];
 					echo'<input type="submit" class="success button"value="Modificar"></input>';
 				    echo'</form>';
 				}
-				
                 echo'</div>';
 			}
 		  ?>
@@ -169,8 +164,7 @@ $id_edificio=$_POST['id_edificio'];
         echo'</div>';
         echo'</div>';
         echo'</form>';
-		
-		
+
 		?>
  		
   <insertar>
@@ -308,6 +302,15 @@ $id_edificio=$_POST['id_edificio'];
 
   </div>
   <div class="tabs-panel" id="panel2c">
+  
+  
+  
+  
+  
+  
+  
+  
+  
      <?php  
 			$conn = mysqli_connect("localhost","root","","tesis");
    	
@@ -315,18 +318,30 @@ $id_edificio=$_POST['id_edificio'];
 									  	   FROM riesgo r,edificio_riesgo d  
 									       WHERE r.id_riesgo=d.id_riesgo   
 										   AND d.id_edificio ='.$id_edificio.'    ;');
-		    while($row = mysqli_fetch_array($result)){
- echo ' <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+		    
+	  
+			while($row = mysqli_fetch_array($result)){
  
-	echo '<img   src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
+    echo'<div style="display: inline-block;">';
+ 
+ 
+    echo ' <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+	echo '<img src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
 	if(isset($_SESSION['usuario'])){
     echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
     echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />';
-   echo' <input type="submit" name="submitquitarriesgo" class="alert button"value="Quitar"></input> ';  
-	}
-  echo '</form>';
-	 
-				}
+    echo' <input type="submit" name="submitquitarriesgo" class="alert button"value="Quitar"></input> ';  
+ 	}
+    echo '</form>';
+	
+	
+	echo'</div>';
+	
+	
+	
+				} 
+			  
+  
 		  ?>
 		  
    
@@ -371,6 +386,19 @@ $id_edificio=$_POST['id_edificio'];
  ?>
 </div>
 
+
+ 
+
+
+
+
+
+
+
+
+
+
+
  
 <insertar>	  
 		  
@@ -383,15 +411,18 @@ $id_edificio=$_POST['id_edificio'];
     <table>
   <thead>
     <tr>
-      <th width="50">ID</th>
-      <th width="100">Fecha</th>
-      <th width="150">Tipo</th>
-      
+	<?php  
+		if(isset($_SESSION['usuario'])){?>
+      <th width="50">ID</th>  <?php }
+	    ?>
+      <th width="200">Fecha</th>
+      <th width="200">Tipo</th>
+      <th width="200">Numero</th>
 	   <?php  
 		if(isset($_SESSION['usuario'])){
-	      echo  '  <th width="150">Numero</th>';
-	      echo  ' <th width="150">Persona</th>';
-		  echo  ' <th width="150">Descripción</th>';
+ 
+	      echo  ' <th width="200">Persona</th>';
+		  echo  ' <th width="400">Descripción</th>';
 		}
 	    ?>
 	  
@@ -408,28 +439,38 @@ $id_edificio=$_POST['id_edificio'];
 									       WHERE id_edificio ='.$id_edificio.'
 										   ORDER BY fecha DESC;');
 		    while($row = mysqli_fetch_array($result)){
-
-  
- 					   
-    echo '<tr>';
+  echo'<form action="MAccidentes.php" method="post">';
+				echo'<input type="hidden" name="id_accidente" value='.$row["id_accidente"].'>';
+				echo'<input type="hidden" name="id_edificio" value='.$row["id_edificio"].'>';		   
+     echo '<tr>';
 	 if(isset($_SESSION['usuario'])){ 
       echo '<td>'.$row["id_accidente"].'</td>';
 	 }
-      echo '<td>'.$row["fecha"].'</td>';
-      echo '<td>'.$row["tipo"].'</td>';
-      echo '<td>'.$row["numero"].'</td>';
-	  echo '<td>' ;
-	   if(isset($_SESSION['usuario'])){ 
-	  echo  utf8_encode($row["persona"]);
-	   }
-	  echo '</td>';
-	  echo '<td>' ;
-	   if(isset($_SESSION['usuario'])){ 
-	  echo  utf8_encode($row["descripcion"]);
-	   }
-      echo '</td>';
  
+      echo '<td>';  
+	  $date=date_create($row["fecha"]);
+	  echo date_format($date,"d/m/Y") ;
+	  echo '</td>';
+	  
+      echo '<td>'.$row["tipo"].'</td>';
+	  
+      echo '<td>'.$row["numero"].'</td>';
+ 
+	   if(isset($_SESSION['usuario'])){ 
+	   	  echo '<td>' ;
+	  echo  utf8_encode($row["persona"]);
+	  	  echo '</td>';
+ 
+	   echo '<td>' ;
+	  echo  utf8_encode($row["descripcion"]);
+	    echo '</td>';
+		
+	    echo '<td>' ;
+		echo'<input type="submit" class="success button"value="Modificar"></input>';
+	    echo '</td>';
+	   }
       echo '</tr>';
+       echo'</form>';
 				}
 		  ?>
  
@@ -473,11 +514,7 @@ if(isset($_SESSION['usuario'])){?>
   </tbody>
 </table>
 </div>
-
- 
 <insertar>
-
-
   </div>
   
   <div class="tabs-panel" id="panel4c">
@@ -489,41 +526,142 @@ if(isset($_SESSION['usuario'])){?>
 	  <th width="150">Fecha de vencimiento</th>
       <th width="150">Ubicación</th>
       <th width="150">Estado</th>
+	<?php   if(isset($_SESSION['usuario'])){ ?>
+	   <th width="150"> </th>
+	  <?php } ?>
     </tr>
   </thead> 
   <tbody>
   <?php  
 			$conn = mysqli_connect("localhost","root","","tesis");
 
-			$result = mysqli_query($conn, 'SELECT e.nombre,e.fecha_carga,e.fecha_venc,e.ubicacion,e.estado
+			$result = mysqli_query($conn, 'SELECT e.id_extintor,e.nombre,e.fecha_carga,e.fecha_venc,e.ubicacion,e.estado,e.id_piso
 									  	   FROM extintor e,piso p
 									       WHERE e.id_piso=p.id_piso
 										   AND p.id_edificio ='.$id_edificio.'    ;');
 		    while($row = mysqli_fetch_array($result)){
- 	   
+  echo'<form action="MExtintores.php" method="post">';
+				echo'<input type="hidden" name="id_extintor" value='.$row["id_extintor"].'>';
+ 
       echo '<tr>';
 	  echo '<td>' ;
 	  echo  utf8_encode($row["nombre"]);
 	  echo '</td>';
-      echo '<td>' ;
-	  echo  utf8_encode($row["fecha_carga"]);
+ 
+	  echo '<td>';  
+	  $date=date_create($row["fecha_carga"]);
+	  echo date_format($date,"d/m/Y") ;
 	  echo '</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["fecha_venc"]);
-      echo '</td>';
+	  
+	  echo '<td>';  
+	  $date=date_create($row["fecha_venc"]);
+	  echo date_format($date,"d/m/Y") ;
+	  echo '</td>';
+ 
 	  echo '<td>' ;
 	  echo  utf8_encode($row["ubicacion"]);
       echo '</td>';
 	  echo '<td>' ;
 	  echo  utf8_encode($row["estado"]);
       echo '</td>';
+ if(isset($_SESSION['usuario'])){
+      echo '<td>' ;
+	  echo'<input type="submit" class="success button"value="Modificar"></input>';
+	  echo '</td>';
+ }
+ 
       echo '</tr>';
-	 
+	 echo'</form>';
 				}
 		  ?>
 		    </tbody>
 </table>
+ 
+<insertar>
+<?php
+if(isset($_SESSION['usuario'])){?>
+<div class="titulo_boton">
+  <a style='cursor: pointer;' onClick="extintores_ocultos('nuevoextintor')" title="" class="success button">Añadir Extintor</a>
+</div>
+<?php
+}
+?>
+<div id="nuevoextintor">
+  <table>
+  <thead>
+    <tr>
+      <th width="150">Nombre</th>
+      <th width="100">Fecha de carga</th>
+      <th width="100">Fecha de vencimiento</th>
+	  <th width="300">Ubicación</th>
+      <th width="200">Estado</th>
+      <th width="200">Piso</th>
+	  <th width="100"> </th>
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	
+    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="" Required >	</td>
+    <td><input type="date" id="inputFechaCarga" name="fecha_carga" class="form-control" placeholder="" Required >	</td>
+    <td><input type="date" id="inputFechaVenc" name="fecha_venc" class="form-control" placeholder="" Required >	</td>
+    <td><input type="text" id="inputPersona" name="persona" class="form-control" placeholder="Escriba el nombre" Required >	</td>
+    <td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="" Required >	</td>
+ <td>
+	 <?php 
+ 
+    $result = mysqli_query($conn, 'SELECT * FROM piso
+                                   WHERE id_edificio ='.$id_edificio.';');
+			    if($result==null){
+				    echo'';
+			    }else{
+ 
+       
+                    echo'<select class="form-control form-control-sm" name="id_piso">';
+ 
+                    while($row=mysqli_fetch_assoc($result)) { 
+                        echo "<option value='$row[id_piso]'>$row[nombre]</option>";  
+				    } 
+				 }	 
+                echo'</select>';
+ 
+        echo'</label>';
+ 
+		?>
+</td>
+	 <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>  
+	 <td><button class="success button" type="submit" name="submitextintor">Registrar</button></td>
+  
+    </form>   
+    </tr>
+  </tbody>
+</table>
+</div>
+<insertar>
+
+
+ 
+
+
+
+
+
+
+
+
   </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
     <div class="tabs-panel" id="panel5c">
 	<table>
@@ -532,51 +670,111 @@ if(isset($_SESSION['usuario'])){?>
       <th width="200">Nombre</th>
       <th width="150">Ubicación</th>
       <th width="150">Estado</th>
+	   <?php   if(isset($_SESSION['usuario'])){ ?>
+	   <th width="150"> </th>
+	   <?php } ?>
     </tr>
   </thead> 
   <tbody>
  <?php  
 			$conn = mysqli_connect("localhost","root","","tesis");
 
-			$result = mysqli_query($conn, 'SELECT r.nombre,r.ubicacion,r.estado
+			$result = mysqli_query($conn, 'SELECT r.id_redhumeda,r.nombre,r.ubicacion,r.estado
 									  	   FROM red_humeda r,piso p
 									       WHERE r.id_piso=p.id_piso
 										   AND p.id_edificio ='.$id_edificio.'    ;');
 		    while($row = mysqli_fetch_array($result)){
- 	   
-      echo '<tr>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-      echo '<td>' ;
-	  echo  utf8_encode($row["ubicacion"]);
-	  echo '</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["estado"]);
-      echo '</td>';
-	   
-	  
-      echo '</tr>';
-	 
+				
+ 	    echo'<form action="MRedHumeda.php" method="post">';
+	    echo'<input type="hidden" name="id_redhumeda" value='.$row["id_redhumeda"].'>';
+        echo '<tr>';
+	    echo '<td>' ;
+	    echo  utf8_encode($row["nombre"]);
+	    echo '</td>';
+        echo '<td>' ;
+	    echo  utf8_encode($row["ubicacion"]);
+	    echo '</td>';
+	    echo '<td>' ;
+        echo  utf8_encode($row["estado"]);
+        echo '</td>';
+        if(isset($_SESSION['usuario'])){
+        echo '<td>' ;
+	    echo'<input type="submit" class="success button"value="Modificar"></input>';
+	    echo '</td>';
+        }
+        echo '</tr>';
+	    echo'</form>';
 				}
 		  ?>
-		  		    </tbody>
+  </tbody>
 </table>
+<insertar>
+<?php
+if(isset($_SESSION['usuario'])){?>
+<div class="titulo_boton">
+  <a style='cursor: pointer;' onClick="rehumeda_ocultos('nuevaredhumeda')" title="" class="success button">Añadir Red Húmeda</a>
+</div>
+<?php
+}
+?>
+<div id="nuevaredhumeda">
+  <table>
+  <thead>
+    <tr>
+      <th width="150">Nombre</th>
+	  <th width="300">Ubicación</th>
+      <th width="200">Estado</th>
+      <th width="200">Piso</th>
+	  <th width="100"> </th>
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	
+    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="" Required >	</td>  
+    <td><input type="text" id="inputUbicacion" name="ubicacion" class="form-control" placeholder="Escriba el nombre" Required >	</td>
+    <td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="" Required >	</td>
+ <td>
+	 <?php 
+ 
+    $result = mysqli_query($conn, 'SELECT * FROM piso
+                                   WHERE id_edificio ='.$id_edificio.';');
+			    if($result==null){
+				    echo'';
+			    }else{
+ 
+       
+                    echo'<select class="form-control form-control-sm" name="id_piso">';
+ 
+                    while($row=mysqli_fetch_assoc($result)) { 
+                        echo "<option value='$row[id_piso]'>$row[nombre]</option>";  
+				    } 
+				 }	 
+                echo'</select>';
+ 
+        echo'</label>';
+ 
+		?>
+</td>
+	 <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>  
+	 <td><button class="success button" type="submit" name="submitredhumeda">Registrar</button></td>
   
-  </div>
+    </form>   
+    </tr>
+  </tbody>
+</table>
+</div>
+<insertar>
+  
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+  </div>
+ 
    <div class="tabs-panel" id="panel6c">
   <table>
   <thead>
@@ -586,6 +784,9 @@ if(isset($_SESSION['usuario'])){?>
 	  <th width="150">Funcionarios que aporta</th>
       <th width="150">Fecha de actualización</th>
       <th width="150">Estado</th>
+	  <?php if(isset($_SESSION['usuario'])){ ?>
+      <th width="150">Modificar</th>
+	  <?php } ?>
     </tr>
   </thead> 
   <tbody>
@@ -597,8 +798,10 @@ if(isset($_SESSION['usuario'])){?>
 									  	   FROM unidad
 									       WHERE id_edificio ='.$id_edificio.';');
 		    while($row = mysqli_fetch_array($result)){
-	   
-      echo '<tr>';
+      echo'<form action="MUnidad.php" method="post">';	 
+      echo '<input type="hidden" name="id_unidad" value='.$row["id_unidad"].' />'; 
+      echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />'; 
+	  echo '<tr>';
 	  echo '<td>' ;
 	  echo  utf8_encode($row["nombre"]);
 	  echo '</td>';
@@ -606,14 +809,22 @@ if(isset($_SESSION['usuario'])){?>
 	  echo '<td>' ;
 	  echo  utf8_encode($row["func_aporta_edi"]);
       echo '</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["fecha_act"]);
-      echo '</td>';
+ 
+	  echo '<td>';  
+	  $date=date_create($row["fecha_act"]);
+	  echo date_format($date,"d/m/Y") ;
+	  echo '</td>';
+ 
 	  echo '<td>' ;
 	  echo  utf8_encode($row["estado"]);
       echo '</td>';
+	  if(isset($_SESSION['usuario'])){
+	  echo '<td>' ;
+      echo'<input type="submit" class="success button"value="Modificar"></input>';
+      echo '</td>';
+	  }
       echo '</tr>';
-	  
+	  echo'</form>';
 				}
 		  ?>
   </tbody>
@@ -622,47 +833,37 @@ if(isset($_SESSION['usuario'])){?>
 <insertar>
 <div class="titulo_boton">
 <?php 				if(isset($_SESSION['usuario'])){?>
-  <a style='cursor: pointer;' onClick="muestra_unidad('nuevaunidad')" title="" class="success button">Asignar Protocolo</a>
+  <a style='cursor: pointer;' onClick="muestra_unidad('nuevaunidad')" title="" class="success button">Asignar Unidad</a>
 <?php 			}?>
   </div>
 
 <div id="nuevaunidad">
-<?php 
-  	    	    
-                echo'<table>';
-                echo'<thead>';
-                $result = mysqli_query($conn, 'SELECT p.nombre,p.id_protocolo 
-			                                   FROM protocolo p 
-                                                ;');
-			    if($result==null){
-				    echo'';
-			    }else{	
-				 echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	
-			        echo'<tr>';
-			        echo'<th style="font-weight: normal;"width="150">';
-					echo "Protocolo";
-                    echo'<select class="form-control form-control-sm" name="id_protocolo">';
- 
-                    while($row=mysqli_fetch_assoc($result)) { 
-                        echo "<option value='$row[id_protocolo]'>$row[nombre]</option>";  
-				    } 
-				 }	 
-                echo'</select>';
-		        echo'<th style="font-weight: normal;"width="50">';
-				echo "Estado";
-                echo'<input type="text" id="estado" name="estado" class="form-control" value="">';
-				echo'</th>';
-				
-			    echo'<th style="font-weight: normal;"width="50">';
-               echo'</br><input type="submit" name="submitprotocolo" class="button primary"value="Asignar"></input>';
-				echo'</th>';
-				echo'</th>';
-                echo'</thead>';
-                echo'</table>';
-				echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
-				echo '<input type="hidden" name="id" value='.$id_edificio.' />';
-        echo '</form>';	 
- ?>
+ <table>
+  <thead>
+    <tr>
+      <th width="300">Nombre</th>
+      <th width="100">Total de funcionarios</th>
+      <th width="100">Funcionarios que aporta</th> 
+	  <th width="300">Fecha de actualización</th>
+	  <th width="300">Estado</th>
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	
+    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre " Required >	</td>
+    <td><input type="text" id="inputTotal" name="total_func" class="form-control" placeholder="" Required ></td>
+    <td><input type="text" id="inputAporta" name="func_aporta_edi" class="form-control" placeholder="" Required ></td>
+    <td><input type="date" id="inputFecha" name="fecha_act" class="form-control" placeholder="" Required ></td>
+    <td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="" Required ></td>
+	    <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>  
+	<td><button class="success button" type="submit" name="submitunidad">Registrar</button></td>
+  
+    </form>
+    </tr>
+  </tbody>
+</table>
 </div>
 
  
@@ -679,6 +880,9 @@ if(isset($_SESSION['usuario'])){?>
       <th width="400">Elementos de protección personal</th>
 	  <th width="400">Vestimenta</th>
       <th width="400">Herramientas</th>
+	   <?php if(isset($_SESSION['usuario'])){ ?>
+      <th width="50">Modificar</th>
+	  <?php } ?>
  
     </tr>
   </thead> 
@@ -694,7 +898,9 @@ if(isset($_SESSION['usuario'])){?>
  
   
 			while($row = mysqli_fetch_array($result)){
- 
+   echo'<form action="MProcedimiento.php" method="post">';	 
+   echo '<input type="hidden" name="id_procedimiento" value='.$row["id_procedimiento"].' />'; 
+   echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />'; 
    echo '<tr>';
 	  echo '<td>' ;
 	  echo  utf8_encode($row["reglamento_interno"]);
@@ -708,15 +914,13 @@ if(isset($_SESSION['usuario'])){?>
 	  echo '<td>' ;
 	  echo  utf8_encode($row["herramientas"]);
       echo '</td>';
- 
+ if(isset($_SESSION['usuario'])){
+	  echo '<td>' ;
+      echo'<input type="submit" class="success button"value="Modificar"></input>';
+      echo '</td>';
+	  }
       echo '</tr>';
-   
-  
-  
-  
-  
-  
-  
+      echo'</form>';
 				}
  
 				
@@ -727,47 +931,47 @@ if(isset($_SESSION['usuario'])){?>
 <insertar>
 <div class="titulo_boton">
 <?php 				if(isset($_SESSION['usuario'])){?>
-  <a style='cursor: pointer;' onClick="muestra_procedimientos('nuevoprocedimiento')" title="" class="success button">Asignar Protocolo</a>
+  <a style='cursor: pointer;' onClick="muestra_procedimientos('nuevoprocedimiento')" title="" class="success button">Asignar Procedimiento</a>
 <?php 			}?>
   </div>
 
 <div id="nuevoprocedimiento">
-<?php 
-  	    	    
-                echo'<table>';
-                echo'<thead>';
-                $result = mysqli_query($conn, 'SELECT p.nombre,p.id_protocolo 
-			                                   FROM protocolo p 
-                                                ;');
-			    if($result==null){
-				    echo'';
-			    }else{	
-				 echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	
-			        echo'<tr>';
-			        echo'<th style="font-weight: normal;"width="150">';
-					echo "Protocolo";
-                    echo'<select class="form-control form-control-sm" name="id_protocolo">';
+<table>
+  <thead>
+    <tr>
+      <th width="300">Reglamento interno</th>
+      <th width="300">Elementos de protección personal</th>
+      <th width="300">Vestimenta</th> 
+	  <th width="300">Herramientas</th>
+	  <th width="100"> </th>
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	
+    <td> 
+	 <textarea name="reglamento_interno" type="text"rows="5" cols="55"  Required> </textarea> 
+    </td> 
+    
+    <td> 
+	 <textarea name="elementos_de_proteccion_personal" type="text"rows="5" cols="55"  Required> </textarea> 
+    </td> 
+    <td> 
+	 <textarea name="vestimenta" type="text"rows="5" cols="55"  Required> </textarea> 
+    </td> 	  
+	
+    <td> 
+	 <textarea name="herramientas" type="text"rows="5" cols="55"  Required> </textarea> 
+    </td>  
  
-                    while($row=mysqli_fetch_assoc($result)) { 
-                        echo "<option value='$row[id_protocolo]'>$row[nombre]</option>";  
-				    } 
-				 }	 
-                echo'</select>';
-		        echo'<th style="font-weight: normal;"width="50">';
-				echo "Estado";
-                echo'<input type="text" id="estado" name="estado" class="form-control" value="">';
-				echo'</th>';
-				
-			    echo'<th style="font-weight: normal;"width="50">';
-               echo'</br><input type="submit" name="submitprotocolo" class="button primary"value="Asignar"></input>';
-				echo'</th>';
-				echo'</th>';
-                echo'</thead>';
-                echo'</table>';
-				echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
-				echo '<input type="hidden" name="id" value='.$id_edificio.' />';
-        echo '</form>';	 
- ?>
+	    <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>  
+	<td><button class="success button" type="submit" name="submitprocedimiento">Registrar</button></td>
+  
+    </form>
+    </tr>
+  </tbody>
+</table>
 </div>
 
  
@@ -779,16 +983,7 @@ if(isset($_SESSION['usuario'])){?>
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ 
   
 </div>
         </div>
@@ -853,14 +1048,59 @@ if(isset($_POST['submitaccidente'])){
      $nuevo = new GuardarAccidente("tesis"); 
      $nuevo->NuevoAccidente($campos);
 } 
-if(isset($_POST['submitpiso'])){
+if(isset($_POST['submitunidad'])){
  
-    $campos = array("id_piso"=> Null,
-	"nombre"=> $_POST['nombre'] , 
- 	"id_edificio"=> $_POST['id_edificio']); 
+    $campos = array("id_unidad"=> NULL ,
+	"nombre"=>$_POST['nombre'],"total_func"=>$_POST['total_func']
+	,"func_aporta_edi"=>$_POST['func_aporta_edi'],"fecha_act"=>$_POST['fecha_act']
+	,"estado"=>$_POST['estado'],"id_edificio"=>$_POST['id_edificio']); 
  
-     $nuevo = new GuardarPiso("tesis"); 
-     $nuevo->NuevoPiso($campos);
+    $nuevo = new GuardarUnidad("tesis"); 
+    $nuevo->NuevaUnidad($campos);
+} 
+if(isset($_POST['submitunidad'])){
+ 
+    $campos = array("id_unidad"=> NULL ,
+	"nombre"=>$_POST['nombre'],"total_func"=>$_POST['total_func']
+	,"func_aporta_edi"=>$_POST['func_aporta_edi'],"fecha_act"=>$_POST['fecha_act']
+	,"estado"=>$_POST['estado'],"id_edificio"=>$_POST['id_edificio']); 
+ 
+    $nuevo = new GuardarUnidad("tesis"); 
+    $nuevo->NuevaUnidad($campos);
+} 
+if(isset($_POST['submitextintor'])){
+ 
+    $campos = array("id_extintor"=> NULL ,
+	"nombre"=>$_POST['nombre'],"fecha_carga"=>$_POST['fecha_carga']
+	,"fecha_venc"=>$_POST['fecha_venc'],"ubicacion"=>$_POST['ubicacion']
+	,"estado"=>$_POST['estado'],"id_piso"=>$_POST['id_piso']); 
+ 
+    $nuevo = new GuardarExtintor("tesis"); 
+    $nuevo->NuevoExtintor($campos);
+} 
+if(isset($_POST['submitredhumeda'])){
+ 
+    $campos = array("id_redhumeda"=> NULL ,
+	"nombre"=>$_POST['nombre'],"ubicacion"=>$_POST['ubicacion']
+	,"estado"=>$_POST['estado'] 
+	,"id_piso"=>$_POST['id_piso']); 
+ 
+    $nuevo = new GuardarRedHumeda("tesis"); 
+    $nuevo->NuevaRedHumeda($campos);
+} 
+
+
+
+if(isset($_POST['submitprocedimiento'])){
+ 
+    $campos = array("id_procedimiento"=> Null,
+	"reglamento_interno"=> $_POST['reglamento_interno'], 
+ 	"elementos_de_proteccion_personal"=> $_POST['elementos_de_proteccion_personal'],
+	"vestimenta"=> $_POST['vestimenta'],"herramientas"=> $_POST['herramientas']
+    ,"id_edificio"=> $_POST['id_edificio']); 
+ 
+     $nuevo = new GuardarProcedimiento("tesis"); 
+     $nuevo->NuevoProcedimiento($campos);
 } 
  
 ?>
@@ -887,6 +1127,12 @@ var el = document.getElementById(id);
 el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
 }
 }
+function extintores_ocultos(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
  function piso_oculto(id){
 if (document.getElementById){  
 var el = document.getElementById(id);  
@@ -905,13 +1151,21 @@ var el = document.getElementById(id);
 el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
 }
 }
+ function rehumeda_ocultos(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
 window.onload = function(){ 
 muestra_procedimientos('nuevoprocedimiento');
 muestra_unidad('nuevaunidad');
 muestra_oculta('nuevoprotocolo'); 
 riesgos_ocultos('nuevoriesgo'); 
 accidentes_ocultos('nuevoaccidente'); 
-piso_oculto('nuevopiso');
+extintores_ocultos('nuevoextintor');
+rehumeda_ocultos('nuevaredhumeda');
+piso_oculto('nuevopiso');           
   
 }
 </script>

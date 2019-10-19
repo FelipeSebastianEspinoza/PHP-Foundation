@@ -6,7 +6,8 @@
            window.location.replace('index.php');					
 		  </script>";
 }
- $id_protocolo = $_POST["id_protocolo"]; 				 
+ $id_accidente = $_POST["id_accidente"];   
+ $id_edificio2 = $_POST["id_edificio"];
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -58,7 +59,7 @@
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Protocolos</h4>
+                <h4 style="margin: 0;" class="text-center">Accidentes</h4>
                 <hr>
             </div>
             <div class="callout">
@@ -71,9 +72,13 @@
   <table>
   <thead>
     <tr>
-      <th width="200">Nombre</th>
-	  <th width="400">Descripción</th>
-      <th width="150">Modificar</th>
+      <th width="100">Fecha</th>
+      <th width="100">Tipo</th>
+	  <th width="100">Número</th>
+      <th width="200">Persona</th>
+      <th width="400">Descripción</th>
+      <th width="150">Edificio</th>
+	  <th width="150"> </th>
     </tr>
   </thead> 
   
@@ -91,34 +96,58 @@
 			$conn = mysqli_connect("localhost","root","","tesis");
 
 			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM protocolo
-										   WHERE id_protocolo='.$id_protocolo.';');
+									  	   FROM accidente
+										   WHERE id_accidente='.$id_accidente.';');
 		    while($row = mysqli_fetch_array($result)){
 
-  
+       
  	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
-      echo '<input type="hidden" name="id_protocolo" value='.$row["id_protocolo"].' />'; 
+      echo '<input type="hidden" name="id_accidente" value='.$row["id_accidente"].' />'; 
 	  echo '<tr>';
+	  
 	  echo '<td>' ;
- 
-	  echo '<input type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required>';
+	  echo '<input type="date" id="fecha"name="fecha" class="form-control" value="'.$row["fecha"].'" Required>';
 	  echo '</td>';
-
+	  
+	  echo '<td>';
+	  echo '<input type="text" id="tipo"name="tipo" class="form-control" value="'.$row["tipo"].'" Required>';
+	  echo '</td>';
+	  
+	  echo '<td>';
+	  echo '<input type="text" id="numero"name="numero" class="form-control" value="'.$row["numero"].'" Required>';
+	  echo '</td>';
+	  
+	  echo '<td>';
+	  echo '<input type="text" id="persona"name="persona" class="form-control" value="'.$row["persona"].'" Required>';
+	  echo '</td>';
+	  
 	  echo '<td>' ;
 	   ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
       echo '</td>';
 	   
+	   
+ 
+			$result = mysqli_query($conn, 'SELECT id_edificio,nombre
+			                               FROM edificio ;');
+			 	 		   
+		         echo'<td><select  id="lista1" name="id_edificio">';
+                    while($row3=mysqli_fetch_assoc($result)) { 
+              
+					if( $id_edificio2 == $row3[id_edificio]){
+						 echo "<option value='$row3[id_edificio]'Selected>$row3[nombre]</option>";  
+					}else{
+						 echo "<option value='$row3[id_edificio]'>$row3[nombre]</option>";  
+					}	
+				 
+				    } 
+                echo'</td></select>';
+ 
+	   
 	  echo '<td>' ;
-	   if(isset($_SESSION['usuario'])){ 
-      echo'<button class="success button" type="submit" name="submitprotocolo">Registrar</button> ';
-	   }
+      echo'<button class="success button" type="submit" name="submitmodificarriesgo">Registrar</button> ';
       echo '</td>';
  
       echo '</tr>';
-	  
- 
-	 
-	  
       echo '</form>';
 				}
 		  ?>
@@ -163,13 +192,18 @@
 <?php
 include("guardar.php");
  
-if(isset($_POST['submitprotocolo'])){
+if(isset($_POST['submitmodificarriesgo'])){
  
-    $campos = array("id_protocolo"=> $_POST['id_protocolo'] ,
-	"nombre"=>$_POST['nombre'],"descripcion"=>$_POST['descripcion']); 
+    $campos = array("id_accidente"=> $_POST['id_accidente'] ,
+	"fecha"=>$_POST['fecha'],
+	"tipo"=>$_POST['tipo'],
+	"numero"=>$_POST['numero'],
+	"persona"=>$_POST['persona'],
+	"descripcion"=>$_POST['descripcion'],
+	"id_edificio"=>$_POST['id_edificio']); 
  
-    $nuevo = new GuardarProtocolo("tesis"); 
-    $nuevo->ModificarProtocolo($campos);
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->ModificarAccidente($campos);
 }
  
 ?>

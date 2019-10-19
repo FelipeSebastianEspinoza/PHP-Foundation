@@ -6,7 +6,8 @@
            window.location.replace('index.php');					
 		  </script>";
 }
- $id_protocolo = $_POST["id_protocolo"]; 				 
+ $id_unidad = $_POST["id_unidad"]; 	
+ $id_edificio = $_POST["id_edificio"]; 	 
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -58,7 +59,7 @@
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Protocolos</h4>
+                <h4 style="margin: 0;" class="text-center">Unidad</h4>
                 <hr>
             </div>
             <div class="callout">
@@ -72,8 +73,10 @@
   <thead>
     <tr>
       <th width="200">Nombre</th>
-	  <th width="400">Descripción</th>
-      <th width="150">Modificar</th>
+	  <th width="400">Total funcionarios</th>
+      <th width="150">Funcionarios que aporta</th>
+	  <th width="150">Fecha Actualización</th>
+	  <th width="150">Estado</th> 
     </tr>
   </thead> 
   
@@ -91,61 +94,59 @@
 			$conn = mysqli_connect("localhost","root","","tesis");
 
 			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM protocolo
-										   WHERE id_protocolo='.$id_protocolo.';');
+									  	   FROM unidad
+										   WHERE id_unidad='.$id_unidad.';');
 		    while($row = mysqli_fetch_array($result)){
 
   
  	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
-      echo '<input type="hidden" name="id_protocolo" value='.$row["id_protocolo"].' />'; 
+      echo '<input type="hidden" name="id_unidad" value='.$row["id_unidad"].' />'; 
+	  echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />'; 
 	  echo '<tr>';
+	  
 	  echo '<td>' ;
- 
 	  echo '<input type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required>';
+	  echo '</td>';
+ 
+	  echo '<td>' ;
+	  echo '<input type="text" id="func_aporta_edi"name="func_aporta_edi" class="form-control" value="'.$row["func_aporta_edi"].'" Required>';
 	  echo '</td>';
 
 	  echo '<td>' ;
-	   ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
-      echo '</td>';
-	   
+	  echo '<input type="date" id="fecha_act"name="fecha_act" class="form-control" value="'.$row["fecha_act"].'" Required>';
+	  echo '</td>';
+	  
+	  echo '<td>' ;
+	  echo '<input type="text" id="estado"name="estado" class="form-control" value="'.$row["estado"].'" Required>';
+	  echo '</td>';
+	  
+	  
+	  
+	  echo '<td>' ;
+	  echo '<input type="text" id="total_func"name="total_func" class="form-control" value="'.$row["total_func"].'" Required>';
+	  echo '</td>';
+
+
+ 
 	  echo '<td>' ;
 	   if(isset($_SESSION['usuario'])){ 
       echo'<button class="success button" type="submit" name="submitprotocolo">Registrar</button> ';
 	   }
       echo '</td>';
- 
       echo '</tr>';
-	  
- 
-	 
-	  
       echo '</form>';
 				}
 		  ?>
  
-   
   </tbody>
 </table>
-
-
  
-          
                 </div>
                 </div>
           </div>
         </div>
       </div>
-	 
-	 
  
-  
- 
- 
-	
-
-	
-	
-	
 </br>	
 <?php include 'Footer.php'; ?>
  
@@ -165,11 +166,13 @@ include("guardar.php");
  
 if(isset($_POST['submitprotocolo'])){
  
-    $campos = array("id_protocolo"=> $_POST['id_protocolo'] ,
-	"nombre"=>$_POST['nombre'],"descripcion"=>$_POST['descripcion']); 
+    $campos = array("id_unidad"=> $_POST['id_unidad'] ,
+	"nombre"=>$_POST['nombre'],"total_func"=>$_POST['total_func']
+	,"func_aporta_edi"=>$_POST['func_aporta_edi'],"fecha_act"=>$_POST['fecha_act']
+	,"estado"=>$_POST['estado'],"id_edificio"=>$_POST['id_edificio'] ); 
  
-    $nuevo = new GuardarProtocolo("tesis"); 
-    $nuevo->ModificarProtocolo($campos);
+    $nuevo = new GuardarUnidad("tesis"); 
+    $nuevo->ModificarUnidad($campos);
 }
  
 ?>

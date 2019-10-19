@@ -1,4 +1,3 @@
- 
 
  <center>
     <link href="css/zoom-marker.css" rel="stylesheet"/>
@@ -17,7 +16,7 @@
 $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
 ?>  
  
-	
+	</br></br>
     <div class="container" >
 	
 	

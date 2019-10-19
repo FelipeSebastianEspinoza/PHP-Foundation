@@ -71,7 +71,7 @@
 		$id = htmlentities($_POST['id_edificio']);
 		$id_protocolo = $_POST['id_protocolo'];
 		$id_edificio = $_POST['id_edificio'];
-		$estado = htmlentities($_POST['estado']);
+		$estado = htmlentities($_POST['estado']) ;
  
         $consulta = "UPDATE `asigna` SET `estado`='$estado'
 	                 WHERE `id_edificio`='$id_edificio' 
@@ -134,6 +134,176 @@
  
  }
 
+ class GuardarUnidad{
+ 
+	private $id_unidad;
+	private $nombre;
+	private $total_func;
+    private $func_aporta_edi;
+    private $fecha_act;
+    private $estado;
+    private $id_edificio;
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevaUnidad($form_data){
+        $fields = array_keys($form_data);
+		
+		$nombre = htmlentities($_POST['nombre']);
+		$total_func =htmlentities($_POST['total_func']);
+        $func_aporta_edi =htmlentities($_POST['func_aporta_edi']);
+		$fecha_act =htmlentities($_POST['fecha_act']);
+		$estado =htmlentities($_POST['estado']);
+		$id_edificio =htmlentities($_POST['id_edificio']);
+ 
+        $consulta = "INSERT INTO `unidad` 
+		(`id_unidad`,`nombre`,`total_func`,`func_aporta_edi`,`fecha_act`,`estado`,`id_edificio`) 
+		VALUES 
+		(NULL,'$nombre','$total_func','$func_aporta_edi','$fecha_act','$estado','$id_edificio');";
+    
+		 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	}
+   
+    function ModificarUnidad($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_unidad = htmlentities($_POST['id_unidad']);
+		$nombre = htmlentities($_POST['nombre']);
+		$total_func =htmlentities($_POST['total_func']);
+        $func_aporta_edi =htmlentities($_POST['func_aporta_edi']);
+		$fecha_act =htmlentities($_POST['fecha_act']);
+		$estado =htmlentities($_POST['estado']);
+		$id_edificio =htmlentities($_POST['id_edificio']);
+
+        $consulta = "UPDATE `unidad` SET `nombre`='$nombre' 
+	    ,`total_func`='$total_func',`func_aporta_edi`='$func_aporta_edi'
+        ,`fecha_act`='$fecha_act',`estado`='$estado',`id_edificio`='$id_edificio'     		
+		WHERE `id_unidad`='$id_unidad'"; 
+ 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	
+	}
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+
+ 
+ 
+ 
+ class GuardarProcedimiento{
+ 
+	private $id_procedimiento;
+	private $reglamento_interno;
+	private $elementos_de_proteccion_personal;
+    private $vestimenta;
+    private $herramientas;
+    private $id_edificio;
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevoProcedimiento($form_data){
+        $fields = array_keys($form_data);
+		
+		$reglamento_interno = htmlentities($_POST['reglamento_interno']);
+        $elementos_de_proteccion_personal = htmlentities($_POST['elementos_de_proteccion_personal']);
+		$vestimenta = htmlentities($_POST['vestimenta']);
+		$herramientas = htmlentities($_POST['herramientas']);
+		$id_edificio = htmlentities($_POST['id_edificio']);
+ 
+        $consulta = "INSERT INTO `procedimiento` 
+		(`id_procedimiento`,`reglamento_interno`,`elementos_de_proteccion_personal`,`vestimenta`,`herramientas`,`id_edificio`) 
+		VALUES 
+		(NULL,'$reglamento_interno','$elementos_de_proteccion_personal','$vestimenta','$herramientas','$id_edificio');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	}
+   
+    function ModificarProcedimiento($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_procedimiento = htmlentities($_POST['id_procedimiento']);
+		$reglamento_interno = htmlentities($_POST['reglamento_interno']);
+        $elementos_de_proteccion_personal = htmlentities($_POST['elementos_de_proteccion_personal']);
+		$vestimenta = htmlentities($_POST['vestimenta']);
+		$herramientas = htmlentities($_POST['herramientas']);
+		$id_edificio = htmlentities($_POST['id_edificio']);
+
+        $consulta = "UPDATE `procedimiento` SET `reglamento_interno`='$reglamento_interno' 
+	    ,`elementos_de_proteccion_personal`='$elementos_de_proteccion_personal',
+		`vestimenta`='$vestimenta'
+        ,`herramientas`='$herramientas',`id_edificio`='$id_edificio'     		
+		WHERE `id_procedimiento`='$id_procedimiento'"; 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	
+	}
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+
+ 
+ 
+ 
  
  
  class GuardarRiesgo{
@@ -234,11 +404,13 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
-					 alert('No es posible quitar');
+			  alert('No es posible asignar');
+					  
 				  </script>";
 		}else{
 			echo "<script>
-					alert('Se ha quitado con éxito'); 
+					 
+					 alert('Se ha asignado con éxito'); 
                      window.location.replace('Edificio.php?');					
 			      </script>"; 
 		}
@@ -262,11 +434,11 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
-					 alert('No es posible asignar');
+					 alert('No es posible quitar');
 				  </script>";
 		}else{
 			echo "<script>
-					alert('Se ha asignado con éxito'); 
+					alert('Se ha quitado con éxito'); 
                      window.location.replace('Edificio.php?');					
 			      </script>"; 
 		}
@@ -319,12 +491,41 @@
 		}else{
 			echo "<script>
 					alert('Se ha añadido con éxito'); 
-                    window.location.replace('Edificio.php');					
+                    window.location.replace('Accidentes.php');					
 			      </script>"; 
 		}
 	
 	}
-   
+       function ModificarAccidente($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_accidente = $_POST['id_accidente'];
+		$fecha = htmlentities($_POST['fecha']);
+		$tipo = htmlentities($_POST['tipo']);
+        $numero = htmlentities($_POST['numero']);
+        $persona = htmlentities($_POST['persona']);
+        $descripcion = htmlentities($_POST['descripcion']);
+        $id_edificio = htmlentities($_POST['id_edificio']);
+
+        $consulta = "UPDATE `accidente` SET `fecha`='$fecha',
+		`tipo`='$tipo',`numero`='$numero',
+		`persona`='$persona',`descripcion`='$descripcion',
+	    `id_edificio`='$id_edificio'
+		WHERE `id_accidente`='$id_accidente'";  
+  
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');	 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Accidentes.php');					
+			      </script>"; 
+		}
+	}
      
 	 
 	 
@@ -334,7 +535,6 @@
 	}
  
  }
- 
  
  
  
@@ -362,7 +562,7 @@
         $ubicacion =htmlentities($_POST['ubicacion']);
         $estado =htmlentities($_POST['estado']);	
         $id_piso =htmlentities($_POST['id_piso']);
- 
+   
         $consulta = "INSERT INTO `extintor` (`id_extintor`,`nombre`,`fecha_carga`,
 		`fecha_venc`,`ubicacion`,`estado`,`id_piso`)
 		VALUES (NULL,'$nombre','$fecha_carga','$fecha_venc',
@@ -497,10 +697,6 @@
 	}
  
  }
- 
- 
- 
- 
  
  
  
@@ -996,21 +1192,11 @@
 		}
 	
 	}
-	
-    
- 
+
     public function cerrarBD(){
 		$this->con->close();
 	}
  
  }
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
 ?>

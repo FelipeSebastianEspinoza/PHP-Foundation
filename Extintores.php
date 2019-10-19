@@ -157,10 +157,14 @@ if (!isset($_SESSION['usuario'])){
 	  echo  utf8_encode($row["nombre"]);
       echo '</td>';
 	  echo '<td>' ;
-	  echo  utf8_encode($row["fecha_carga"]);
+	// echo  utf8_encode($row["fecha_carga"]); 
+	  $date=date_create($row["fecha_carga"]);
+	  echo date_format($date,"d/m/Y") ;
       echo '</td>';
 	  echo '<td>' ;
-	  echo  utf8_encode($row["fecha_venc"]);
+	 // echo  utf8_encode($row["fecha_venc"]);
+	  $date=date_create($row["fecha_venc"]);
+	  echo date_format($date,"d/m/Y") ;
       echo '</td>';
 	  echo '<td>' ;
 	  echo  utf8_encode($row["ubicacion"]);
@@ -184,11 +188,7 @@ if (!isset($_SESSION['usuario'])){
   </tbody>
 </table>
 
-            <div class="row column">
-                <hr>
-                <h4 style="margin: 0;" class="text-center">Extintores a vencer</h4>
-                <hr>
-            </div>
+ 
                 </div>
                 </div>
           </div>

@@ -2,6 +2,11 @@
  $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');  
  
  session_start();
+ if (!isset($_SESSION['usuario'])){
+	echo "<script>
+           window.location.replace('index.php');					
+		  </script>";
+}
   if(!empty($_POST['id_edificio'])) {
         $id_edificio = $_POST['id_edificio'];
 		
@@ -177,7 +182,7 @@
 <ul class="tabs" data-active-collapse="true" data-tabs id="collapsing-tabs">
   <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Protocolos</a></li>
 <!--<li class="tabs-title"><a href="#panel2c">Riesgos</a></li>-->
-  <li class="tabs-title"><a href="#panel3c">Accidentes</a></li>
+<!--<li class="tabs-title"><a href="#panel3c">Accidentes</a></li>-->
 <!--<li class="tabs-title"><a href="#panel4c">Extintores</a></li>-->
 <!--<li class="tabs-title"><a href="#panel5c">Redes Humedas</a></li>-->
 </ul>

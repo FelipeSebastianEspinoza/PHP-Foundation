@@ -5,9 +5,7 @@ if (!isset($_SESSION['usuario'])){
            window.location.replace('index.php');					
 		  </script>";
 }
-
  
-  
  ?>
  
  <!doctype html>
@@ -82,6 +80,7 @@ if(isset($_SESSION['usuario'])){?>
       <th width="100">Número</th>
 	  <th width="300">Persona</th>
       <th width="600">Descripción</th>
+	  <th width="200">Edificio</th>
 	  <th width="100"> </th>
     </tr>
   </thead>
@@ -94,8 +93,34 @@ if(isset($_SESSION['usuario'])){?>
     <td><input type="text" id="inputNumero" name="numero" class="form-control" placeholder="" Required >	</td>
     <td><input type="text" id="inputPersona" name="persona" class="form-control" placeholder="Escriba el nombre" Required >	</td>
     <td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
-    <td><button class="success button" type="submit" name="submitaccidente">Registrar</button></td>
+    
+	<?php 
+    $conn = mysqli_connect("localhost","root","","tesis");
+    $result = mysqli_query($conn, 'SELECT id_edificio, nombre 
+	                               FROM edificio
+                                   WHERE 1');
+			    if($result==null){
+				    echo'';
+			    }else{
+                    
+                    
+                    echo'<td><select class="form-control form-control-sm" name="id_edificio">';
+ 
+                    while($row=mysqli_fetch_assoc($result)) { 
+                        echo "<option value='$row[id_edificio]'>$row[nombre]</option>";  
+				    } 
+				 }	 
+                echo'</select></td>';
+       
   
+ 
+		?>
+	
+	
+	
+	    
+	<td><button class="success button" type="submit" name="submitaccidente">Registrar</button></td>
+      
     </form>
     </tr>
   </tbody>
@@ -130,7 +155,11 @@ Haga click en el nombre de la columna para ordenar de manera ascendente o descen
 		            if(!$base){
 			        echo'No se encontro la base de datos: '.mysql_error();
 		            }else{	 
-		            	$sql = "SELECT * FROM `accidente` WHERE 1 ORDER BY persona";
+		            	$sql = "SELECT e.id_edificio,e.nombre,a.id_accidente,a.fecha,a.tipo,a.numero,
+                                       a.persona,a.descripcion,a.id_edificio						
+						        FROM accidente a,edificio e 
+						        WHERE e.id_edificio=a.id_edificio ";
+								
 	            		$ejecuta_sentencia = mysql_query($sql);
 	         		if(!$ejecuta_sentencia){
 		        		echo'hay un error en la sentencia de sql: '.$sql;
@@ -156,26 +185,38 @@ Haga click en el nombre de la columna para ordenar de manera ascendente o descen
       echo '<th style="cursor: pointer;" width="50">Tipo</th>';
       echo '<th style="cursor: pointer;" width="50">Numero</th>';
 	  echo '<th style="cursor: pointer;" width="100">Persona</th>';
-      echo '<th style="cursor: pointer;" width="200">Descripción</th>';
-	  echo '<th style="cursor: pointer;" width="200">Modificar</th>';
+      echo '<th style="cursor: pointer;" width="250">Descripción</th>';
+      echo '<th style="cursor: pointer;" width="50">Edificio</th>';
+	  echo '<th style="cursor: pointer;" width="100">Modificar</th>';
     echo '</tr>';
  echo ' </thead>';
     echo '<tbody id="myTable"> ';
       echo '<tr>  '; 
 					for($i=0; $i<$row; $i++){
- 
+            echo'<form action="MAccidentes.php" method="post">';
              echo '<td>'.$row["id_accidente"].'</td>';
-             echo '<td>'.$row["fecha"].'</td>';
+			 $date=date_create($row["fecha"]);
+			 echo '<td>';
+	        echo date_format($date,"d/m/Y") ;
+			echo '</td>';
                echo '<td>'.$row["tipo"].'</td>';
               echo '<td>'.$row["numero"].'</td>';
 	          echo '<td>' ;
 	          echo  utf8_encode($row["persona"]);
 	          echo '</td>';
-	           echo '<td>' ;
+	           echo '<td>';
 	          echo  utf8_encode($row["descripcion"]);
                 echo '</td>';
-           		echo '   </tr>';
-     
+			  echo '<td>';
+	          echo  utf8_encode($row["nombre"]);
+                echo '</td>';
+				 echo '<td>';
+				echo'<input type="submit" class="success button"value="Modificar"></input>';
+           		echo '</td>';
+				echo'<input type="hidden" name="id_accidente" value='.$row["id_accidente"].'>';
+				echo'<input type="hidden" name="id_edificio" value='.$row["id_edificio"].'>';
+				echo '</tr>';
+                echo'</form>';
  
 						$row = mysql_fetch_array($ejecuta_sentencia);
  						
@@ -221,13 +262,15 @@ include("guardar.php");
  
 if(isset($_POST['submitaccidente'])){
  
-    $campos = array("id_riesgo"=> NULL ,
-	"nombre"=>$_POST['nombre'],
-	"descripcion"=>$_POST['descripcion'],
-	"imagen"=>$_POST['ARCHIVO']); 
+    $campos = array("id_accidente"=> NULL ,
+	"fecha"=>$_POST['fecha'],
+	"numero"=>$_POST['numero'],
+	"persona"=>$_POST['persona'],
+    "descripcion"=>$_POST['descripcion'],
+    "id_edificio"=>$_POST['id_edificio']	); 
  
-    $nuevo = new GuardarRiesgo("tesis"); 
-    $nuevo->NuevoRiesgo($campos);
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->NuevoAccidente($campos);
 }
  
  
