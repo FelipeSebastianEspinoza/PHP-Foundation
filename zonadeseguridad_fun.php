@@ -3,9 +3,11 @@
  <center>
     <link href="css/zoom-marker.css" rel="stylesheet"/>
     <style>
-        .container{
+        .mapaimagens3{
             width: 800px;
-            margin: 30px auto;
+           margin-bottom: 17px;
+		   margin-top: 6px;
+		   
         }
         img{
             width: 600px;
@@ -18,7 +20,7 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
 ?>  
  
 		</br></br>
-    <div class="container" >
+    <div class="mapaimagens3" >
 	
 	 <!--
         <img usemap="#edificiomap" style=" width:100%;max-width:1356px;min-width:678px;
@@ -31,10 +33,8 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
 	
 	
 	</div>
- <style>
+	 </center>
  
- 
- </style>
     <script src="js/jquery.min.js"></script>
     <script src="js/zoom-marker.min.js"></script>
  	 <script src="js/jquery.mousewheel.min.js"></script>  
@@ -64,7 +64,7 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
 		
     </script>
  
- </center>
+ 
  	 
 	 
 	 

@@ -86,19 +86,6 @@ $id_piso=$_POST['id_piso'];
 
  
 	
-
-
-
- 
-
-
-
-
-
-
-
-
-	
  
  </br>
  <div class="row column">
@@ -178,13 +165,21 @@ echo '<input type=image class="thumbnail"
 				echo'</th></th>'; 
 				echo'</tr>'; 
 				}
+	            echo'</thead>';
+                echo'</table>';
+				                 
+                echo'<table>';
+				echo'<thead>';
                 echo'<tr>';
                 echo'<th width="50">Departamento: </th>';
  
                 echo '<td>' ;
-	            ?> <textarea name="departamento" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['departamento']) ?></textarea><?php
+	            ?> <textarea name="departamento" type="text"rows="5" cols="20"  Required><?php echo utf8_encode($row['departamento']) ?></textarea><?php
                 echo '</td>';
 				echo'</th>';
+				
+				
+				
 				echo'<th><th>'; 
 				echo'</th></th>'; 
 				echo'</tr>'; 

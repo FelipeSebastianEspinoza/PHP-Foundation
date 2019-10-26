@@ -142,7 +142,7 @@ echo '<input type=image class="thumbnail"
                 echo'<tr>';
 				
                 echo'<th width="50">Encargado: </th>';
-                echo'<th style="font-weight: normal;"width="150">';  
+                echo'<th style="font-weight: normal;"width="1000">';  
 				echo '<input type="text" id="encargado"name="encargado" class="form-control" value="'.$row["encargado"].'" Required>';
                 echo '</th>';
 				
@@ -158,6 +158,7 @@ echo '<input type=image class="thumbnail"
                 echo '<td>' ;
 	            ?> <textarea name="descripcion" type="text"rows="5" cols="400"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
                 echo '</td>';
+				
 				echo'</th>';
 				echo'</tr>'; 
                 

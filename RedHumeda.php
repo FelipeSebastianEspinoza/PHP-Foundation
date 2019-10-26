@@ -28,30 +28,7 @@ if (!isset($_SESSION['usuario'])){
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+                 <?php include 'Top-Bar.php'; ?>
  
             </br>
             <div class="row column">
@@ -130,8 +107,10 @@ if (!isset($_SESSION['usuario'])){
     <tr>
       <th width="300">Nombre</th>
 	  <th width="300">Estado</th>
+	  <th width="300">Edificio</th>
 	  <th width="600">Ubicación</th>
-      <th width="100"></th>
+      <th width="50">Modificar</th>
+      <th width="50">Eliminar</th>
     </tr>
   </thead> 
   <tbody>
@@ -141,8 +120,17 @@ if (!isset($_SESSION['usuario'])){
   <?php  
  
 			$conn = mysqli_connect("localhost","root","","tesis");
-			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM red_humeda;');
+			$result = mysqli_query($conn, 'SELECT r.id_redhumeda,r.nombre,r.estado,r.id_piso,r.ubicacion,
+			                                      p.id_piso,p.id_edificio,
+												  e.id_edificio,e.nombre AS nombre2
+									  	   FROM red_humeda r,piso p,edificio e
+										   WHERE r.id_piso=p.id_piso
+										   AND r.eliminar!="1" 
+										   AND p.id_edificio=e.id_edificio
+										   ;');
+										   
+										   
+										   
 		    while($row = mysqli_fetch_array($result)){
   
  echo'<form action="MRedHumeda.php" method="post">';	 
@@ -159,18 +147,36 @@ if (!isset($_SESSION['usuario'])){
       echo '</td>';
 	  
 	  echo '<td>' ;
+	  echo  utf8_encode($row["nombre2"]);
+      echo '</td>';
+	  
+	  echo '<td>' ;
 	  echo  utf8_encode($row["ubicacion"]);
       echo '</td>';
  
 	   
+	   
+	   
 	  echo '<td>' ;
 	   if(isset($_SESSION['usuario'])){ 
      echo'<input type="submit" class="success button"value="Modificar"></input>';
-	   }
-      echo '</td>';
+     echo '</td>';
+     echo'</form>';
+	 
+     echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+     echo '<input type="hidden" name="id_redhumeda" value='.$row["id_redhumeda"].' />';
+     echo '<td>' ;    
+       
+     ?>  
+    <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminarredhumeda">Eliminar</button> 
+    <?php
+	 echo '</td>' ;
+     echo'</form>';
+     echo '</tr>';
  
-      echo '</tr>';
- echo'</form>';
+ 
+ 
+	   }
 				}
 		  ?>
  
@@ -212,6 +218,13 @@ if(isset($_POST['submitredhumeda'])){
  
     $nuevo = new GuardarRedHumeda("tesis"); 
     $nuevo->NuevaRedHumeda($campos);
+}
+if(isset($_POST['eliminarredhumeda'])){
+  
+    $campos = array("id_redhumeda"=>$_POST['id_redhumeda']); 
+  
+    $nuevo = new GuardarRedHumeda("tesis"); 
+    $nuevo->EliminarRedHumeda($campos);
 }
 ?>
  <script type="text/javascript">

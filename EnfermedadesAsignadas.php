@@ -5,6 +5,7 @@ if (!isset($_SESSION['usuario'])){
            window.location.replace('index.php');					
 		  </script>";
 }
+ 
  ?>
  
  <!doctype html>
@@ -28,12 +29,35 @@ if (!isset($_SESSION['usuario'])){
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-            <?php include 'Top-Bar.php'; ?> 
+                <div class="top-bar" id="realEstateMenu">
+                    <div class="top-bar-left">
+                        <ul class="menu menu-hover-lines">
+                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">Products</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="top-bar-right">
+                        <ul class="menu">
+			 		        <?php 
+			         			if(isset($_SESSION['usuario'])){
+						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
+						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
+					        	}else{
+					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
+					        	}
+						    ?>
+                        </ul>
+                    </div>
+                </div>
  
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Accidentes</h4>
+                <h4 style="margin: 0;" class="text-center">Enfermedades Reportadas</h4>
                 <hr>
             </div>
             <div class="callout">
@@ -42,7 +66,7 @@ if (!isset($_SESSION['usuario'])){
 <?php
 if(isset($_SESSION['usuario'])){?>
 <div class="titulo_boton">
-  <a style='cursor: pointer;' onClick="accidentes_ocultos('nuevoaccidente')" title="" class="success button">Añadir Accidente</a>
+  <a style='cursor: pointer;' onClick="accidentes_ocultos('nuevoaccidente')" title="" class="success button">Añadir Reporte</a>
 </div>
 <?php
 }
@@ -51,12 +75,10 @@ if(isset($_SESSION['usuario'])){?>
   <table>
   <thead>
     <tr>
-      <th width="100">Fecha</th>
-      <th width="100">Tipo</th>
-      <th width="100">Número</th>
-	  <th width="300">Persona</th>
-      <th width="600">Descripción</th>
-	  <th width="200">Edificio</th>
+      <th width="80">Fecha</th>
+      <th width="300">Edificio</th>
+      <th width="250">Persona</th>
+	  <th width="250">Enfermedad</th>
 	  <th width="100"> </th>
     </tr>
   </thead>
@@ -65,11 +87,7 @@ if(isset($_SESSION['usuario'])){?>
 	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
 	
     <td><input type="date" id="inputFecha" name="fecha" class="form-control" placeholder="" Required >	</td>
-    <td><input type="text" id="inputTipo" name="tipo" class="form-control" placeholder="" Required >	</td>
-    <td><input type="text" id="inputNumero" name="numero" class="form-control" placeholder="" Required >	</td>
-    <td><input type="text" id="inputPersona" name="persona" class="form-control" placeholder="Escriba el nombre" Required >	</td>
-    <td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
-    
+ 
 	<?php 
     $conn = mysqli_connect("localhost","root","","tesis");
     $result = mysqli_query($conn, 'SELECT id_edificio, nombre 
@@ -87,14 +105,32 @@ if(isset($_SESSION['usuario'])){?>
 				    } 
 				 }	 
                 echo'</select></td>';
-       
-  
  
 		?>
-	
-	
-	
-	    
+		
+		  <td><input type="text" id="inputPersona" name="persona" class="form-control" placeholder="" Required >	</td>
+		<?php 
+    $conn = mysqli_connect("localhost","root","","tesis");
+    $result = mysqli_query($conn, 'SELECT id_enfermedad, nombre 
+	                               FROM enfermedades_profesionales
+                                   WHERE 1');
+			    if($result==null){
+				    echo'';
+			    }else{
+ 
+                    echo'<td><select class="form-control form-control-sm" name="id_enfermedad">';
+ 
+                    while($row=mysqli_fetch_assoc($result)) { 
+                        echo "<option value='$row[id_enfermedad]'>$row[nombre]</option>";  
+				    } 
+				 }	 
+                echo'</select></td>';
+ 
+		?>
+		
+		
+		
+ 
 	<td><button class="success button" type="submit" name="submitaccidente">Registrar</button></td>
       
     </form>
@@ -131,11 +167,15 @@ Haga click en el nombre de la columna para ordenar de manera ascendente o descen
 		            if(!$base){
 			        echo'No se encontro la base de datos: '.mysql_error();
 		            }else{	 
-		            	$sql = 'SELECT e.id_edificio,e.nombre,a.id_accidente,a.fecha,a.tipo,a.numero,
-                                       a.persona,a.descripcion,a.id_edificio						
-						        FROM accidente a,edificio e 
-						        WHERE a.eliminar!="1" 
-								AND e.id_edificio=a.id_edificio ';
+		            	$sql = "SELECT r.id_enfermedad_reportada,r.fecha,r.persona,r.id_edificio,r.id_enfermedad,
+                                       n.id_enfermedad,n.nombre AS nombre2,
+                                       e.id_edificio,e.nombre									   
+						        FROM enfermedades_profesionales n,
+								     enfermedades_reportadas r,
+								     edificio e 
+						        WHERE n.id_enfermedad=r.id_enfermedad  
+								AND r.eliminar!='1'
+								AND r.id_edificio=e.id_edificio  ";
 								
 	            		$ejecuta_sentencia = mysql_query($sql);
 	         		if(!$ejecuta_sentencia){
@@ -146,75 +186,71 @@ Haga click en el nombre de la columna para ordenar de manera ascendente o descen
 		         	}
 		         }
 	            }
-	            if($row['id_accidente']==""){
+	            if($row['id_enfermedad_reportada']==""){
 				 echo "<script>
 					alert('No existen resultados de busqueda');
 				  </script>";   
 			  }
-			  
-			  
-			  
+ 
 			echo '<table>';
   echo '<thead>';
     echo '<tr>';
       echo '<th style="cursor: pointer;" width="50">ID</th>';
       echo '<th style="cursor: pointer;" width="50">Fecha</th>';
-      echo '<th style="cursor: pointer;" width="50">Tipo</th>';
-      echo '<th style="cursor: pointer;" width="50">Numero</th>';
-	  echo '<th style="cursor: pointer;" width="100">Persona</th>';
-      echo '<th style="cursor: pointer;" width="250">Descripción</th>';
-      echo '<th style="cursor: pointer;" width="50">Edificio</th>';
-	  echo '<th style="cursor: pointer;" width="50">Modificar</th>';
-	  echo '<th style="cursor: pointer;" width="50">Eliminar</th>';
+      echo '<th style="cursor: pointer;" width="50">Enfermedad</th>';
+      echo '<th style="cursor: pointer;" width="50">Persona</th>';
+	  echo '<th style="cursor: pointer;" width="100">Edificio</th>';
+	  echo '<th style="cursor: pointer;" width="100">Modificar</th>';
+	  echo '<th style="cursor: pointer;" width="100">Eliminar</th>';
     echo '</tr>';
  echo ' </thead>';
     echo '<tbody id="myTable"> ';
       echo '<tr>  '; 
 					for($i=0; $i<$row; $i++){
-            echo'<form action="MAccidentes.php" method="post">';
-             echo '<td>'.$row["id_accidente"].'</td>';
+            echo'<form action="MEnfermedadesAsignadas.php" method="post">';
+             echo '<td>'.$row["id_enfermedad_reportada"].'</td>';
 			 $date=date_create($row["fecha"]);
 			 echo '<td>';
 	        echo date_format($date,"d/m/Y") ;
 			echo '</td>';
-               echo '<td>'.$row["tipo"].'</td>';
-              echo '<td>'.$row["numero"].'</td>';
+	        echo '<td>' ;
+			  if($row["nombre2"]=="Sin Asignar"){
+		    echo '<font color="red">';
+		    echo utf8_encode($row["nombre2"]);
+		    echo '</font>';
+	        }else{
+	         echo  utf8_encode($row["nombre2"]);  
+	        } 
+	          echo '</td>';
 	          echo '<td>' ;
 	          echo  utf8_encode($row["persona"]);
 	          echo '</td>';
 	           echo '<td>';
-	          echo  utf8_encode($row["descripcion"]);
-                echo '</td>';
-			  echo '<td>';
 	          echo  utf8_encode($row["nombre"]);
                 echo '</td>';
+ 
 				 echo '<td>';
 				echo'<input type="submit" class="success button"value="Modificar"></input>';
            		echo '</td>';
-				echo'<input type="hidden" name="id_accidente" value='.$row["id_accidente"].'>';
+				echo'<input type="hidden" name="id_enfermedad_reportada" value='.$row["id_enfermedad_reportada"].'>';
 				echo'<input type="hidden" name="id_edificio" value='.$row["id_edificio"].'>';
-			    echo'</form>';
  
-				
-				echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
-                echo '<input type="hidden" name="id_accidente" value='.$row["id_accidente"].' />';
-                echo '<td>' ;    
- 
-                ?>  
-                <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminaraccidentes">Eliminar</button> 
-                <?php 
-				echo '</td>' ;
                 echo'</form>';
-                echo '</tr>';
- 
+				
+				 echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+                 echo '<input type="hidden" name="id_enfermedad_reportada" value='.$row["id_enfermedad_reportada"].' />';
+                echo '<td>' ;
+                ?>  
+                <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminarenfermedades">Eliminar</button> 
+                <?php 
+                echo '</td>' ;
+				echo '</tr>';
+				echo'</form>';
 						$row = mysql_fetch_array($ejecuta_sentencia);
  						
 					}
             echo ' </tbody>';
             echo '</table>';
-         
-       		
-		  				
  
  
 				?>
@@ -251,22 +287,21 @@ include("guardar.php");
  
 if(isset($_POST['submitaccidente'])){
  
-    $campos = array("id_accidente"=> NULL ,
+    $campos = array("id_enfermedad_reportada"=> NULL ,
 	"fecha"=>$_POST['fecha'],
-	"numero"=>$_POST['numero'],
 	"persona"=>$_POST['persona'],
-    "descripcion"=>$_POST['descripcion'],
-    "id_edificio"=>$_POST['id_edificio']	); 
+    "id_edificio"=>$_POST['id_edificio'],
+    "id_enfermedad"=>$_POST['id_enfermedad']); 
  
-    $nuevo = new GuardarAccidente("tesis"); 
-    $nuevo->NuevoAccidente($campos);
+    $nuevo = new GuardarReporteEnfermedad("tesis"); 
+    $nuevo->NuevoReporteEnfermedad2($campos);
 }
-if(isset($_POST['eliminaraccidentes'])){
+if(isset($_POST['eliminarenfermedades'])){
+ 
+    $campos = array("id_enfermedad_reportada"=>$_POST['id_enfermedad_reportada']); 
   
-    $campos = array("id_accidente"=>$_POST['id_accidente']); 
-  
-    $nuevo = new GuardarAccidente("tesis"); 
-    $nuevo->EliminarAccidente($campos);
+    $nuevo = new GuardarReporteEnfermedad("tesis"); 
+    $nuevo->EliminarReporteEnfermedad($campos);
 }
  
 ?>

@@ -28,30 +28,7 @@ if (!isset($_SESSION['usuario'])){
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+            <?php include 'Top-Bar.php'; ?>
  
             </br>
             <div class="row column">
@@ -74,7 +51,6 @@ if (!isset($_SESSION['usuario'])){
     <tr>
       <th width="150">Seleccione el edificio en el cual está el extintor</th>
       <th width="100">Seleccione el piso en el cual se encuentra</th>
- 
     </tr>
   </thead>
   <tbody>  
@@ -91,8 +67,6 @@ if (!isset($_SESSION['usuario'])){
 				    } 
                 echo'</td></select>';
 			 ?>
-		 
-			
 			 <td><div id="select2lista"></div></td> </tr>
 			<table>
   <thead>
@@ -107,16 +81,12 @@ if (!isset($_SESSION['usuario'])){
   <tbody>  
     <tr>
 	 <input  type="hidden" id="id_piso" name="id_piso" class="form-control"   Required > 
-
     <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre del riesgo" Required ></td>
     <td><input type="date" id="inputFechaCarga" name="fecha_carga" class="form-control"  Required ></td>
     <td><input type="date" id="inputFechaVenc" name="fecha_venc" class="form-control"  Required ></td>
 	<td><textarea  type="text" id="inputUbicacion" rows="5" cols="55"name="ubicacion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
 	<td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="Escriba el estado" Required ></td>
     <td><button onclick="TomarIdPiso()" class="success button" type="submit" name="submitextintor"  >Registrar</button></td>
-  
- 
-  
     </form>
     </tr>
   </tbody>
@@ -124,35 +94,39 @@ if (!isset($_SESSION['usuario'])){
 </div>
  
 <insertar>
-
-				 
+ 			 
   <table>
   <thead>
     <tr>
       <th width="200">Nombre</th>
 	  <th width="200">Fecha de Carga</th>
 	  <th width="200">Fecha Vencimiento</th>
-	  <th width="400">Ubicación</th>
+	  <th width="300">Ubicación</th>
+	  <th width="300">Edificio</th>
 	  <th width="200">Estado</th>
- 
+	  <th width="50">Modificar</th>
+	  <th width="50">Eliminar</th>
     </tr>
   </thead> 
   <tbody>
-   
-  
-  
-  <?php  
  
+  <?php  
 			$conn = mysqli_connect("localhost","root","","tesis");
-			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM extintor;');
+			$result = mysqli_query($conn, 'SELECT x.id_extintor,x.nombre,x.fecha_carga,x.fecha_venc,x.ubicacion,x.estado,x.id_piso,
+			                                      e.id_edificio,e.nombre AS nombre2,p.id_piso,p.id_edificio
+									  	   FROM extintor x,edificio e,piso p
+										   WHERE x.id_piso=p.id_piso 
+										   AND eliminar!="1"
+										   AND  p.id_edificio=e.id_edificio 
+										   ;');
+ 						   
+										   
 		    while($row = mysqli_fetch_array($result)){
   
  echo'<form action="MExtintores.php" method="post">';	 
  echo '<input type="hidden" name="id_extintor" value='.$row["id_extintor"].' />'; 
       echo '<tr>';
  
-	  
 	  echo '<td>' ;
 	  echo  utf8_encode($row["nombre"]);
       echo '</td>';
@@ -170,6 +144,9 @@ if (!isset($_SESSION['usuario'])){
 	  echo  utf8_encode($row["ubicacion"]);
       echo '</td>';
 	  echo '<td>' ;
+	  echo  utf8_encode($row["nombre2"]);
+      echo '</td>';
+	  echo '<td>' ;
 	  echo  utf8_encode($row["estado"]);
       echo '</td>';
 	   
@@ -178,16 +155,24 @@ if (!isset($_SESSION['usuario'])){
      echo'<input type="submit" class="success button"value="Modificar"></input>';
 	   }
       echo '</td>';
+      echo'</form>';
  
-      echo '</tr>';
- echo'</form>';
+ 
+  echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+  echo '<input type="hidden" name="id_extintor" value='.$row["id_extintor"].' />';
+  echo '<td>' ;    
+  
+  ?>  
+  <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminarextintor">Eliminar</button> 
+  <?php
+  echo '</td>' ;
+  echo'</form>';
+  echo '</tr>';
 				}
 		  ?>
  
-   
   </tbody>
 </table>
-
  
                 </div>
                 </div>
@@ -195,11 +180,9 @@ if (!isset($_SESSION['usuario'])){
         </div>
       </div>
  
- 
 </br>	
 <?php include 'Footer.php'; ?>
  
-
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
@@ -223,6 +206,13 @@ if(isset($_POST['submitextintor'])){
  
     $nuevo = new GuardarExtintor("tesis"); 
     $nuevo->NuevoExtintor($campos);
+}
+if(isset($_POST['eliminarextintor'])){
+  
+    $campos = array("id_extintor"=>$_POST['id_extintor']); 
+  
+    $nuevo = new GuardarExtintor("tesis"); 
+    $nuevo->EliminarExtintor($campos);
 }
 ?>
  <script type="text/javascript">

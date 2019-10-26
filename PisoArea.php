@@ -182,9 +182,15 @@ echo '<input type=image class="thumbnail"
 				echo'</th></th>'; 
 				echo'</tr>'; 
                 
+			    echo'</thead>';
+                echo'</table>';
+				
+ 
+                echo'<table>';
+			    echo'<thead>';
 				echo'<tr>';
                 echo'<th width="50">Descripción: </th>';
-				echo'<th style="font-weight: normal;"width="150">';
+				echo'<th class="column text-center medium-text-left" style="font-weight: normal;"width="1000";  >';
 				echo utf8_encode($row["descripcion"]);
 				echo'</th>';
 				echo'<th><th>'; 

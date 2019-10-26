@@ -27,31 +27,8 @@ if (!isset($_SESSION['usuario'])){
     <div class="off-canvas-content" data-off-canvas-content>
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
+            <?php include 'Top-Bar.php'; ?>
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
  
             </br>
             <div class="row column">
@@ -83,8 +60,8 @@ if (!isset($_SESSION['usuario'])){
 	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
 	
     <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre del riesgo" Required >	</td>
-    <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" > </td>
-	<td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
+    <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" Required> </td>
+	<td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción" Required> </textarea> 	</td>
     <td><button class="success button" type="submit" name="submitriesgo">Registrar</button></td>
   
     </form>
@@ -115,7 +92,8 @@ muestra_oculta('nuevoriesgo');
       <th width="200">Icono</th>
 	  <th width="200">Nombre</th>
 	  <th width="400">Descripción</th>
-      <th width="150">Modificar</th>
+      <th width="50">Modificar</th>
+	  <th width="50">Eliminar</th>
     </tr>
   </thead> 
   <tbody>
@@ -127,7 +105,8 @@ muestra_oculta('nuevoriesgo');
 			$conn = mysqli_connect("localhost","root","","tesis");
 
 			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM riesgo;');
+									  	   FROM riesgo 
+										   WHERE eliminar!="1";');
 		    while($row = mysqli_fetch_array($result)){
 
   
@@ -135,8 +114,9 @@ muestra_oculta('nuevoriesgo');
  echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />'; 
       echo '<tr>';
 	  echo '<td>' ;
-	  
-	  echo '<img class="thumbnail"  src="data:image/png;base64,'.base64_encode( $row["icono"] ).'"/>';
+	  ?><embed class="thumbnail" src="imagenes\<?php
+      echo $row["icono"] ; 
+	  ?>" type="image/png" /><?php
 	  echo '</td>';
 	  
 	  echo '<td>' ;
@@ -153,18 +133,28 @@ muestra_oculta('nuevoriesgo');
 	   }
       echo '</td>';
  
-      echo '</tr>';
- echo'</form>';
+ 
+    echo'</form>';
+ 
+    echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+    echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />';
+    echo '<td>' ;    
+ 
+	?>  
+	<button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminarriesgo">Eliminar</button> 
+	<?php
+ 
+    echo '</td>' ;
+    echo'</form>';
+    echo '</tr>';
+ 
 				}
 		  ?>
  
    
   </tbody>
 </table>
-
-
  
-          
                 </div>
                 </div>
           </div>
@@ -172,6 +162,10 @@ muestra_oculta('nuevoriesgo');
       </div>
  
  
+
+ 
+
+
 </br>	
 <?php include 'Footer.php'; ?>
  
@@ -199,6 +193,17 @@ if(isset($_POST['submitriesgo'])){
     $nuevo = new GuardarRiesgo("tesis"); 
     $nuevo->NuevoRiesgo($campos);
 }
+
+if(isset($_POST['eliminarriesgo'])){
+ 
+    $campos = array("id_riesgo"=>$_POST['id_riesgo']); 
+ 
+    $nuevo = new GuardarRiesgo("tesis"); 
+    $nuevo->EliminarRiesgo($campos); 
+ 	
+}
+
+
 ?>
  
  

@@ -83,21 +83,7 @@ $id_piso=$_POST['id_piso'];
                     </ul>
                 </div>
             </div>
-
  
-	
-
-
-
- 
-
-
-
-
-
-
-
-
 	
  
  </br>
@@ -176,6 +162,11 @@ echo '<input type=image class="thumbnail"
                 echo '</th>';
 				echo'</tr>'; 
 				}
+				echo'</thead>';              
+                echo'</table>';
+ 
+			    echo'<table>';
+				echo'<thead>';
                 echo'<tr>';
                 echo'<th width="50">Departamento: </th>';
  

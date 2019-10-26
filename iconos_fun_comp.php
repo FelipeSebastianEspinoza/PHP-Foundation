@@ -1,10 +1,7 @@
- <h5>RANDOM MAG</h5>
+ <h5 id="grifoTitulo"></h5>
 	  <div class="cell shrink">
 <!--<img class="thumbnail" src="https://placehold.it/550x350">   -->
- <img id="edGantes" src="img/ICONOS.png">
+ <img id="edGantes" src="">
 </div>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti quam voluptatum vel repellat ab similique molestias molestiae ea omnis eos, id asperiores est praesentium, voluptate officia nulla aspernatur sequi aliquam.</p>
- 
-	 
- 
- 
+</br><p id="grifoParrafo"></br></br></br></br>"Selecione un grifo para mostrar su información"</br>
+ </br></br></br></br></br></br></p></br>

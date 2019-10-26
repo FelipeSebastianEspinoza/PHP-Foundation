@@ -6,7 +6,7 @@
            window.location.replace('index.php');					
 		  </script>";
 }
- $id_riesgo = $_POST["id_riesgo"]; 				 
+ $id_enfermedad = $_POST["id_enfermedad"]; 				 
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -58,108 +58,70 @@
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Riesgos</h4>
+                <h4 style="margin: 0;" class="text-center">Enfermedades Profesionales</h4>
                 <hr>
             </div>
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
-              
- 
-
-				 
+ 	 
   <table>
   <thead>
     <tr>
       <th width="200">Nombre</th>
-      <th width="100">Icono</th>
 	  <th width="400">Descripción</th>
       <th width="150">Modificar</th>
     </tr>
   </thead> 
-  
-   
+ 
   <tbody>
-   
-  
-  
+ 
   <?php  
  
-	
-	
-	
-	
 			$conn = mysqli_connect("localhost","root","","tesis");
 
 			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM riesgo
-										   WHERE id_riesgo='.$id_riesgo.';');
+									  	   FROM enfermedades_profesionales
+										   WHERE id_enfermedad='.$id_enfermedad.';');
 		    while($row = mysqli_fetch_array($result)){
 
   
  	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
-      echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />'; 
+      echo '<input type="hidden" name="id_enfermedad" value='.$row["id_enfermedad"].' />'; 
 	  echo '<tr>';
-	  
 	  echo '<td>' ;
+ 
 	  echo '<input type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required>';
 	  echo '</td>';
 
-	  echo '<td>' ;
- 
-	   ?><embed class="thumbnail" src="imagenes\<?php
-      echo $row["icono"] ; 
-	  ?>" type="image/png" /><?php
-	   
-	   
-	   
-	   
-	   echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 
-	  echo '</td>';
-	  
-	  
 	  echo '<td>' ;
 	   ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
       echo '</td>';
 	   
 	  echo '<td>' ;
 	   if(isset($_SESSION['usuario'])){ 
-      echo'<button class="success button" type="submit" name="submitmodificarriesgo">Registrar</button> ';
+      echo'<button class="success button" type="submit" name="submitprotocolo">Registrar</button> ';
 	   }
       echo '</td>';
  
       echo '</tr>';
+ 
       echo '</form>';
 				}
 		  ?>
  
-   
   </tbody>
 </table>
-
-
  
-          
                 </div>
                 </div>
           </div>
         </div>
       </div>
-	 
-	 
  
-  
- 
- 
-	
-
-	
-	
-	
 </br>	
 <?php include 'Footer.php'; ?>
  
-
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
@@ -173,17 +135,13 @@
 <?php
 include("guardar.php");
  
-if(isset($_POST['submitmodificarriesgo'])){
+if(isset($_POST['submitprotocolo'])){
  
-    $campos = array("id_riesgo"=> $_POST['id_riesgo'] ,
-	"nombre"=>$_POST['nombre'],
-	"descripcion"=>$_POST['descripcion'],
-	"imagen"=>$_POST['ARCHIVO']); 
+    $campos = array("id_enfermedad"=> $_POST['id_enfermedad'] ,
+	"nombre"=>$_POST['nombre'],"descripcion"=>$_POST['descripcion']); 
  
-    $nuevo = new GuardarRiesgo("tesis"); 
-    $nuevo->ModificarRiesgo($campos);
+    $nuevo = new GuardarEnfermedad("tesis"); 
+    $nuevo->ModificarEnfermedad($campos);
 }
- 
 ?>
- 
  

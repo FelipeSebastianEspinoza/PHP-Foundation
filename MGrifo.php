@@ -4,9 +4,9 @@
  if (!isset($_SESSION['usuario'])){
 	echo "<script>
            window.location.replace('index.php');					
-		  </script>";
+		  </script>"; 
 }
- $id_riesgo = $_POST["id_riesgo"]; 				 
+ $id_grifo = $_POST["id_grifo"]; 				 
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -30,35 +30,12 @@
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+            <?php include 'Top-Bar.php'; ?>
  
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Riesgos</h4>
+                <h4 style="margin: 0;" class="text-center">Modificar Grifo</h4>
                 <hr>
             </div>
             <div class="callout">
@@ -71,52 +48,38 @@
   <table>
   <thead>
     <tr>
-      <th width="200">Nombre</th>
-      <th width="100">Icono</th>
+      <th width="400">Imagen</th>
+      <th width="400">Nombre</th>
 	  <th width="400">Descripción</th>
-      <th width="150">Modificar</th>
+      <th width="300">Modificar</th>
     </tr>
   </thead> 
-  
-   
+ 
   <tbody>
-   
-  
-  
+ 
   <?php  
  
-	
-	
-	
-	
 			$conn = mysqli_connect("localhost","root","","tesis");
 
 			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM riesgo
-										   WHERE id_riesgo='.$id_riesgo.';');
+									  	   FROM grifo
+										   WHERE id_grifo='.$id_grifo.';');
 		    while($row = mysqli_fetch_array($result)){
-
-  
+ 
  	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
-      echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />'; 
+      echo '<input type="hidden" name="id_grifo" value='.$row["id_grifo"].' />'; 
 	  echo '<tr>';
+ 
+	  echo '<td>' ;
+	   ?><embed class="thumbnail" src="imagenes\<?php
+      echo $row["imagen"] ; 
+	  ?>" type="image/png" /><?php
+	   echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 
+	  echo '</td>';
 	  
 	  echo '<td>' ;
 	  echo '<input type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required>';
 	  echo '</td>';
-
-	  echo '<td>' ;
- 
-	   ?><embed class="thumbnail" src="imagenes\<?php
-      echo $row["icono"] ; 
-	  ?>" type="image/png" /><?php
-	   
-	   
-	   
-	   
-	   echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 
-	  echo '</td>';
-	  
 	  
 	  echo '<td>' ;
 	   ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
@@ -124,7 +87,7 @@
 	   
 	  echo '<td>' ;
 	   if(isset($_SESSION['usuario'])){ 
-      echo'<button class="success button" type="submit" name="submitmodificarriesgo">Registrar</button> ';
+      echo'<button class="success button" type="submit" name="submitmodificargrifo">Registrar</button> ';
 	   }
       echo '</td>';
  
@@ -173,17 +136,16 @@
 <?php
 include("guardar.php");
  
-if(isset($_POST['submitmodificarriesgo'])){
+if(isset($_POST['submitmodificargrifo'])){
  
-    $campos = array("id_riesgo"=> $_POST['id_riesgo'] ,
+    $campos = array("id_grifo"=> $_POST['id_grifo'] ,
 	"nombre"=>$_POST['nombre'],
 	"descripcion"=>$_POST['descripcion'],
 	"imagen"=>$_POST['ARCHIVO']); 
  
-    $nuevo = new GuardarRiesgo("tesis"); 
-    $nuevo->ModificarRiesgo($campos);
+    $nuevo = new Grifo("tesis"); 
+    $nuevo->ModificarGrifo($campos);
 }
- 
 ?>
  
  

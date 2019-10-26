@@ -1,5 +1,5 @@
 <?php
-
+ 
  class GuardarProtocolo{
  
 	private $id_protocolo;
@@ -66,6 +66,63 @@
 	
 	}
 	
+	function EliminarProtocolo($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_protocolo = $_POST['id_protocolo'];
+ 
+        $consulta = "UPDATE `protocolo` SET `eliminar`='1'
+		WHERE `id_protocolo`='$id_protocolo'"; 
+
+		$consulta2 = "DELETE FROM `asigna`  
+		WHERE `id_protocolo`='$id_protocolo'"; 
+		$resultado_cons2 = mysqli_query($this->con,$consulta2);
+		
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('protocolos.php');					
+			      </script>"; 
+		}
+		
+	
+	}
+	function EliminarAsignacionProtocolo($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_protocolo = $_POST['id_protocolo'];
+        $id_edificio = $_POST['id_edificio'];
+		
+        $consulta = "UPDATE `asigna` SET `eliminar`='1'
+		WHERE `id_protocolo`='$id_protocolo'
+		AND `id_edificio`='$id_edificio' ";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;					
+			      </script>"; 
+		}
+		 
+	
+	}
+	
+	
+	
     function ModificarAsignacionProtocolo($form_data){
         $fields = array_keys($form_data);
 		$id = htmlentities($_POST['id_edificio']);
@@ -88,7 +145,7 @@
 		}else{
 			echo "<script>
 					alert('Se ha modificado con éxito'); 
-                    window.location.replace('MapaPrueba.php');					
+                    window.location.replace('Edificio.php');					
 			      </script>"; 
 		}
 	
@@ -122,7 +179,7 @@
 		}else{
 			echo "<script>
 					alert('Se ha asignado con éxito'); 
-                     window.location.replace('Edificio.php?');					
+                     window.location.replace('Edificio.php');					
 			      </script>"; 
 		}
 	
@@ -133,6 +190,261 @@
 	}
  
  }
+ 
+ 
+ 
+ 
+  class GuardarEnfermedad{
+ 
+	private $id_enfermedad;
+	private $nombre;
+	private $descripcion;
+   
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevaEnfermedad($form_data){
+        $fields = array_keys($form_data);
+		
+		$nombre = htmlentities($_POST['nombre']);
+		$descripcion =htmlentities($_POST['descripcion']);
+
+        $consulta = "INSERT INTO `enfermedades_profesionales` (`id_enfermedad`,`nombre`,`descripcion`) VALUES 
+		(NULL,'$nombre','$descripcion');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('EnfermedadesProfesionales.php');					
+			      </script>"; 
+		}
+	}
+   
+    function ModificarEnfermedad($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_enfermedad = $_POST['id_enfermedad'];
+		$nombre = htmlentities($_POST['nombre']);
+		$descripcion =htmlentities($_POST['descripcion']);
+
+        $consulta = "UPDATE `enfermedades_profesionales` SET `nombre`='$nombre',
+		`descripcion`='$descripcion' 
+		WHERE `id_enfermedad`='$id_enfermedad'"; 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('EnfermedadesProfesionales.php');					
+			      </script>"; 
+		}
+	}
+	
+    
+	function EliminarEnfermedad($form_data){
+        $fields = array_keys($form_data); 
+		
+		$id_enfermedad = $_POST['id_enfermedad'];
+ 
+        $consulta = "UPDATE `enfermedades_profesionales` SET `eliminar`='1'
+		WHERE `id_enfermedad`='$id_enfermedad'"; 
+ 	 
+	 
+	    $consulta2 = "UPDATE `enfermedades_reportadas` SET `id_enfermedad`='2'
+		WHERE `id_enfermedad`='$id_enfermedad'";  
+        $resultado_cons2 = mysqli_query($this->con,$consulta2);
+		
+	    $resultado_cons = mysqli_query($this->con,$consulta);
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('EnfermedadesProfesionales.php');					
+			      </script>"; 
+		}
+		
+	
+	}
+	
+	
+	
+	 
+	 
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+ 
+ 
+ 
+ 
+ 
+ class GuardarReporteEnfermedad{
+ 
+	private $id_enfermedad_reportada;
+	private $fecha;
+	private $persona;
+    private $id_edificio;
+    private $id_enfermedad;
+ 
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	
+    function NuevoReporteEnfermedad($form_data){
+        $fields = array_keys($form_data);
+		
+		$fecha = htmlentities($_POST['fecha']);
+		$persona =htmlentities($_POST['persona']);
+        $id_edificio =htmlentities($_POST['id_edificio']);
+		$id_enfermedad =htmlentities($_POST['id_enfermedad']);
+ 
+        $consulta = "INSERT INTO `enfermedades_reportadas` 
+		(`id_enfermedad_reportada`,`fecha`,`persona`,`id_edificio`,`id_enfermedad`) 
+		VALUES 
+		(NULL,'$fecha','$persona','$id_edificio','$id_enfermedad');";
+    
+		 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	}
+	
+	
+	 
+	
+	
+   
+    function ModificarReporteEnfermedad($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_enfermedad_reportada = htmlentities($_POST['id_enfermedad_reportada']);
+		$fecha = htmlentities($_POST['fecha']);
+		$persona =htmlentities($_POST['persona']);
+        $id_edificio =htmlentities($_POST['id_edificio']);
+		$id_enfermedad =htmlentities($_POST['id_enfermedad']);
+ 
+        $consulta = "UPDATE `enfermedades_reportadas` SET `fecha`='$fecha' 
+	    ,`persona`='$persona',`id_edificio`='$id_edificio'
+        ,`id_enfermedad`='$id_enfermedad'     		
+		WHERE `id_enfermedad_reportada`='$id_enfermedad_reportada'"; 
+ 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	
+	}
+	 function ModificarReporteEnfermedad2($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_enfermedad_reportada = htmlentities($_POST['id_enfermedad_reportada']);
+		$fecha = htmlentities($_POST['fecha']);
+		$persona =htmlentities($_POST['persona']);
+        $id_edificio =htmlentities($_POST['id_edificio']);
+		$id_enfermedad =htmlentities($_POST['id_enfermedad']);
+ 
+        $consulta = "UPDATE `enfermedades_reportadas` SET `fecha`='$fecha' 
+	    ,`persona`='$persona',`id_edificio`='$id_edificio'
+        ,`id_enfermedad`='$id_enfermedad'     		
+		WHERE `id_enfermedad_reportada`='$id_enfermedad_reportada'"; 
+ 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('EnfermedadesAsignadas.php');					
+			      </script>"; 
+		}
+	
+	}
+	
+	
+ function EliminarReporteEnfermedad($form_data){ 
+        $fields = array_keys($form_data);
+		
+		$id_enfermedad_reportada = $_POST['id_enfermedad_reportada'];  
+ 
+        $consulta = "UPDATE `enfermedades_reportadas` SET `eliminar`='1'
+		WHERE `id_enfermedad_reportada`='$id_enfermedad_reportada'";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;					
+			      </script>"; 
+		}
+	}
+	
+	
+	
+	
+	
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+ 
+ 
+ 
+ 
 
  class GuardarUnidad{
  
@@ -212,6 +524,37 @@
 		}
 	
 	}
+	
+	
+	function EliminarUnidad($form_data){ 
+        $fields = array_keys($form_data);
+		
+		$id_unidad = $_POST['id_unidad'];  
+ 
+        $consulta = "UPDATE `unidad` SET `eliminar`='1'
+		WHERE `id_unidad`='$id_unidad'";  
+ 
+		
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;					
+			      </script>"; 
+		}
+		
+	
+	}
+	
+	
+	
+	
  
     public function cerrarBD(){
 		$this->con->close();
@@ -295,15 +638,44 @@
 	
 	}
  
+     
+    	function EliminarProcedimiento($form_data){ 
+        $fields = array_keys($form_data);
+		
+		$id_procedimiento = $_POST['id_procedimiento'];  
+ 
+        $consulta = "UPDATE `procedimiento` SET `eliminar`='1'
+		WHERE `id_procedimiento`='$id_procedimiento '";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;					
+			      </script>"; 
+		}
+	}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
     public function cerrarBD(){
 		$this->con->close();
 	}
  
  }
 
- 
- 
- 
  
  
  class GuardarRiesgo{
@@ -319,19 +691,26 @@
 	
     function NuevoRiesgo($form_data){
         $fields = array_keys($form_data);
-		
-		$nombre = htmlentities($_POST['nombre']);
-		$descripcion =htmlentities($_POST['descripcion']);
-
-        $nombre_archivo=($_FILES['ARCHIVO']['name']);
-        $tipo_archivo=($_FILES['ARCHIVO']['type']);
-        $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));
-		
-		
-		
+ 
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+	    $nombre = htmlentities($_POST['nombre']);
+ 	    $descripcion =htmlentities($_POST['descripcion']);
+ 
         $consulta = "INSERT INTO `riesgo` (`id_riesgo`,`nombre`,`descripcion`,`icono`)
-		VALUES (NULL,'$nombre','$descripcion','$imageData');";
-    
+                 	VALUES (NULL,'$nombre','$descripcion','$nnombre');";
 		 
 		 
         $resultado_cons = mysqli_query($this->con,$consulta);
@@ -357,9 +736,19 @@
 		$nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
 
-		$nombre_archivo=($_FILES['ARCHIVO']['name']);
-        $tipo_archivo=($_FILES['ARCHIVO']['type']);
-        $imageData = addslashes(file_get_contents($_FILES['ARCHIVO']['tmp_name']));
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=5000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        echo "Archivo subido satisfactoriamente";
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
 			
 			if($nombre_archivo==null){
               $consulta = "UPDATE `riesgo` SET `nombre`='$nombre',
@@ -367,7 +756,7 @@
 		      WHERE `id_riesgo`='$id_riesgo'"; 
 			}else{
 			 $consulta = "UPDATE `riesgo` SET `nombre`='$nombre',
-		     `descripcion`='$descripcion',`icono`='$imageData'  
+		     `descripcion`='$descripcion',`icono`='$nnombre'  
 		      WHERE `id_riesgo`='$id_riesgo'"; 	
 				
 			}
@@ -444,6 +833,39 @@
 		}
 	
 	} 	
+	
+	function EliminarRiesgo($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_riesgo = $_POST['id_riesgo'];
+ 
+        $consulta = "UPDATE `riesgo` SET `eliminar`='1'
+		WHERE `id_riesgo`='$id_riesgo'"; 
+
+		$consulta2 = "DELETE FROM `edificio_riesgo`  
+		WHERE `id_riesgo`='$id_riesgo'"; 
+		$resultado_cons2 = mysqli_query($this->con,$consulta2);
+		
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('Riesgos.php');					
+			      </script>"; 
+		}
+		
+	
+	}
+	
+	
+	
+	
  
     public function cerrarBD(){
 		$this->con->close();
@@ -526,7 +948,32 @@
 			      </script>"; 
 		}
 	}
-     
+	
+       function EliminarAccidente($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_accidente = $_POST['id_accidente'];
+ 
+        $consulta = "UPDATE `accidente` SET `eliminar`='1'
+		WHERE `id_accidente`='$id_accidente'";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar'); 
+				  </script>"; 
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;
+ 
+                    //location.reload(); 					
+			      </script>"; 
+		}
+		
+	
+	} 
 	 
 	 
  
@@ -535,8 +982,7 @@
 	}
  
  }
- 
- 
+
  
  
  class GuardarExtintor{
@@ -615,6 +1061,35 @@
 			      </script>"; 
 		}
 	}
+	
+	
+	function EliminarExtintor($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_extintor = $_POST['id_extintor'];
+ 
+        $consulta = "UPDATE `extintor` SET `eliminar`='1'
+		WHERE `id_extintor`='$id_extintor'";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar'); 
+				  </script>"; 
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;			
+			      </script>"; 
+		}
+		
+	
+	}
+	
+	
+	
+	
 
     public function cerrarBD(){
 		$this->con->close();
@@ -622,7 +1097,7 @@
  
  }
  
- 
+
  
  class GuardarRedHumeda{
  
@@ -691,6 +1166,40 @@
 			      </script>"; 
 		}
 	}
+	
+		function EliminarRedHumeda($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_redhumeda = $_POST['id_redhumeda'];
+   
+        $consulta = "UPDATE `red_humeda` SET `eliminar`='1'
+		WHERE `id_redhumeda`='$id_redhumeda'";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar'); 
+				  </script>"; 
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;			
+			      </script>"; 
+		}
+		
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
     public function cerrarBD(){
 		$this->con->close();
@@ -780,8 +1289,6 @@
 	}
  
  } 
- 
- 
  
  
  class GuardarPiso{
@@ -1094,9 +1601,6 @@
  }
  
  
- 
- 
- 
  class GuardarLaboratorio{
  
 	private $id_laboratorio;
@@ -1199,4 +1703,158 @@
  
  }
 
+ 
+ 
+ 
+ 
+class Grifo{
+	 
+    private $id_grifo; 
+	private $nombre; 
+	private $posx; 
+	private $posy; 
+	private $descripcion;  	
+	private $id_campus;
+    private $imagen;
+	
+    function __construct($bd){
+		 $this->con = new mysqli('localhost','root','',$bd); 
+	}
+ 
+    function insertar($form_data){
+
+      $fields = array_keys($form_data);
+      $posx = $_POST['posx'];
+	  $posy = $_POST['posy'];
+	  $posx=$posx-63;
+	  $posy = $posy-225;
+ 
+ 
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 20 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+     
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+	    $nombre = htmlentities($_POST['nombre']);
+ 	    $descripcion =htmlentities($_POST['descripcion']);
+   
+ 
+	  $consulta = "INSERT INTO `grifo` 
+	  (`id_grifo`, `nombre`, `posx`, `posy`, `descripcion`, `id_campus`,imagen)
+	   VALUES (NULL, '$nombre', '$posx', '$posy', '$descripcion', '1','$nnombre');";
+ 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('MapaPrueba.php');					
+			      </script>"; 
+		}
+	  
+	  
+	  
+	  
+	}		 
+     function ModificarGrifo($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_grifo = $_POST['id_grifo'];
+		$nombre = htmlentities($_POST['nombre']);
+		$descripcion =htmlentities($_POST['descripcion']);
+
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=5000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        echo "Archivo subido satisfactoriamente";
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+			
+			if($nombre_archivo==null){
+              $consulta = "UPDATE `grifo` SET `nombre`='$nombre',
+		     `descripcion`='$descripcion' 
+		      WHERE `id_grifo`='$id_grifo'"; 
+			}else{
+			 $consulta = "UPDATE `grifo` SET `nombre`='$nombre',
+		     `descripcion`='$descripcion',`imagen`='$nnombre'  
+		      WHERE `id_grifo`='$id_grifo'"; 	
+				
+			}
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('NGrifo.php');					
+			      </script>"; 
+		}           
+ 
+	 }
+	 
+	 
+	 function EliminarGrifo($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_grifo = $_POST['id_grifo'];
+ 
+        $consulta = "UPDATE `grifo` SET `eliminar`='1'
+		WHERE `id_grifo`='$id_grifo'"; 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('NGrifo.php');					
+			      </script>"; 
+		}
+		
+	
+	}
+	 
+	 
+	 
+	 
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+ 
+ 
+ 
+ 
 ?>

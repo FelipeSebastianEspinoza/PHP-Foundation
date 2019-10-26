@@ -28,31 +28,7 @@ if (!isset($_SESSION['usuario'])){
     <div class="off-canvas-content" data-off-canvas-content>
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
- 
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+                <?php include 'Top-Bar.php'; ?>
  
             </br>
             <div class="row column">
@@ -113,28 +89,18 @@ muestra_oculta('nuevoprotocolo');
     <tr>
       <th width="200">Nombre</th>
 	  <th width="400">Descripción</th>
-      <th width="150">Modificar</th>
+      <th width="50">Modificar</th>
+	  <th width="50">Eliminar</th>
     </tr>
   </thead> 
-  
-   
   <tbody>
-   
-  
-  
   <?php  
- 
-	
-	
-	
-	
 			$conn = mysqli_connect("localhost","root","","tesis");
-
 			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM protocolo;');
+									  	   FROM protocolo
+										   WHERE eliminar!="1";');
 		    while($row = mysqli_fetch_array($result)){
 
-  
  echo'<form action="MProtocolos.php" method="post">';	 
  echo '<input type="hidden" name="id_protocolo" value='.$row["id_protocolo"].' />'; 
       echo '<tr>';
@@ -151,34 +117,29 @@ muestra_oculta('nuevoprotocolo');
      echo'<input type="submit" class="success button"value="Modificar"></input>';
 	   }
       echo '</td>';
+  echo'</form>';
  
-      echo '</tr>';
- echo'</form>';
+ 
+  echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+  echo '<input type="hidden" name="id_protocolo" value='.$row["id_protocolo"].' />';
+  echo '<td>' ;    
+ 
+  ?>  
+  <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminarprotocolo">Eliminar</button> 
+  <?php
+  echo '</td>' ;
+  echo'</form>';
+  echo '</tr>';
 				}
 		  ?>
- 
-   
   </tbody>
 </table>
-
-
- 
-          
                 </div>
                 </div>
           </div>
         </div>
       </div>
-	 
-	 
- 
-  
- 
- 
-	
 
-	
-	
 	
 </br>	
 <?php include 'Footer.php'; ?>
@@ -204,6 +165,13 @@ if(isset($_POST['submitprotocolo'])){
  
     $nuevo = new GuardarProtocolo("tesis"); 
     $nuevo->NuevoProtocolo($campos);
+}
+if(isset($_POST['eliminarprotocolo'])){
+  
+    $campos = array("id_protocolo"=>$_POST['id_protocolo']); 
+  
+    $nuevo = new GuardarProtocolo("tesis"); 
+    $nuevo->EliminarProtocolo($campos);
 }
 ?>
  

@@ -1,12 +1,10 @@
   <?php  
- 
  session_start();
- if (!isset($_SESSION['usuario'])){
+if (!isset($_SESSION['usuario'])){
 	echo "<script>
            window.location.replace('index.php');					
 		  </script>";
-}
- $id_riesgo = $_POST["id_riesgo"]; 				 
+}						 
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -58,103 +56,69 @@
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Riesgos</h4>
+                <h4 style="margin: 0;" class="text-center">Añadir Grifo</h4>
                 <hr>
             </div>
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
-              
  
-
-				 
-  <table>
-  <thead>
-    <tr>
-      <th width="200">Nombre</th>
-      <th width="100">Icono</th>
-	  <th width="400">Descripción</th>
-      <th width="150">Modificar</th>
-    </tr>
-  </thead> 
-  
-   
-  <tbody>
-   
-  
-  
-  <?php  
- 
-	
-	
-	
-	
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM riesgo
-										   WHERE id_riesgo='.$id_riesgo.';');
-		    while($row = mysqli_fetch_array($result)){
-
-  
- 	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
-      echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />'; 
-	  echo '<tr>';
-	  
-	  echo '<td>' ;
-	  echo '<input type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required>';
-	  echo '</td>';
-
-	  echo '<td>' ;
- 
-	   ?><embed class="thumbnail" src="imagenes\<?php
-      echo $row["icono"] ; 
-	  ?>" type="image/png" /><?php
-	   
-	   
-	   
-	   
-	   echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 
-	  echo '</td>';
-	  
-	  
-	  echo '<td>' ;
-	   ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
-      echo '</td>';
-	   
-	  echo '<td>' ;
-	   if(isset($_SESSION['usuario'])){ 
-      echo'<button class="success button" type="submit" name="submitmodificarriesgo">Registrar</button> ';
-	   }
-      echo '</td>';
- 
-      echo '</tr>';
-      echo '</form>';
-				}
-		  ?>
- 
-   
-  </tbody>
-</table>
-
-
  
           
+		  
+		  <div class="row">
+
+</div>
+  <div class="row">
+<div class="grid-x grid-margin-x expanded callout">
+  <div class="large-8 cell">
+<img id="mapa" src="img/mapa.jpg" class="img-fluid" alt="..."
+style="width:678px;
+       height:100%;
+	   max-height:1012px;
+	   min-height:506px;">
+
+ 
+
+
+
+
+ 
+</div>
+<div class="large-3 cell">
+<p>"De click en el mapa en el lugar que quiera añadir un grifo"</p>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	<table>
+   <tr>
+    Nombre: <input type="text" id="nombre" name="nombre" value=""Required>
+ </tr>
+ <tr>
+    <th>Cordenadas X: <input type="text" id="posx" name="posx" value=""Required></th>
+     <th>Cordenadas Y:  <input type="text" id="posy" name="posy" value=""Required></th>
+  </tr>
+  <tr>
+	Imagen: <input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" Required>  
+	Breve descripción (Opcional): <input type="text" id="descripcion" name="descripcion" value="">
+ </tr>
+   </table>
+ <center></br><button class="success button" type="submit" name="submit">Registrar</button>
+  
+    </form>
+ 
+</div>
+ </div> 
+  
+ 
+</div>
+		  
+ 
                 </div>
                 </div>
           </div>
         </div>
       </div>
 	 
-	 
  
-  
- 
- 
-	
-
-	
-	
 	
 </br>	
 <?php include 'Footer.php'; ?>
@@ -170,20 +134,44 @@
   </body>
 </html>
 
-<?php
-include("guardar.php");
+<script>
+$(document).ready(function () {//puede comentarse las lineas o poniendo el tamaño 0 si no se quiere que aparezca un punto
+      $(mapa).click(function (ev) {
+          mouseX = ev.pageX;
+          mouseY = ev.pageY
+          console.log(mouseX + ' ' + mouseY);  
+          document.getElementById("posx").value = mouseX;
+		  document.getElementById("posy").value = mouseY;
+          var color = '#000000';
+          var size = '5px';
+          $("body").append(
+          $('<div></div>')
+              .css('position', 'absolute')
+              .css('top', mouseY + 'px')
+              .css('left', mouseX + 'px')
+              .css('width', size)
+              .css('height', size)
+              .css('background-color', color));
+      });
+  });
+</script>
+
+ <?php
  
-if(isset($_POST['submitmodificarriesgo'])){
+ include("guardar.php");
+ if(isset($_POST['submit'])){
+    $valorx = $_POST["posx"];
+    $valory = $_POST["posy"];
  
-    $campos = array("id_riesgo"=> $_POST['id_riesgo'] ,
+   $campos = array("id_grifo"=> NULL ,
+   "posx"=>$_POST['posx'],
+   "posy"=>$_POST['posy'],
 	"nombre"=>$_POST['nombre'],
-	"descripcion"=>$_POST['descripcion'],
-	"imagen"=>$_POST['ARCHIVO']); 
+	"descripcion"=>$_POST['descripcion']); 
  
-    $nuevo = new GuardarRiesgo("tesis"); 
-    $nuevo->ModificarRiesgo($campos);
-}
+   $a = new Grifo("tesis"); 
+   $a->insertar($campos);
+ 
+ }
  
 ?>
- 
- 

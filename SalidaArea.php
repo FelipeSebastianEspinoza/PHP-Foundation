@@ -93,19 +93,6 @@ $id_edificio=$_POST['id_edificio'];
                     </ul>
                 </div>
             </div>
-
- 
-	
-
-
-
-  
-
-
-
- 
-
-	
  
  </br>
  <div class="row column">
@@ -165,18 +152,25 @@ echo '<input type=image class="thumbnail"
                 echo'<tr>';
                 echo'<th width="50">%Hacinamiento: </th>';
 				echo'<th style="font-weight: normal;"width="150">'.$row["porcentaje_hacinamiento"].'</th>';
+				echo'<th></th><th></th>'; 
 				echo'</tr>'; 
+				 
 				}
                 echo'<tr>';
                 echo'<th width="50">Departamento: </th>';
 				echo'<th style="font-weight: normal;"width="150">';
 			    echo utf8_encode($row["departamento"]);
 				echo'</th>';
+				echo'<th></th><th></th>';
 				echo'</tr>'; 
-                
+                echo'</thead>';
+                echo'</table>';
+ 
+                echo'<table>';
+			    echo'<thead>';
 				echo'<tr>';
                 echo'<th width="50">Descripción: </th>';
-				echo'<th style="font-weight: normal;"width="150">';
+				echo'<th class="column text-center medium-text-left" style="font-weight: normal;"width="1000";>';
 				echo utf8_encode($row["descripcion"]);
 				echo'</th>';
 				echo'</tr>'; 

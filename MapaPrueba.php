@@ -114,15 +114,15 @@ $( document ).ready(function() {
 });
 function MostrarGrifo() {
  $('#load_tweets').load('grifo_fun.php').fadeIn("slow");
-  $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
+ $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
 }
 function MostrarZonadeEvacuacion() {
  $('#load_tweets').load('zonadeevacuacion_fun.php').fadeIn("slow");
-   $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
+ $('#load_tweets2').load('edificio_fun_comp.php').fadeIn("slow");
 }
 function MostrarZonadeSeguridad() {
  $('#load_tweets').load('zonadeseguridad_fun.php').fadeIn("slow");
-   $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
+ $('#load_tweets2').load('edificio_fun_comp.php').fadeIn("slow");
 }
 function MostrarEdificios() {
  $('#load_tweets').load('edificio_fun.php').fadeIn("slow");

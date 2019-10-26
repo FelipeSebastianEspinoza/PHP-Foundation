@@ -93,19 +93,7 @@ $id_edificio=$_POST['id_edificio'];
                     </ul>
                 </div>
             </div>
-
  
-	
-
-
-
-  
-
-
-
- 
-
-	
  
  </br>
  <div class="row column">
@@ -147,12 +135,6 @@ echo '<input type=image class="thumbnail"
 
 <div class="medium-10 large-8 cell ">
 
-
-
-
-   
-
- 
  
  
 <?php
@@ -171,7 +153,7 @@ echo '<input type=image class="thumbnail"
 				}
 				echo'<tr>';
                 echo'<th width="50">Descripción: </th>';
-				echo'<th style="font-weight: normal;"width="600">';
+				echo'<th class="column text-center medium-text-left" style="font-weight: normal;"width="1200";>';
 		 
 	 
 				//echo'<textarea rows="10" cols="10" readonly>';
@@ -183,7 +165,7 @@ echo '<input type=image class="thumbnail"
                 
 				echo'<tr>';
                 echo'<th width="50">Reglamento: </th>';
-			    echo'<th style="font-weight: normal;"width="600">';
+				echo'<th class="column text-center medium-text-left" style="font-weight: normal;"width="1200";>';
 		 
 			    echo'<p rows="10" cols="10">';
 				echo utf8_encode($row["reglamento"]);
@@ -195,7 +177,7 @@ echo '<input type=image class="thumbnail"
 				
 			    echo'<tr>';
                 echo'<th width="50">Equipamiento: </th>';
-				echo'<th style="font-weight: normal;"width="600">';
+				echo'<th class="column text-center medium-text-left" style="font-weight: normal;"width="1200";>';
 		 
 				//echo'<textarea rows="10" cols="10" readonly>';
 				echo utf8_encode($row["equipamiento"]);
@@ -223,17 +205,7 @@ echo '<input type=image class="thumbnail"
 }									   
 ?>
  
-  <style>
- p {
-  display: block;
-  margin-top: 2em;
-  margin-bottom: 2em;
-  margin-left: 0;
-  margin-right: 0;
-  max-width: 2em;
  
-}
- </style>
  
 
 
