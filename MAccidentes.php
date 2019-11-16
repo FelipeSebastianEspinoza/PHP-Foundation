@@ -6,8 +6,11 @@
            window.location.replace('index.php');					
 		  </script>";
 }
- $id_accidente = $_POST["id_accidente"];   
+  
+ $id_accidente = $_POST["id_accidente"];
+ if(!empty($_POST['id_edificio'])) { 
  $id_edificio2 = $_POST["id_edificio"];
+ }
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -31,30 +34,7 @@
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+                 <?php include 'Top-Bar.php'; ?> 
  
             </br>
             <div class="row column">
@@ -156,22 +136,162 @@
   </tbody>
 </table>
 
-
- 
-          
+<?php
+ $result = mysqli_query($conn, 'SELECT *
+									  	   FROM accidente
+										   WHERE id_accidente='.$id_accidente.';');
+		    while($row = mysqli_fetch_array($result)){ 
+?>
+<table>
+  <tbody> 
+<tr>  
+  
+ <td>Diat</td>
+        <td>
+		<?php    
+ 		if(!empty($row["archivo1"])){
+		?>	
+	 	<a href="pdf/<?php  echo $row["archivo1"] ;?>" target="_blank"><img src="img/carpeta.png" alt="Archivo" style="width:42px;height:42px; " border="0"/></a>
+		<?php	
+		}else{
+        ?> 
+        <button type="" name=""><img src="img/sincarpeta.png" alt="" style="width:42px;height:42px; "></button>
+        <?php
+		} 
+		?>
+		</td>
+	    <?php if(!empty($row["archivo1"])){	?>
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/> 		
+       <td><button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminararchivo1">Eliminar</button> </td>
+ </form>
+		<?php	
+		}else{
+        ?> 
+		<td></td>
+		<?php
+		} 
+		?>
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/> 	
+ <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" Required> </td>
+ <td><button class="success button" type="" name="submitarchivo1">Subir</button></td> 
+ </form>
+</tr>  
+<tr>  
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/>  
+ <td>Investigación</td>
+        <td>
+		<?php    
+ 		if(!empty($row["archivo2"])){
+		?>	
+	 	<a href="pdf/<?php  echo $row["archivo2"] ;?>" target="_blank"><img src="img/carpeta.png" alt="Archivo" style="width:42px;height:42px; " border="0"/></a>
+		<?php	
+		}else{
+        ?> 
+        <button type="" name=""><img src="img/sincarpeta.png" alt="" style="width:42px;height:42px; "></button>
+        <?php
+		} 
+		?>
+		</td>
+	    <?php if(!empty($row["archivo2"])){	?>	
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/> 
+       <td><button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminararchivo2">Eliminar</button> </td>
+ </form>
+		<?php	
+		}else{
+        ?> 
+		<td></td>
+		<?php
+		} 
+		?>
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/> 
+ <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" Required> </td>
+ <td><button class="success button" type="" name="submitarchivo2">Subir</button></td> 
+ </form>
+</tr> 
+<tr>  
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/>  
+ <td>Investigación</td>
+        <td>
+		<?php    
+ 		if(!empty($row["archivo3"])){
+		?>	
+	 	<a href="pdf/<?php  echo $row["archivo3"] ;?>" target="_blank"><img src="img/carpeta.png" alt="Archivo" style="width:42px;height:42px; " border="0"/></a>
+		<?php	
+		}else{
+        ?> 
+        <button type="" name=""><img src="img/sincarpeta.png" alt="" style="width:42px;height:42px; "></button>
+        <?php
+		} 
+		?>
+		</td>
+	    <?php if(!empty($row["archivo3"])){	?>	
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/> 
+       <td><button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminararchivo3">Eliminar</button> </td>
+</form>
+		<?php	
+		}else{
+        ?> 
+		<td></td>
+		<?php
+		} 
+		?>
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/> 	
+ <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" Required> </td>
+ <td><button class="success button" type="" name="submitarchivo3">Subir</button></td> 
+ </form>
+</tr>
+<tr>  
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/>  
+ <td>Investigación</td>
+        <td>
+		<?php    
+ 		if(!empty($row["archivo4"])){
+		?>	
+	 	<a href="pdf/<?php  echo $row["archivo4"] ;?>" target="_blank"><img src="img/carpeta.png" alt="Archivo" style="width:42px;height:42px; " border="0"/></a>
+		<?php	
+		}else{
+        ?> 
+        <button type="" name=""><img src="img/sincarpeta.png" alt="" style="width:42px;height:42px; "></button>
+        <?php
+		} 
+		?>
+		</td>
+	    <?php if(!empty($row["archivo4"])){	?>	
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/> 
+       <td><button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminararchivo4">Eliminar</button> </td>
+</form> 
+		<?php	
+		}else{
+        ?> 
+		<td></td>
+		<?php
+		} 
+		?>
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_accidente" value="<?php echo $id_accidente ?>"/> 
+ <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" Required> </td>
+ <td><button class="success button" type="" name="submitarchivo4">Subir</button></td> 
+ </form>
+</tr>
+  </tbody>
+</table>
+			<?php  } ?>
                 </div>
                 </div>
           </div>
         </div>
       </div>
-	 
-	 
  
-  
- 
- 
-	
-
 	
 	
 	
@@ -205,7 +325,65 @@ if(isset($_POST['submitmodificarriesgo'])){
     $nuevo = new GuardarAccidente("tesis"); 
     $nuevo->ModificarAccidente($campos);
 }
+if(isset($_POST['submitarchivo1'])){
  
+    $campos = array("id_accidente"=> $_POST['id_accidente'],"id_edificio"=>$_POST['id_edificio']);  
+ 
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->Archivo1($campos);
+}
+
+if(isset($_POST['submitarchivo2'])){
+ 
+    $campos = array("id_accidente"=> $_POST['id_accidente'],"id_edificio"=>$_POST['id_edificio']);  
+ 
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->Archivo2($campos);
+}
+
+if(isset($_POST['submitarchivo3'])){
+ 
+    $campos = array("id_accidente"=> $_POST['id_accidente'],"id_edificio"=>$_POST['id_edificio']);  
+ 
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->Archivo3($campos);
+}
+
+if(isset($_POST['submitarchivo4'])){
+ 
+    $campos = array("id_accidente"=> $_POST['id_accidente'],"id_edificio"=>$_POST['id_edificio']);  
+ 
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->Archivo4($campos);
+}
+if(isset($_POST['eliminararchivo1'])){
+ 
+    $campos = array("id_accidente"=> $_POST['id_accidente'],"id_edificio"=>$_POST['id_edificio']);  
+ 
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->EliminarArchivo1($campos);
+}
+if(isset($_POST['eliminararchivo2'])){
+ 
+    $campos = array("id_accidente"=> $_POST['id_accidente'],"id_edificio"=>$_POST['id_edificio']);  
+ 
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->EliminarArchivo2($campos);
+}
+if(isset($_POST['eliminararchivo3'])){
+ 
+    $campos = array("id_accidente"=> $_POST['id_accidente'],"id_edificio"=>$_POST['id_edificio']);  
+ 
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->EliminarArchivo3($campos);
+}
+if(isset($_POST['eliminararchivo4'])){
+ 
+    $campos = array("id_accidente"=> $_POST['id_accidente'],"id_edificio"=>$_POST['id_edificio']);  
+ 
+    $nuevo = new GuardarAccidente("tesis"); 
+    $nuevo->EliminarArchivo4($campos);
+}
 ?>
  
  

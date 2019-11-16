@@ -1,7 +1,7 @@
                 <div class="top-bar" id="realEstateMenu">
                     <div class="top-bar-left">
                         <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
+                            <li class="active"><a href="Principal.php">Home</a></li>
                             <li><a href="#">About Us</a></li>
                             <li><a href="#">Blog</a></li>
                             <li><a href="#">Services</a></li>

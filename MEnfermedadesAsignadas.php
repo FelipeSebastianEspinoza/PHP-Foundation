@@ -30,30 +30,7 @@
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+               <?php include 'Top-Bar.php'; ?> 
  
             </br>
             <div class="row column">
@@ -69,6 +46,7 @@
   <thead>
     <tr>
       <th width="200">Fecha</th>
+	  <th width="200">Fecha Término (Opcional)</th>
 	  <th width="400">Persona</th>
 	  <th width="400">Edificio</th>
 	  <th width="400">Enfermedad</th>
@@ -98,10 +76,13 @@
 	  echo '<input type="date" id="fecha"name="fecha" class="form-control" value="'.$row["fecha"].'" Required>';
 	  echo '</td>';
 	  
+	  echo '<td>' ;
+	  echo '<input type="date" id="fecha_termino"name="fecha_termino" class="form-control" value="'.$row["fecha_termino"].'" >';
+	  echo '</td>';
  
  
  	  echo '<td>' ;
-	  echo '<input type="text" id="persona" name="persona" class="form-control" value="'.$row["persona"].'" Required>';
+	 echo '<input type="text" id="persona"name="persona" class="form-control" value="'.$row["persona"].'" Required>';
 	  echo '</td>';
 	  
  
@@ -177,7 +158,7 @@ include("guardar.php");
 if(isset($_POST['submitprotocolo'])){
  
     $campos = array("id_enfermedad_reportada"=> $_POST['id_enfermedad_reportada'] ,
-	"fecha"=>$_POST['fecha'],"persona"=>$_POST['persona'],
+	"fecha"=>$_POST['fecha'],"fecha_termino"=>$_POST['fecha_termino'],"persona"=>$_POST['persona'],
     "id_edificio"=>$_POST['id_edificio'],"id_enfermedad"=>$_POST['id_enfermedad']); 
  
     $nuevo = new GuardarReporteEnfermedad("tesis"); 

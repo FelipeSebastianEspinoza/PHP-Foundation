@@ -49,33 +49,7 @@ $id_edificio=$_POST['id_edificio'];
      <div class="grid-x grid-padding-x">
         <div class="large-12 cell">
  
-  <div class="top-bar" id="realEstateMenu">
-                <div class="top-bar-left">
-                    <ul class="menu menu-hover-lines">
-                        <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Services</a></li>
-                        <li><a href="#">Products</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="top-bar-right">
-                    <ul class="menu">
-					    <?php 
-
-						if(isset($_SESSION['usuario'])){
-							echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						    echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-						}else{
-							echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-						}
-	
-						?>
-
-                    </ul>
-                </div>
-            </div>
+   <?php include 'Top-Bar.php'; ?> 
 
  
 		
@@ -93,7 +67,8 @@ $id_edificio=$_POST['id_edificio'];
 <?php
 		   $conn = mysqli_connect("localhost","root","","tesis");
            $result = mysqli_query($conn, 'SELECT nombre ,imagen,id_area FROM area_del_edificio  
-                                   WHERE id_piso ='.$id_piso.';');
+                                   WHERE eliminar!=1
+								   AND id_piso ='.$id_piso.';');
 			    if($result==null){
 				    echo'';
 			    }else{
@@ -132,7 +107,8 @@ $id_edificio=$_POST['id_edificio'];
 				    } 
 				 }
        $result = mysqli_query($conn, 'SELECT nombre,imagen,id_salida FROM salida_de_emergencia  
-                                           WHERE id_piso ='.$id_piso.';');
+                                           WHERE eliminar!=1
+										   AND id_piso ='.$id_piso.';');
 			    if($result==null){
 				    echo'';
 			    }else{
@@ -170,7 +146,8 @@ $id_edificio=$_POST['id_edificio'];
 				    } 
 				 }	  
             $result = mysqli_query($conn, 'SELECT nombre,imagen,id_laboratorio FROM laboratorio  
-                                           WHERE id_piso ='.$id_piso.';');
+                                           WHERE eliminar!=1
+										   AND id_piso ='.$id_piso.';');
 			    if($result==null){
 				    echo'';
 			    }else{
@@ -273,7 +250,7 @@ $id_edificio=$_POST['id_edificio'];
                 echo '</th>';
 			    echo'</tr>';
 				echo'<tr>';
-                echo'<th width="50">Descripcion: </th>';
+                echo'<th width="50">Descripción: </th>';
                 echo'<th style="font-weight: normal;"width="150">';  
 				?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
                 echo '</th>';
@@ -442,7 +419,7 @@ $id_edificio=$_POST['id_edificio'];
  
         <div class="titulo_boton">
  
-  </br><a style='cursor: pointer;' onClick="pisonombre_oculto('modificarnpiso')" title="" class="success button">Modificar Nombre del piso</a>
+  </br><a style='cursor: pointer;' onClick="pisonombre_oculto('modificarnpiso')" title="" class="success button">Modificar el nombre del piso</a>
  
         </div>
 
@@ -479,6 +456,27 @@ $id_edificio=$_POST['id_edificio'];
  }
  ?>
 </modificarnombre>
+
+
+<ELIMINARPISO>
+<?php
+ echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+            echo '<input type="hidden" name="id_piso" value='.$id_piso.' />';
+            echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />';
+            echo '<td>';
+			
+            ?>  
+            <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminarpiso">Eliminar el Piso</button> 
+            <?php
+            echo '</td>' ;
+            echo'</form>';
+?>
+</ELIMINARPISO>
+
+
+
+
+
   </div>
   
   <div class="tabs-panel" id="panel4c">
@@ -668,6 +666,13 @@ if(isset($_POST['submitlaboratorio'])){
  
     $nuevo = new GuardarLaboratorio("tesis"); 
     $nuevo->NuevoLaboratorio($campos);
+}
+if(isset($_POST['eliminarpiso'])){
+  
+    $campos = array("id_piso"=>$_POST['id_piso']); 
+  
+    $nuevo = new GuardarPiso("tesis"); 
+    $nuevo->EliminarPiso($campos);
 }
 ?>
 

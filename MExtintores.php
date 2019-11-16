@@ -30,30 +30,7 @@
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+            <?php include 'Top-Bar.php'; ?> 
  
             </br>
             <div class="row column">
@@ -74,8 +51,9 @@
       <th width="250">Nombre</th>
       <th width="150">Fecha de Carga</th>
 	  <th width="150">Fecha de Vencimiento</th>
-      <th width="450">Ubicación</th>
+      <th width="450">Ubicación (Opcional)</th>
 	  <th width="150">Estado</th>
+	  <th width="150">imagen</th>
     </tr>
   </thead> 
   
@@ -118,6 +96,19 @@
       echo '<td>' ;
 	  echo '<input type="text" id="estado"name="estado" class="form-control" value="'.$row["estado"].'" Required>';
 	  echo '</td>';
+	  
+	  
+	        	  echo '<td>' ;
+ if(!empty($row["imagen"])){
+	   ?><embed class="thumbnail" src="imagenes\<?php
+      echo $row["imagen"] ; 
+	  ?>" type="image/png" /> 
+ 
+	 <?php 
+ }
+	 echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >';
+	 echo '</td>';
+	  
 	  
 	  echo '<td>' ;
  
@@ -186,6 +177,10 @@
 		  
                 </div>
                 </div>
+								      <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_extintor" value="<?php echo $id_extintor ?>"/> 		
+       <td><button onclick="return confirm('Quitar Imagen?');"class="alert button" type="submit" name="eliminararchivo1">Quitar imagen</button> </td>
+ </form>
           </div>
         </div>
       </div>

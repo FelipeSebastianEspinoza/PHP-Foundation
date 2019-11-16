@@ -23,7 +23,7 @@ try{
 		
 		switch($_SESSION["tipo"]){
              case 1:
-                header("Location:MapaPrueba.php");
+                header("Location:Principal.php");
              break;
              case 2:
                header("Location:index.php");

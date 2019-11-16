@@ -34,6 +34,7 @@
                 }
         ?>
             <h4 class="text-center">Ingreso al sistema</h4>
+			</br>
 		    <h4 class="text-center">Prevención de Riegos</h4>
             <label>Email
             <input type="text" placeholder="alguien@example.com" name="login">
@@ -42,7 +43,7 @@
             <input type="password" placeholder="Contraseña" name="password">
             </label>
             <p><input type="submit" name="enviar" class="button expanded" value="Login"></p>
-			<center><button class="active"><a href="MapaPrueba.php">Entrar como invitado</a></button></center>
+			<center><button class="active"><a href="Principal.php">Entrar como invitado</a></button></center>
             <!--<p class="text-center"><a href="#">Olvidaste tu contraseña?</a></p>-->
         </form>
         </div>

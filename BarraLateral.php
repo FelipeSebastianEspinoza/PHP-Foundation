@@ -9,6 +9,8 @@
       <li><a href="EnfermedadesProfesionales.php">Enfermedades Profesionales</a></li>
       <li><a href="EnfermedadesAsignadas.php">Enfermedades Reportadas</a></li>
 	  <li><a href="NGrifo.php">Administrar Grifos</a></li>
+	  <li><a href="NZonadeEvacuacion.php">Administrar Zonas de Evacuación</a></li>
+	  <li><a href="NZonadeSeguridad.php">Administrar Zonas de Seguridad</a></li>
 	  <div class="cell shrink">
 	  </br>
 <img class="thumbnail" src="https://placehold.it/550x350">

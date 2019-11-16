@@ -32,17 +32,13 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
     <script src="js/jquery.min.js"></script>
     <script src="js/zoom-marker.min.js"></script>
  	 <script src="js/jquery.mousewheel.min.js"></script> 
- 
     <script>
-	
-	
- 
+	 
         $('#viewArea').zoomMarker({
             src: "img/mapa.jpg",
             rate: 0.2,
             markers: [
 			 
-		 
 				<?php foreach ($link->query('SELECT * from grifo') as $row){  
 				if($row['eliminar']==0){ 	
 				?> 

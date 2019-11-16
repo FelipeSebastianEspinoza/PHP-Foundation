@@ -81,6 +81,12 @@ $id_edificio=$_POST['id_edificio'];
                 echo'<th width="50">Area Total: </th>';
 			    echo'<th style="font-weight: normal;"width="150">'.$row["area_total"].'</th>';
 			    echo'</tr>';
+				echo'<tr>';
+                echo'<th width="50">N°Docentes: </th>';
+                echo'<th style="font-weight: normal;"width="150">'.$row["n_docentes"].'</th>';
+                echo'<th width="50">N°Funcionarios: </th>';
+			    echo'<th style="font-weight: normal;"width="150">'.$row["n_funcionarios"].'</th>';
+			    echo'</tr>';
 				if(isset($_SESSION['usuario'])){
 			    echo'<tr>';
 			    echo'<th width="50">%Hacinamiento: </th>';
@@ -116,7 +122,8 @@ $id_edificio=$_POST['id_edificio'];
  <?php 
  
     $result = mysqli_query($conn, 'SELECT * FROM piso
-                                   WHERE id_edificio ='.$id_edificio.';');
+                                   WHERE eliminar!="1"
+								   AND id_edificio ='.$id_edificio.';');
 			    if($result==null){
 				    echo'';
 			    }else{
@@ -166,12 +173,15 @@ $id_edificio=$_POST['id_edificio'];
 </div>
  	  
 <ul class="tabs" data-active-collapse="true" data-tabs id="collapsing-tabs">
-  <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Protocolos</a></li>
-  <li class="tabs-title"><a href="#panel2c">Riesgos</a></li>
+<!-- <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Protocolos</a></li>  
+  <li class="tabs-title"><a href="#panel2c">Riesgos</a></li>-->
+  
+  
+  <li class="tabs-title is-active"><a href="#panel2c" aria-selected="true">Riesgos</a></li>
   <li class="tabs-title"><a href="#panel3c">Accidentes</a></li>
   <li class="tabs-title"><a href="#panel4c">Extintores</a></li>
   <li class="tabs-title"><a href="#panel5c">Redes Humedas</a></li>
-  <li class="tabs-title"><a href="#panel6c">Unidad de Análisis</a></li>
+<!-- <li class="tabs-title"><a href="#panel6c">Unidad de Análisis</a></li> -->
   <li class="tabs-title"><a href="#panel7c">Procedimientos</a></li>
   
  <?php if(isset($_SESSION['usuario'])){ ?>
@@ -181,148 +191,63 @@ $id_edificio=$_POST['id_edificio'];
 </ul>
 
 <div class="tabs-content" data-tabs-content="collapsing-tabs">
+  
+  <div class="tabs-panel is-active" id="panel2c">
  
-  <div class="tabs-panel is-active" id="panel1c">
-  <table>
+	<table>
   <thead>
     <tr>
-      <th width="200">Nombre</th>
-      <th width="150">Estado</th>
-	  <th width="150">Descripción</th>
-	  <th width="50">Eliminar</th>
+      <th> </th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+	   <?php   if(isset($_SESSION['usuario'])){ ?>
+	   <th>Eliminar</th>
+ 
+	   <?php } ?>
     </tr>
   </thead> 
   <tbody>
- 
-  <?php  
+ <?php  
 			$conn = mysqli_connect("localhost","root","","tesis");
 
-			$result = mysqli_query($conn, 'SELECT a.estado,p.nombre,p.descripcion, p.id_protocolo
-									  	   FROM protocolo p,asigna a
-									       WHERE a.eliminar!="1"
-										   AND p.id_protocolo=a.id_protocolo
-										   AND a.id_edificio ='.$id_edificio.';');
-		    while($row = mysqli_fetch_array($result)){
-	   
-      echo '<tr>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-      echo '<td>'.$row["estado"].'</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["descripcion"]);
-      echo '</td>';
-
-	  echo '<td>' ;
-      echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
-      echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
-      echo '<input type="hidden" name="id_protocolo" value='.$row["id_protocolo"].' />';
-    ?>  
-    <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="submitquitarprotocolo">Quitar</button> 
-    <?php 
-      echo '</form>';
-      echo '</td>';
-      echo '</tr>';
-	  
-				}
-		  ?>
-  </tbody>
-</table>
-
-<insertar>
-<?php  if(isset($_SESSION['usuario'])){?>
-<div class="titulo_boton">
- 
-  <a style='cursor: pointer;' onClick="muestra_oculta('nuevoprotocolo')" title="" class="success button">Asignar Protocolo</a>
- 
-  </div>
-
-<div id="nuevoprotocolo">
-<?php 
-  	    	    
-                echo'<table>';
-                echo'<thead>';
-                $result = mysqli_query($conn, 'SELECT p.nombre,p.id_protocolo 
-			                                   FROM protocolo p 
-                                                WHERE eliminar!="1";');
-			    if($result==null){
-				    echo'';
-			    }else{	
-				 echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	
-			        echo'<tr>';
-			        echo'<th style="font-weight: normal;"width="150">';
-					echo "Protocolo";
-                    echo'<select class="form-control form-control-sm" name="id_protocolo">';
- 
-                    while($row=mysqli_fetch_assoc($result)) { 
-                        echo "<option value='$row[id_protocolo]'>$row[nombre]</option>";  
-				    } 
-				 }	 
-                echo'</select>';
-		        echo'<th style="font-weight: normal;"width="50">';
-				echo "Estado";
-                echo'<input type="text" id="estado" name="estado" class="form-control" value="">';
-				echo'</th>';
-				
-			    echo'<th style="font-weight: normal;"width="50">';
-               echo'</br><input type="submit" name="submitprotocolo" class="button primary"value="Asignar"></input>';
-				echo'</th>';
-				echo'</th>';
-                echo'</thead>';
-                echo'</table>';
-				echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
-				echo '<input type="hidden" name="id" value='.$id_edificio.' />';
-        echo '</form>';	 
- ?>
-</div>
-<?php 			}?>
- 
-<insertar>
- 
-
-  </div>
-  <div class="tabs-panel" id="panel2c">
- 
-     <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-   	
-			$result = mysqli_query($conn, 'SELECT r.id_riesgo,r.icono,d.id_edificio,d.id_riesgo
+			$result = mysqli_query($conn, 'SELECT r.id_riesgo,r.icono,d.id_edificio,d.id_riesgo,r.nombre,descripcion
 									  	   FROM riesgo r,edificio_riesgo d  
 									       WHERE r.id_riesgo=d.id_riesgo   
 										   AND d.id_edificio ='.$id_edificio.' ;');
-		    
-	  
-			while($row = mysqli_fetch_array($result)){
+										   
+		    while($row = mysqli_fetch_array($result)){
  
-    echo'<div style="display: inline-block;">';
+        echo '<tr>';
+		
+        echo '<td>' ;
+	    ?><embed class="thumbnail" src="imagenes\<?php
+        echo $row["icono"] ; 
+	    ?>" type="image/png" /><?php
+	    echo '</td>';
+		
+	    echo '<td>' ;
+	    echo  utf8_encode($row["nombre"]);
+	    echo '</td>';
+        echo '<td>' ;
+	    echo  utf8_encode($row["descripcion"]);
+	    echo '</td>';
+        if(isset($_SESSION['usuario'])){
  
-    echo ' <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
-	
-	
-	 
-	  ?><embed class="thumbnail" src="imagenes\<?php
-      echo $row["icono"] ; 
-	  ?>" type="image/png" /><?php
-	 
-	
-	
-	
-	if(isset($_SESSION['usuario'])){
-    echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
-    echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />';
+	    echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+        echo '<input type="hidden" name="id_riesgo" value='.$row["id_riesgo"].' />';
+        echo '<td>' ; 
+	    ?>  
+        <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="submitquitarriesgo">Eliminar</button> 
+        <?php
  
-    ?>  
-    <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="submitquitarriesgo">Quitar</button> 
-    <?php 
- 
- 	}
-    echo '</form>';
- 
-	echo'</div>';
- 
-				} 
- 
+        echo '</td>' ;
+        echo'</form>';
+        echo '</tr>';
+		}
+	}
 		  ?>
+  </tbody>
+</table>
  
 	<insertar>
 <?php  if(isset($_SESSION['usuario'])){?>
@@ -377,11 +302,11 @@ $id_edificio=$_POST['id_edificio'];
     <tr>
 	<?php  
 		if(isset($_SESSION['usuario'])){?>
-      <th width="50">ID</th>  <?php }
+      <th >ID</th>  <?php }
 	    ?>
-      <th width="200">Fecha</th>
-      <th width="200">Tipo</th>
-      <th width="200">Numero</th>
+      <th >Fecha</th>
+      <th >Tipo</th>
+      <th >Número</th>
 	   <?php  
 		if(isset($_SESSION['usuario'])){
  
@@ -515,7 +440,7 @@ $id_edificio=$_POST['id_edificio'];
 			$result = mysqli_query($conn, 'SELECT e.id_extintor,e.nombre,e.fecha_carga,e.fecha_venc,e.ubicacion,e.estado,e.id_piso
 									  	   FROM extintor e,piso p
 									       WHERE e.id_piso=p.id_piso
-										   AND eliminar!="1"
+										   AND e.eliminar!="1"
 										   AND p.id_edificio ='.$id_edificio.'    ;');
 		    while($row = mysqli_fetch_array($result)){
       echo'<form action="MExtintores.php" method="post">';
@@ -654,7 +579,7 @@ if(isset($_SESSION['usuario'])){?>
 			$result = mysqli_query($conn, 'SELECT r.id_redhumeda,r.nombre,r.ubicacion,r.estado
 									  	   FROM red_humeda r,piso p
 									       WHERE r.id_piso=p.id_piso
-										   AND eliminar!="1"
+										   AND r.eliminar!="1"
 										   AND p.id_edificio ='.$id_edificio.'    ;');
 		    while($row = mysqli_fetch_array($result)){
 				
@@ -753,116 +678,7 @@ if(isset($_SESSION['usuario'])){?>
  
   </div>
  
-   <div class="tabs-panel" id="panel6c">
-  <table>
-  <thead>
-    <tr>
-      <th width="200">Nombre</th>
-      <th width="150">Total de funcionarios</th>
-	  <th width="150">Funcionarios que aporta</th>
-      <th width="150">Fecha de actualización</th>
-      <th width="150">Estado</th>
-	  <?php if(isset($_SESSION['usuario'])){ ?>
-      <th width="50">Modificar</th>
-      <th width="50">Eliminar</th>
-	  <?php } ?>
-    </tr>
-  </thead> 
-  <tbody>
- 
-  <?php  
-			$conn = mysqli_connect("localhost","root","","tesis");
-
-			$result = mysqli_query($conn, 'SELECT *
-									  	   FROM unidad
-									       WHERE eliminar!="1"
-										   AND id_edificio ='.$id_edificio.';');
-		    while($row = mysqli_fetch_array($result)){
-      echo'<form action="MUnidad.php" method="post">';	 
-      echo '<input type="hidden" name="id_unidad" value='.$row["id_unidad"].' />'; 
-      echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />'; 
-	  echo '<tr>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["nombre"]);
-	  echo '</td>';
-      echo '<td>'.$row["total_func"].'</td>';
-	  echo '<td>' ;
-	  echo  utf8_encode($row["func_aporta_edi"]);
-      echo '</td>';
- 
-	  echo '<td>';  
-	  $date=date_create($row["fecha_act"]);
-	  echo date_format($date,"d/m/Y") ;
-	  echo '</td>';
- 
-	  echo '<td>' ;
-	  echo  utf8_encode($row["estado"]);
-      echo '</td>';
-	  if(isset($_SESSION['usuario'])){
- 
-	  echo '<td>' ;
-      echo'<input type="submit" class="success button"value="Modificar"></input>';
-      echo '</td>';
-	  echo'</form>';
- 
-	    echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
-        echo '<input type="hidden" name="id_unidad" value='.$row["id_unidad"].' />';
-        echo '<td>' ; 
-	    ?>   
-        <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminarunidad">Eliminar</button> 
-        <?php
- 
-        echo '</td>' ;
-        echo'</form>';
-	  }
-      echo '</tr>';
- 
-				}
-		  ?>
-  </tbody>
-</table>
-
-<insertar>
-<?php if(isset($_SESSION['usuario'])){?>
-<div class="titulo_boton">
- 
-  <a style='cursor: pointer;' onClick="muestra_unidad('nuevaunidad')" title="" class="success button">Asignar Unidad</a>
- 
-  </div>
-
-<div id="nuevaunidad">
- <table>
-  <thead>
-    <tr>
-      <th width="300">Nombre</th>
-      <th width="100">Total de funcionarios</th>
-      <th width="100">Funcionarios que aporta</th> 
-	  <th width="300">Fecha de actualización</th>
-	  <th width="300">Estado</th>
-    </tr>
-  </thead>
-  <tbody>  
-    <tr>
-	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
-	
-    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre " Required >	</td>
-    <td><input type="text" id="inputTotal" name="total_func" class="form-control" placeholder="" Required ></td>
-    <td><input type="text" id="inputAporta" name="func_aporta_edi" class="form-control" placeholder="" Required ></td>
-    <td><input type="date" id="inputFecha" name="fecha_act" class="form-control" placeholder="" Required ></td>
-    <td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="" Required ></td>
-	    <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>  
-	<td><button class="success button" type="submit" name="submitunidad">Registrar</button></td>
-  
-    </form>
-    </tr>
-  </tbody>
-</table>
-</div>
-<?php }?>
- 
-<insertar>
-</div>
-  
+   
   
   
  <div class="tabs-panel" id="panel7c">
@@ -1287,13 +1103,14 @@ if(isset($_POST['submitquitarprotocolo'])){
 }
 ?>
  
-<script>
+<script>/*
 function muestra_oculta(id){
 if (document.getElementById){  
 var el = document.getElementById(id);  
 el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
 }
-}
+} */
+
 function riesgos_ocultos(id){
 if (document.getElementById){  
 var el = document.getElementById(id);  
@@ -1318,12 +1135,12 @@ var el = document.getElementById(id);
 el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
 }
 }
-function muestra_unidad(id){
+/* function muestra_unidad(id){
 if (document.getElementById){  
 var el = document.getElementById(id);  
 el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
 }
-}
+} */
 function muestra_procedimientos(id){
 if (document.getElementById){  
 var el = document.getElementById(id);  
@@ -1344,9 +1161,9 @@ el.style.display = (el.style.display == 'none') ? 'block' : 'none';
 }
 window.onload = function(){ 
 muestra_procedimientos('nuevoprocedimiento');
-muestra_unidad('nuevaunidad');
+//muestra_unidad('nuevaunidad');
 muestra_enfermedad('nuevaenfermedad');
-muestra_oculta('nuevoprotocolo'); 
+//muestra_oculta('nuevoprotocolo'); 
 riesgos_ocultos('nuevoriesgo'); 
 accidentes_ocultos('nuevoaccidente'); 
 extintores_ocultos('nuevoextintor');

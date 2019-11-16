@@ -16,7 +16,16 @@
 		
 		$nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
-
+        
+		 
+		  if(strlen(trim($nombre))<3){
+			echo "<script> 
+					 alert('el nombre no es válido');
+				  </script>";
+			
+		}else{
+ 	
+		
         $consulta = "INSERT INTO `protocolo` (`id_protocolo`,`nombre`,`descripcion`) VALUES 
 		(NULL,'$nombre','$descripcion');";
     
@@ -35,6 +44,7 @@
                     window.location.replace('protocolos.php');					
 			      </script>"; 
 		}
+		}
 	
 	}
    
@@ -45,6 +55,14 @@
 		$nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
 
+				  if(strlen(trim($nombre))<3){
+			echo "<script> 
+					 alert('el nombre no es válido');
+				  </script>";
+			
+		}else{
+		
+		
         $consulta = "UPDATE `protocolo` SET `nombre`='$nombre',
 		`descripcion`='$descripcion' 
 		WHERE `id_protocolo`='$id_protocolo'"; 
@@ -63,7 +81,7 @@
                     window.location.replace('protocolos.php');					
 			      </script>"; 
 		}
-	
+	}
 	}
 	
 	function EliminarProtocolo($form_data){
@@ -210,7 +228,7 @@
 		
 		$nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
-
+         if(strlen(trim($nombre))>1){
         $consulta = "INSERT INTO `enfermedades_profesionales` (`id_enfermedad`,`nombre`,`descripcion`) VALUES 
 		(NULL,'$nombre','$descripcion');";
  
@@ -227,6 +245,11 @@
                     window.location.replace('EnfermedadesProfesionales.php');					
 			      </script>"; 
 		}
+		 }else{
+			echo "<script>
+					alert('el nombre es inválido'); 			
+			      </script>"; 
+		}
 	}
    
     function ModificarEnfermedad($form_data){
@@ -235,7 +258,7 @@
 		$id_enfermedad = $_POST['id_enfermedad'];
 		$nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
-
+         if(strlen(trim($nombre))>1){
         $consulta = "UPDATE `enfermedades_profesionales` SET `nombre`='$nombre',
 		`descripcion`='$descripcion' 
 		WHERE `id_enfermedad`='$id_enfermedad'"; 
@@ -250,6 +273,11 @@
 			echo "<script>
 					alert('Se ha modificado con éxito'); 
                     window.location.replace('EnfermedadesProfesionales.php');					
+			      </script>"; 
+		}
+				 }else{
+			echo "<script>
+					alert('el nombre es inválido'); 			
 			      </script>"; 
 		}
 	}
@@ -342,7 +370,36 @@
 		}
 	}
 	
-	
+	function NuevoReporteEnfermedad2($form_data){
+        $fields = array_keys($form_data);
+		
+		$fecha = htmlentities($_POST['fecha']);
+		$persona =htmlentities($_POST['persona']);
+        $id_edificio =htmlentities($_POST['id_edificio']);
+		$id_enfermedad =htmlentities($_POST['id_enfermedad']);
+          
+        $consulta = "INSERT INTO `enfermedades_reportadas` 
+		(`id_enfermedad_reportada`,`fecha`,`persona`,`id_edificio`,`id_enfermedad`) 
+		VALUES 
+		(NULL,'$fecha','$persona','$id_edificio','$id_enfermedad');";
+    
+		 
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('EnfermedadesAsignadas.php');					
+			      </script>"; 
+		}
+		   
+	}
 	 
 	
 	
@@ -382,14 +439,27 @@
 		
 		$id_enfermedad_reportada = htmlentities($_POST['id_enfermedad_reportada']);
 		$fecha = htmlentities($_POST['fecha']);
+		$fecha_termino = htmlentities($_POST['fecha_termino']);
 		$persona =htmlentities($_POST['persona']);
         $id_edificio =htmlentities($_POST['id_edificio']);
 		$id_enfermedad =htmlentities($_POST['id_enfermedad']);
+  
  
-        $consulta = "UPDATE `enfermedades_reportadas` SET `fecha`='$fecha' 
+		if($fecha_termino!='0000-00-00'){
+		 $consulta = "UPDATE `enfermedades_reportadas` SET `fecha`='$fecha' 
+		,`fecha_termino`='$fecha_termino' 
 	    ,`persona`='$persona',`id_edificio`='$id_edificio'
         ,`id_enfermedad`='$id_enfermedad'     		
 		WHERE `id_enfermedad_reportada`='$id_enfermedad_reportada'"; 
+		}else{
+			 $consulta = "UPDATE `enfermedades_reportadas` SET `fecha`='$fecha' 
+	     ,`persona`='$persona',`id_edificio`='$id_edificio'
+        ,`id_enfermedad`='$id_enfermedad'     		
+		WHERE `id_enfermedad_reportada`='$id_enfermedad_reportada'"; 
+		}
+ 
+ 
+ 
  
 		 
         $resultado_cons = mysqli_query($this->con,$consulta);
@@ -449,12 +519,11 @@
  class GuardarUnidad{
  
 	private $id_unidad;
-	private $nombre;
-	private $total_func;
-    private $func_aporta_edi;
-    private $fecha_act;
-    private $estado;
-    private $id_edificio;
+	private $nombre; 
+	private $fecha_act;
+	private $descripcion;
+	private $estado;
+	private $id_protocolo;
 	
     function __construct($bd){
 	    $this->con = new mysqli('localhost','root','',$bd); 
@@ -464,30 +533,27 @@
         $fields = array_keys($form_data);
 		
 		$nombre = htmlentities($_POST['nombre']);
-		$total_func =htmlentities($_POST['total_func']);
-        $func_aporta_edi =htmlentities($_POST['func_aporta_edi']);
-		$fecha_act =htmlentities($_POST['fecha_act']);
-		$estado =htmlentities($_POST['estado']);
-		$id_edificio =htmlentities($_POST['id_edificio']);
+		$fecha_act = htmlentities($_POST['fecha_act']);
+		$descripcion = htmlentities($_POST['descripcion']);
+		$estado = htmlentities($_POST['estado']);
+		$id_protocolo = htmlentities($_POST['id_protocolo']);
+		 
  
         $consulta = "INSERT INTO `unidad` 
-		(`id_unidad`,`nombre`,`total_func`,`func_aporta_edi`,`fecha_act`,`estado`,`id_edificio`) 
+		(`id_unidad`,`nombre`,`fecha_act`,`descripcion`,`estado`,`id_protocolo`) 
 		VALUES 
-		(NULL,'$nombre','$total_func','$func_aporta_edi','$fecha_act','$estado','$id_edificio');";
-    
-		 
-		 
+		(NULL,'$nombre','$fecha_act','$descripcion','$estado','$id_protocolo');";
+ 
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
         if($resultado_cons == false){
 			echo "<script> 
 					 alert('No es posible crear');
-					 
 				  </script>";
 		}else{
 			echo "<script>
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('Edificio.php');					
+                    window.location.replace('UnidadDeAnalisis.php');					
 			      </script>"; 
 		}
 	}
@@ -497,15 +563,15 @@
 		
 		$id_unidad = htmlentities($_POST['id_unidad']);
 		$nombre = htmlentities($_POST['nombre']);
-		$total_func =htmlentities($_POST['total_func']);
-        $func_aporta_edi =htmlentities($_POST['func_aporta_edi']);
 		$fecha_act =htmlentities($_POST['fecha_act']);
+		$descripcion =htmlentities($_POST['descripcion']);
 		$estado =htmlentities($_POST['estado']);
-		$id_edificio =htmlentities($_POST['id_edificio']);
+		$id_protocolo =htmlentities($_POST['id_protocolo']);
 
-        $consulta = "UPDATE `unidad` SET `nombre`='$nombre' 
-	    ,`total_func`='$total_func',`func_aporta_edi`='$func_aporta_edi'
-        ,`fecha_act`='$fecha_act',`estado`='$estado',`id_edificio`='$id_edificio'     		
+        $consulta = "UPDATE `unidad` SET `nombre`='$nombre', 
+	    `fecha_act`='$fecha_act',
+		`descripcion`='$descripcion',
+		`estado`='$estado',`id_protocolo`='$id_protocolo'     		
 		WHERE `id_unidad`='$id_unidad'"; 
  
 		 
@@ -519,7 +585,7 @@
 		}else{
 			echo "<script>
 					alert('Se ha modificado con éxito'); 
-                    window.location.replace('Edificio.php');					
+                    window.location.replace('UnidadDeAnalisis.php');					
 			      </script>"; 
 		}
 	
@@ -552,9 +618,117 @@
 	
 	}
 	
+	 function Archivo1($form_data){
+        $fields = array_keys($form_data);
+        $id_unidad = $_POST['id_unidad'];
+		$nombre = $_POST['nombre'];
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/pdf/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+          $consulta = "INSERT INTO `unidad_anexos` 
+		(`id_unidad_anexos`,`nombre`,`archivo`,`id_unidad`) 
+		VALUES (NULL,'$nombre','$nnombre','$id_unidad');";
+ 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('UnidadDeAnalisis.php');					
+			      </script>"; 
+		}
+  
+	}
+    
+	 function Archivo2($form_data){
+ 
+		
+        $fields = array_keys($form_data);
+        $id_unidad = $_POST['id_unidad'];
+        $id_unidad_anexos = $_POST['id_unidad_anexos'];
+		$nombre = $_POST['nombre'];
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/pdf/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);   
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 	    if($nombre_archivo==null){ 
+			  $consulta = "UPDATE `unidad_anexos` SET `nombre` = '$nombre' 
+	                 	WHERE `id_unidad_anexos`='$id_unidad_anexos'"; 
+        }else{
+ 
+         $consulta = "UPDATE `unidad_anexos` SET `nombre` = '$nombre', 
+		                      `archivo`='$nnombre'
+	                 	WHERE `id_unidad_anexos`='$id_unidad_anexos'"; 
+
+							
+		}  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible actualizar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('UnidadDeAnalisis.php');					
+			      </script>"; 
+		}
+  
+	}
 	
-	
-	
+	 function EliminarArchivo1($form_data){
+        $fields = array_keys($form_data);
+        $id_unidad = $_POST['id_unidad'];
+		$id_unidad_anexos = $_POST['id_unidad_anexos'];
+ 
+        $consulta = "UPDATE `unidad_anexos` SET `eliminar`='1'
+		WHERE `id_unidad_anexos`='$id_unidad_anexos'"; 
+ 		 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('UnidadDeAnalisis.php');					
+			      </script>"; 
+		}
+	}
  
     public function cerrarBD(){
 		$this->con->close();
@@ -691,8 +865,10 @@
 	
     function NuevoRiesgo($form_data){
         $fields = array_keys($form_data);
- 
+        $nombre = htmlentities($_POST['nombre']);
+ 	    $descripcion =htmlentities($_POST['descripcion']);
 		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+		 $nombre_archivo=($_FILES['ARCHIVO']['name']);
         $tipo_imagen=$_FILES['ARCHIVO']['type'];
         $tamano_imagen=$_FILES['ARCHIVO']['size'];
 		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
@@ -705,9 +881,15 @@
             echo $_FILES['ARCHIVO']['size'];
             echo "El tamaño excede el límite establecido";
         }
+		
+		if(strlen(trim($nombre))<3){
+			echo "<script> 
+					 alert('el nombre no es válido');
+				  </script>";
+			
+		}else{
  
-	    $nombre = htmlentities($_POST['nombre']);
- 	    $descripcion =htmlentities($_POST['descripcion']);
+ 
  
         $consulta = "INSERT INTO `riesgo` (`id_riesgo`,`nombre`,`descripcion`,`icono`)
                  	VALUES (NULL,'$nombre','$descripcion','$nnombre');";
@@ -726,9 +908,11 @@
                     window.location.replace('Riesgos.php');					
 			      </script>"; 
 		}
+	}
 	
 	}
-   
+	
+ 
     function ModificarRiesgo($form_data){
         $fields = array_keys($form_data);
 		
@@ -736,29 +920,38 @@
 		$nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
 
+		if($nombre_imagen==null){
+		
 		$nombre_imagen=$_FILES['ARCHIVO']['name'];
         $tipo_imagen=$_FILES['ARCHIVO']['type'];
         $tamano_imagen=$_FILES['ARCHIVO']['size'];
-		if($tamano_imagen<=5000000){ //archivos hasta 5 megas 
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
         $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
         $info = pathinfo($_FILES['ARCHIVO']['name']); 
         $nnombre = md5(rand().time()).".".$info['extension']; 
         move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
-        echo "Archivo subido satisfactoriamente";
+        
         }else{
             echo $_FILES['ARCHIVO']['size'];
             echo "El tamaño excede el límite establecido";
         }
-			
-			if($nombre_archivo==null){
-              $consulta = "UPDATE `riesgo` SET `nombre`='$nombre',
+	 
+		}
+	 
+        if(strlen(trim($nombre))>3){
+			 
+		 
+           if($nombre_imagen==null){
+               $consulta = "UPDATE `riesgo` SET `nombre`='$nombre',
 		     `descripcion`='$descripcion' 
 		      WHERE `id_riesgo`='$id_riesgo'"; 
+ 
 			}else{
+ 
 			 $consulta = "UPDATE `riesgo` SET `nombre`='$nombre',
 		     `descripcion`='$descripcion',`icono`='$nnombre'  
 		      WHERE `id_riesgo`='$id_riesgo'"; 	
-				
+	 
 			}
 		 
         $resultado_cons = mysqli_query($this->con,$consulta);
@@ -774,9 +967,12 @@
                     window.location.replace('riesgos.php');					
 			      </script>"; 
 		}
-	
 	}
-	 
+	echo "<script> 
+          alert('El nombre no es válido'); 
+		  </script>";
+	}
+ 
 	function AsignarRiesgo($form_data){
         $fields = array_keys($form_data);
 		
@@ -973,9 +1169,267 @@
 		}
 		
 	
+	}
+
+
+
+
+	
+	 function Archivo1($form_data){
+        $fields = array_keys($form_data);
+        $id_accidente = $_POST['id_accidente'];
+		$id_edificio = $_POST['id_edificio'];
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/pdf/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+         $consulta = "UPDATE `accidente` 
+		             SET `archivo1`='$nnombre' 
+		             WHERE `id_accidente`='$id_accidente'";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Accidentes.php');					
+			      </script>"; 
+		}
+  
+	}
+
+	 function Archivo2($form_data){
+        $fields = array_keys($form_data);
+        $id_accidente = $_POST['id_accidente'];
+		$id_edificio = $_POST['id_edificio'];
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/pdf/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+         $consulta = "UPDATE `accidente` 
+		             SET `archivo2`='$nnombre' 
+		             WHERE `id_accidente`='$id_accidente'";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Accidentes.php');					
+			      </script>"; 
+		}
+  
+	}
+
+	 function Archivo3($form_data){
+        $fields = array_keys($form_data);
+        $id_accidente = $_POST['id_accidente'];
+		$id_edificio = $_POST['id_edificio'];
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/pdf/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+         $consulta = "UPDATE `accidente` 
+		             SET `archivo3`='$nnombre' 
+		             WHERE `id_accidente`='$id_accidente'";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Accidentes.php');					
+			      </script>"; 
+		}
+  
+	}
+
+	 function Archivo4($form_data){
+        $fields = array_keys($form_data);
+        $id_accidente = $_POST['id_accidente'];
+		$id_edificio = $_POST['id_edificio'];
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/pdf/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+         $consulta = "UPDATE `accidente` 
+		             SET `archivo4`='$nnombre' 
+		             WHERE `id_accidente`='$id_accidente'";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Accidentes.php');					
+			      </script>"; 
+		}
+  
+	}
+	
+	 function EliminarArchivo1($form_data){
+        $fields = array_keys($form_data);
+        $id_accidente = $_POST['id_accidente'];
+		$id_edificio = $_POST['id_edificio'];
+		 
+ 
+         $consulta = "UPDATE `accidente` 
+		             SET `archivo1`= NULL 
+		             WHERE `id_accidente`='$id_accidente'";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('Accidentes.php');					
+			      </script>"; 
+		}
+  
+	}
+ function EliminarArchivo2($form_data){
+        $fields = array_keys($form_data);
+        $id_accidente = $_POST['id_accidente'];
+		$id_edificio = $_POST['id_edificio'];
+		 
+ 
+         $consulta = "UPDATE `accidente` 
+		             SET `archivo2`= NULL 
+		             WHERE `id_accidente`='$id_accidente'";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('Accidentes.php');					
+			      </script>"; 
+		}
+  
+	}
+ function EliminarArchivo3($form_data){
+        $fields = array_keys($form_data);
+        $id_accidente = $_POST['id_accidente'];
+		$id_edificio = $_POST['id_edificio'];
+		 
+ 
+         $consulta = "UPDATE `accidente` 
+		             SET `archivo3`= NULL 
+		             WHERE `id_accidente`='$id_accidente'";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('Accidentes.php');					
+			      </script>"; 
+		}
+  
 	} 
-	 
-	 
+ function EliminarArchivo4($form_data){
+        $fields = array_keys($form_data);
+        $id_accidente = $_POST['id_accidente'];
+		$id_edificio = $_POST['id_edificio'];
+		 
+ 
+         $consulta = "UPDATE `accidente`  
+		             SET `archivo4`= NULL 
+		             WHERE `id_accidente`='$id_accidente'";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('Accidentes.php');					
+			      </script>"; 
+		}
+  
+	}
+ 
+ 
+ 
  
     public function cerrarBD(){
 		$this->con->close();
@@ -983,7 +1437,7 @@
  
  }
 
- 
+  
  
  class GuardarExtintor{
  
@@ -1001,18 +1455,54 @@
 	
     function NuevoExtintor($form_data){
         $fields = array_keys($form_data);
-		
 		$nombre = htmlentities($_POST['nombre']);
 		$fecha_carga =htmlentities($_POST['fecha_carga']);
 		$fecha_venc =htmlentities($_POST['fecha_venc']);
         $ubicacion =htmlentities($_POST['ubicacion']);
         $estado =htmlentities($_POST['estado']);	
         $id_piso =htmlentities($_POST['id_piso']);
-   
-        $consulta = "INSERT INTO `extintor` (`id_extintor`,`nombre`,`fecha_carga`,
+        $fechacarga = strtotime(date($fecha_carga));
+        $fechavenc = strtotime(date($fecha_venc));
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+	
+        if($fechacarga > $fechavenc){ 
+	        echo "<script>
+					alert('Error: fecha de vencimiento anterior a fecha de carga'); 			 	
+			      </script>"; 
+	    }else 
+        if(strlen(trim($nombre))>1){
+
+	
+	   
+	    if($nombre_archivo==null){ 
+              $consulta = "INSERT INTO `extintor` (`id_extintor`,`nombre`,`fecha_carga`,
 		`fecha_venc`,`ubicacion`,`estado`,`id_piso`)
 		VALUES (NULL,'$nombre','$fecha_carga','$fecha_venc',
 		'$ubicacion','$estado','$id_piso');";
+ 
+		}else{
+		    $consulta = "INSERT INTO `extintor` (`id_extintor`,`nombre`,`fecha_carga`,
+		`fecha_venc`,`ubicacion`,`estado`,`imagen`,`id_piso`)
+		VALUES (NULL,'$nombre','$fecha_carga','$fecha_venc',
+		'$ubicacion','$estado','$nnombre','$id_piso');";
+		}
+ 
+ 
+ 
  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
@@ -1027,7 +1517,11 @@
                     window.location.replace('Extintores.php');					
 			      </script>"; 
 		}
-	
+    }else{
+		echo "<script>
+					alert('el nombre es inválido'); 				
+			      </script>"; 
+	}
 	}
 	
 	
@@ -1041,12 +1535,51 @@
         $ubicacion = htmlentities($_POST['ubicacion']);
         $estado = htmlentities($_POST['estado']);
         $id_piso = htmlentities($_POST['id_piso']);
-
-        $consulta = "UPDATE `extintor` SET `nombre`='$nombre',
+        $fechacarga = strtotime(date($fecha_carga));
+        $fechavenc = strtotime(date($fecha_venc));
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+		
+		
+		
+		
+		
+		if($fechacarga > $fechavenc){ 
+	        echo "<script>
+					alert('Error: fecha de vencimiento anterior a fecha de carga'); 			 	
+			      </script>"; 
+	    }else 
+        if(strlen(trim($nombre))>1){
+			
+			
+		if($nombre_archivo==null){ 	
+                $consulta = "UPDATE `extintor` SET `nombre`='$nombre',
 		`fecha_carga`='$fecha_carga',`fecha_venc`='$fecha_venc',
 		`ubicacion`='$ubicacion',`estado`='$estado',
 	    `id_piso`='$id_piso'
 		WHERE `id_extintor`='$id_extintor'"; 
+		}else{
+		        $consulta = "UPDATE `extintor` SET `nombre`='$nombre',
+		`fecha_carga`='$fecha_carga',`fecha_venc`='$fecha_venc',
+		`ubicacion`='$ubicacion',`estado`='$estado',`imagen`='$nnombre',
+	    `id_piso`='$id_piso'
+		WHERE `id_extintor`='$id_extintor'"; 	
+			
+			
+		}
+  
   
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
@@ -1060,6 +1593,11 @@
                     window.location.replace('Extintores.php');					
 			      </script>"; 
 		}
+		}else{
+		echo "<script>
+					alert('el nombre es inválido'); 				
+			      </script>"; 
+	}
 	}
 	
 	
@@ -1118,10 +1656,40 @@
         $ubicacion =htmlentities($_POST['ubicacion']);
         $estado =htmlentities($_POST['estado']);	
         $id_piso =htmlentities($_POST['id_piso']);
- 
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+  
+         if(strlen(trim($nombre))>1){
+			 
+			 
+		if($nombre_archivo==null){ 
+			 
         $consulta = "INSERT INTO `red_humeda` (`id_redhumeda`,`nombre`, 
 	    `ubicacion`,`estado`,`id_piso`)
 		VALUES (NULL,'$nombre','$ubicacion','$estado','$id_piso');";
+ 
+		}else{
+			
+        $consulta = "INSERT INTO `red_humeda` (`id_redhumeda`,`nombre`, 
+	    `ubicacion`,`estado`,`imagen`,`id_piso`)
+		VALUES (NULL,'$nombre','$ubicacion','$estado','$nnombre','$id_piso');";
+ 	
+			
+		}
+ 
+ 
  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
@@ -1135,7 +1703,11 @@
                     window.location.replace('RedHumeda.php');					
 			      </script>"; 
 		}
-	
+		 }else{
+		echo "<script>
+					alert('el nombre es inválido'); 				
+			      </script>"; 
+	}
 	}
  
 	 
@@ -1147,11 +1719,41 @@
         $ubicacion = htmlentities($_POST['ubicacion']);
         $estado = htmlentities($_POST['estado']);
         $id_piso = htmlentities($_POST['id_piso']);
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+		
+		
+		
+         if(strlen(trim($nombre))>1){
+		
 
+
+		if($nombre_archivo==null){
         $consulta = "UPDATE `red_humeda` SET `nombre`='$nombre', 
 		`ubicacion`='$ubicacion',`estado`='$estado',
 	    `id_piso`='$id_piso'
 		WHERE `id_redhumeda`='$id_redhumeda'"; 
+		}else{
+	     $consulta = "UPDATE `red_humeda` SET `nombre`='$nombre', 
+		`ubicacion`='$ubicacion',`estado`='$estado',`imagen`='$nnombre',
+	    `id_piso`='$id_piso'
+		WHERE `id_redhumeda`='$id_redhumeda'"; 
+			
+		}
+  
+  
   
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
@@ -1165,6 +1767,11 @@
                     window.location.replace('RedHumeda.php');					
 			      </script>"; 
 		}
+	}else{
+		echo "<script>
+					alert('el nombre es inválido'); 				
+			      </script>"; 
+	}	
 	}
 	
 		function EliminarRedHumeda($form_data){
@@ -1193,7 +1800,28 @@
 	
 	
 	
-	
+	 function EliminarArchivo1($form_data){
+        $fields = array_keys($form_data);
+        $id_redhumeda = $_POST['id_redhumeda'];
+ 
+         $consulta = "UPDATE `red_humeda` 
+		             SET `imagen`= NULL 
+		             WHERE `id_redhumeda`='$id_redhumeda'";
+  
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('RedHumeda.php'); 					
+			      </script>"; 
+		}
+  
+	}
 	
 	
 	
@@ -1216,6 +1844,8 @@
 	private $estado;
     private $n_departamentos;
     private $n_estudiantes;
+	private $n_docentes;
+    private $n_funcionarios;
     private $porcentaje_hacinamiento;
     private $area_total;	
     private $imagen;
@@ -1231,7 +1861,9 @@
 		$nombre = htmlentities($_POST['nombre']);
 		$estado = htmlentities($_POST['estado']);
 		$n_departamentos = htmlentities($_POST['n_departamentos']);
-		$n_estudiantes = htmlentities($_POST['n_estudiantes']);		
+		$n_estudiantes = htmlentities($_POST['n_estudiantes']);	
+		$n_docentes = htmlentities($_POST['n_docentes']);		
+		$n_funcionarios = htmlentities($_POST['n_funcionarios']);				
 		$porcentaje_hacinamiento = htmlentities($_POST['porcentaje_hacinamiento']);			
 		$area_total = htmlentities($_POST['area_total']);	
 		
@@ -1243,13 +1875,13 @@
 		if($nombre_archivo==null){
         $consulta = "UPDATE `edificio` SET `nombre`='$nombre',
 		`estado`='$estado',`n_departamentos`='$n_departamentos',
-		`n_estudiantes`='$n_estudiantes',`porcentaje_hacinamiento`='$porcentaje_hacinamiento',
+		`n_estudiantes`='$n_estudiantes',`n_docentes`='$n_docentes',`n_funcionarios`='$n_funcionarios',`porcentaje_hacinamiento`='$porcentaje_hacinamiento',
         `area_total`='$area_total'  		
 		WHERE `id_edificio`='$id_edificio'"; 
 		}else{
         $consulta = "UPDATE `edificio` SET `nombre`='$nombre',
 		`estado`='$estado',`n_departamentos`='$n_departamentos',
-		`n_estudiantes`='$n_estudiantes',`porcentaje_hacinamiento`='$porcentaje_hacinamiento',
+		`n_estudiantes`='$n_estudiantes',`n_docentes`='$n_docentes',`n_funcionarios`='$n_funcionarios',`porcentaje_hacinamiento`='$porcentaje_hacinamiento',
         `area_total`='$area_total', `imagen`='$imageData' 		
 		WHERE `id_edificio`='$id_edificio'"; 
 		}
@@ -1350,8 +1982,28 @@
 		}
 	
 	}
-	
-    
+		function EliminarPiso($form_data){ 
+        $fields = array_keys($form_data);
+		
+		$id_piso = $_POST['id_piso'];  
+ 
+        $consulta = "UPDATE `piso` SET `eliminar`='1'
+		WHERE `id_piso`='$id_piso'";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('Principal.php');				
+			      </script>";  
+		}
+ 
+	}
  
     public function cerrarBD(){
 		$this->con->close();
@@ -1468,7 +2120,31 @@
 		}
 	
 	}
+	 function EliminarArea($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_area = $_POST['id_area'];
+ 
+        $consulta = "UPDATE `area_del_edificio` SET `eliminar`='1'
+		WHERE `id_area`='$id_area'";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar'); 
+				  </script>"; 
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                   //  window.location = window.location.pathname;
+                     window.location.replace('Edificio.php');
+                    //location.reload(); 					
+			      </script>"; 
+		}
+		
 	
+	} 
     
  
     public function cerrarBD(){
@@ -1592,6 +2268,34 @@
 	
 	}
 	
+	  function EliminarSalida($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_salida = $_POST['id_salida'];
+ 
+        $consulta = "UPDATE `salida_de_emergencia` SET `eliminar`='1'
+		WHERE `id_salida`='$id_salida'";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar'); 
+				  </script>"; 
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                   //  window.location = window.location.pathname;
+                     window.location.replace('Edificio.php');
+                    //location.reload(); 					
+			      </script>"; 
+		}
+		
+	
+	} 
+	
+	
+	
     
  
     public function cerrarBD(){
@@ -1696,18 +2400,41 @@
 		}
 	
 	}
+	
+	  function EliminarLaboratorio($form_data){
+        $fields = array_keys($form_data); 
+		
+		$id_laboratorio = $_POST['id_laboratorio']; 
+ 
+        $consulta = "UPDATE `laboratorio` SET `eliminar`='1'
+		WHERE `id_laboratorio`='$id_laboratorio'";   
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar'); 
+				  </script>"; 
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                   //  window.location = window.location.pathname;
+                     window.location.replace('Edificio.php');
+                    //location.reload(); 					
+			      </script>"; 
+		}
+ 
+	} 
+ 
 
     public function cerrarBD(){
 		$this->con->close();
 	}
  
  }
-
  
  
- 
- 
-class Grifo{
+ class Grifo{
 	 
     private $id_grifo; 
 	private $nombre; 
@@ -1762,7 +2489,7 @@ class Grifo{
 		}else{
 			echo "<script>
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('MapaPrueba.php');					
+                    window.location.replace('Principal.php');					
 			      </script>"; 
 		}
 	  
@@ -1791,7 +2518,7 @@ class Grifo{
             echo "El tamaño excede el límite establecido";
         }
 			
-			if($nombre_archivo==null){
+			if($nombre_imagen==null){
               $consulta = "UPDATE `grifo` SET `nombre`='$nombre',
 		     `descripcion`='$descripcion' 
 		      WHERE `id_grifo`='$id_grifo'"; 
@@ -1854,6 +2581,299 @@ class Grifo{
  
  }
  
+ class ZonadeSeguridad{
+	 
+    private $id_zonadeseguridad; 
+	private $nombre; 
+	private $posx; 
+	private $posy; 
+	private $descripcion;  	
+	private $id_campus;
+    private $imagen;
+	
+    function __construct($bd){
+		 $this->con = new mysqli('localhost','root','',$bd); 
+	}
+ 
+    function insertar($form_data){
+
+      $fields = array_keys($form_data);
+      $posx = $_POST['posx'];
+	  $posy = $_POST['posy'];
+	  $posx=$posx-63;
+	  $posy = $posy-225;
+ 
+ 
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 20 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+     
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+	    $nombre = htmlentities($_POST['nombre']);
+ 	    $descripcion =htmlentities($_POST['descripcion']);
+   
+ 
+	  $consulta = "INSERT INTO `zonadeseguridad` 
+	  (`id_zonadeseguridad`, `nombre`, `posx`, `posy`, `descripcion`, `id_campus`,imagen)
+	   VALUES (NULL, '$nombre', '$posx', '$posy', '$descripcion', '1','$nnombre');";
+ 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Principal.php');					
+			      </script>"; 
+		}
+	  
+	  
+	  
+	  
+	}		 
+     function Modificar($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_zonadeseguridad = $_POST['id_zonadeseguridad'];
+		$nombre = htmlentities($_POST['nombre']);
+		$descripcion =htmlentities($_POST['descripcion']);
+
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=5000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        echo "Archivo subido satisfactoriamente";
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+			
+			if($nombre_imagen==null){
+              $consulta = "UPDATE `zonadeseguridad` SET `nombre`='$nombre',
+		     `descripcion`='$descripcion' 
+		      WHERE `id_zonadeseguridad`='$id_zonadeseguridad'"; 
+			}else{ 
+			 $consulta = "UPDATE `zonadeseguridad` SET `nombre`='$nombre',
+		     `descripcion`='$descripcion',`imagen`='$nnombre'  
+		      WHERE `id_zonadeseguridad`='$id_zonadeseguridad'"; 	
+				
+			}
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('NZonadeSeguridad.php');					
+			      </script>"; 
+		}           
+ 
+	 }
+	 
+	 
+	 function Eliminar($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_zonadeseguridad = $_POST['id_zonadeseguridad'];
+ 
+        $consulta = "UPDATE `id_zonadeseguridad` SET `eliminar`='1'
+		WHERE `id_zonadeseguridad`='$id_zonadeseguridad'"; 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('NZonadeSeguridad.php');					
+			      </script>"; 
+		}
+		
+	
+	}
+	 
+	 
+	 
+	 
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+ 
+ class ZonadeEvacuacion{
+	 
+    private $id_zonadeevacuacion; 
+	private $nombre; 
+	private $posx; 
+	private $posy; 
+	private $descripcion;  	
+	private $id_campus;
+    private $imagen;
+	
+    function __construct($bd){
+		 $this->con = new mysqli('localhost','root','',$bd); 
+	}
+ 
+    function insertar($form_data){
+
+      $fields = array_keys($form_data);
+      $posx = $_POST['posx'];
+	  $posy = $_POST['posy'];
+	  $posx=$posx-63;
+	  $posy = $posy-225;
+ 
+ 
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 20 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+     
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+	    $nombre = htmlentities($_POST['nombre']);
+ 	    $descripcion =htmlentities($_POST['descripcion']);
+   
+ 
+	  $consulta = "INSERT INTO `zonadeevacuacion` 
+	  (`id_zonadeevacuacion`, `nombre`, `posx`, `posy`, `descripcion`, `id_campus`,imagen)
+	   VALUES (NULL, '$nombre', '$posx', '$posy', '$descripcion', '1','$nnombre');";
+ 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Principal.php');					
+			      </script>"; 
+		}
+	  
+	  
+	  
+	  
+	}		 
+     function Modificar($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_zonadeevacuacion = $_POST['id_zonadeevacuacion'];
+		$nombre = htmlentities($_POST['nombre']);
+		$descripcion =htmlentities($_POST['descripcion']);
+
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=5000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/imagenes/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        echo "Archivo subido satisfactoriamente";
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+			
+			if($nombre_imagen==null){
+              $consulta = "UPDATE `zonadeevacuacion` SET `nombre`='$nombre',
+		     `descripcion`='$descripcion' 
+		      WHERE `id_zonadeevacuacion`='$id_zonadeevacuacion'"; 
+			}else{
+			 $consulta = "UPDATE `zonadeevacuacion` SET `nombre`='$nombre',
+		     `descripcion`='$descripcion',`imagen`='$nnombre'  
+		      WHERE `id_zonadeevacuacion`='$id_zonadeevacuacion'"; 	
+				
+			}
+		 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('NZonadeEvacuacion.php');					
+			      </script>"; 
+		}           
+ 
+	 }
+	 
+	 
+	 function Eliminar($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_zonadeevacuacion = $_POST['id_zonadeevacuacion'];
+ 
+        $consulta = "UPDATE `zonadeevacuacion` SET `eliminar`='1'
+		WHERE `id_zonadeevacuacion`='$id_zonadeevacuacion'"; 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+					 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('NZonadeEvacuacion.php');					
+			      </script>"; 
+		}
+		
+	
+	}
+	 
+	 
+	 
+	 
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
  
  
  

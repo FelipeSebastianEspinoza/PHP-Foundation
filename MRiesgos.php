@@ -30,30 +30,7 @@
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+                <?php include 'Top-Bar.php'; ?> 
  
             </br>
             <div class="row column">
@@ -73,7 +50,7 @@
     <tr>
       <th width="200">Nombre</th>
       <th width="100">Icono</th>
-	  <th width="400">Descripción</th>
+	  <th width="400">Descripción (Opcional)</th>
       <th width="150">Modificar</th>
     </tr>
   </thead> 
@@ -109,13 +86,11 @@
  
 	   ?><embed class="thumbnail" src="imagenes\<?php
       echo $row["icono"] ; 
-	  ?>" type="image/png" /><?php
-	   
-	   
-	   
-	   
-	   echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 
-	  echo '</td>';
+	  ?>" type="image/png" /> 
+ 
+	 <?php 
+	 echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >';
+	 echo '</td>';
 	  
 	  
 	  echo '<td>' ;
@@ -177,8 +152,7 @@ if(isset($_POST['submitmodificarriesgo'])){
  
     $campos = array("id_riesgo"=> $_POST['id_riesgo'] ,
 	"nombre"=>$_POST['nombre'],
-	"descripcion"=>$_POST['descripcion'],
-	"imagen"=>$_POST['ARCHIVO']); 
+	"descripcion"=>$_POST['descripcion']); 
  
     $nuevo = new GuardarRiesgo("tesis"); 
     $nuevo->ModificarRiesgo($campos);

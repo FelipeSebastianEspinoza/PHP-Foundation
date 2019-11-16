@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario'])){
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <title>Extintores</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -39,95 +39,42 @@ if (!isset($_SESSION['usuario'])){
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
-              
-<insertar>
-<div class="titulo_boton">
-  <a style='cursor: pointer;' onClick="muestra_extintor('nuevoextintor')" title="" class="success button">Añadir Extintor</a>
-</div>
-
-<div id="nuevoextintor">
-  <table>
-  <thead>
-    <tr>
-      <th width="150">Seleccione el edificio en el cual está el extintor</th>
-      <th width="100">Seleccione el piso en el cual se encuentra</th>
-    </tr>
-  </thead>
-  <tbody>  
-    <tr>
-	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
-	<?php 
-		    $conn = mysqli_connect("localhost","root","","tesis");
-			$result = mysqli_query($conn, 'SELECT id_edificio,nombre
-			                               FROM edificio ;');
-			 				   
-		         echo' <tr><td><select class="form-control form-control-sm" id="lista1" name="id_edificio">';
-                    while($row=mysqli_fetch_assoc($result)) { 
-                        echo "<option value='$row[id_edificio]'>$row[nombre]</option>";  
-				    } 
-                echo'</td></select>';
-			 ?>
-			 <td><div id="select2lista"></div></td> </tr>
-			<table>
-  <thead>
-    <tr>
-      <th width="150">Nombre</th>
-      <th width="100">Fecha de Carga</th>
-      <th width="100">Fecha de Vencimiento</th>
-      <th width="600">Ubicación</th>
-      <th width="150">Estado</th>
-    </tr>
-  </thead>
-  <tbody>  
-    <tr>
-	 <input  type="hidden" id="id_piso" name="id_piso" class="form-control"   Required > 
-    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre del riesgo" Required ></td>
-    <td><input type="date" id="inputFechaCarga" name="fecha_carga" class="form-control"  Required ></td>
-    <td><input type="date" id="inputFechaVenc" name="fecha_venc" class="form-control"  Required ></td>
-	<td><textarea  type="text" id="inputUbicacion" rows="5" cols="55"name="ubicacion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
-	<td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="Escriba el estado" Required ></td>
-    <td><button onclick="TomarIdPiso()" class="success button" type="submit" name="submitextintor"  >Registrar</button></td>
-    </form>
-    </tr>
-  </tbody>
-</table>
-</div>
+            
  
-<insertar>
- 			 
-  <table>
+ 	 
+  <table id="example">
   <thead>
     <tr>
-      <th width="200">Nombre</th>
-	  <th width="200">Fecha de Carga</th>
-	  <th width="200">Fecha Vencimiento</th>
-	  <th width="300">Ubicación</th>
-	  <th width="300">Edificio</th>
-	  <th width="200">Estado</th>
-	  <th width="50">Modificar</th>
-	  <th width="50">Eliminar</th>
+      <th>Nombre</th>
+	  <th>Fecha de Carga</th>
+	  <th>Fecha Vencimiento</th>
+	  <th>Ubicación</th>
+	  <th>Edificio</th>
+	  <th>Estado</th>
+      <th>Imagen</th>
+	  <th>Modificar</th>
+	  <th>Eliminar</th>
     </tr>
   </thead> 
   <tbody>
  
   <?php  
 			$conn = mysqli_connect("localhost","root","","tesis");
-			$result = mysqli_query($conn, 'SELECT x.id_extintor,x.nombre,x.fecha_carga,x.fecha_venc,x.ubicacion,x.estado,x.id_piso,
+			$result = mysqli_query($conn, 'SELECT x.id_extintor,x.nombre,x.fecha_carga,x.fecha_venc,x.ubicacion,x.estado,x.id_piso,x.imagen,
 			                                      e.id_edificio,e.nombre AS nombre2,p.id_piso,p.id_edificio
 									  	   FROM extintor x,edificio e,piso p
 										   WHERE x.id_piso=p.id_piso 
-										   AND eliminar!="1"
+										   AND x.eliminar!="1"
 										   AND  p.id_edificio=e.id_edificio 
 										   ;');
  						   
 										   
 		    while($row = mysqli_fetch_array($result)){
   
- echo'<form action="MExtintores.php" method="post">';	 
- echo '<input type="hidden" name="id_extintor" value='.$row["id_extintor"].' />'; 
+  
       echo '<tr>';
  
-	  echo '<td>' ;
+	  echo '<td>' ; 
 	  echo  utf8_encode($row["nombre"]);
       echo '</td>';
 	  echo '<td>' ;
@@ -146,17 +93,46 @@ if (!isset($_SESSION['usuario'])){
 	  echo '<td>' ;
 	  echo  utf8_encode($row["nombre2"]);
       echo '</td>';
+	  
+	  
 	  echo '<td>' ;
-	  echo  utf8_encode($row["estado"]);
+	  if($row["estado"]=="pendiente"||$row["estado"]=="Pendiente"){
+        echo '<font color="red">'; 
+		 echo  utf8_encode($row["estado"]);	   
+	    echo '</font> ' ;
+	  }else{
+		 echo  utf8_encode($row["estado"]);	   
+	  }
       echo '</td>';
 	   
-	  echo '<td>' ;
-	   if(isset($_SESSION['usuario'])){ 
-     echo'<input type="submit" class="success button"value="Modificar"></input>';
-	   }
-      echo '</td>';
-      echo'</form>';
+ ?>	
+        <td>
+		<?php    
+ 		if(!empty($row["imagen"])){
+		?>	
+		<a href="javascript:void(0);" NAME="Error Handling"  title="Imagen" onClick=window.open("imagenes/<?php echo $row["imagen"] ;?>","Ratting","width=450,height=450,left=400,top=100,toolbar=0,status=0,");><img src="img/imagen.png" alt="Archivo" border="0"style="width:30px;height:30px; "/></a>
+		<?php	
+		}else{
+        ?> 
+        <button type="" name="X"><img src="img/sincarpeta.png" alt="" style="width:30px;height:30px; "></button>
+        <?php
+		} 
+		?>
+		</td>
+	    <?php
+     
+   
  
+ 
+  echo'<form class="formulario" action="MExtintores.php" method="post" id="usrform" enctype="multipart/form-data">';
+  echo '<input type="hidden" name="id_extintor" value='.$row["id_extintor"].' />';
+  echo '<td>' ;    
+  
+  ?>  
+  <button  class="success button" type="submit" name="modificarextintor">Modificar</button> 
+  <?php
+  echo '</td>' ;
+  echo'</form>';
  
   echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
   echo '<input type="hidden" name="id_extintor" value='.$row["id_extintor"].' />';
@@ -176,10 +152,66 @@ if (!isset($_SESSION['usuario'])){
  
                 </div>
                 </div>
-          </div>
+				<insertar>
+<div class="titulo_boton">
+  <a style='cursor: pointer;' onClick="muestra_extintor('nuevoextintor')" title="" class="success button">Añadir Extintor</a>
+</div>
+
+<div id="nuevoextintor">
+  <table>
+  <thead>
+    <tr>
+      <th width="150">Seleccione el edificio en el cual está el extintor</th>
+      <th width="100">Seleccione el piso en el cual se encuentra</th>
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	<?php  
+		    $conn = mysqli_connect("localhost","root","","tesis");
+			$result = mysqli_query($conn, 'SELECT id_edificio,nombre
+			                               FROM edificio ;');
+			 				   
+		         echo' <tr><td><select class="form-control form-control-sm" id="lista1" name="id_edificio">';
+                    while($row=mysqli_fetch_assoc($result)) { 
+                        echo "<option value='$row[id_edificio]'>$row[nombre]</option>";  
+				    } 
+                echo'</td></select>';
+			  ?>
+			 <td><div id="select2lista"></div></td> </tr>
+			<table>
+  <thead>
+    <tr>
+      <th width="150">Nombre</th>
+      <th width="100">Fecha de Carga</th>
+      <th width="100">Fecha de Vencimiento</th>
+      <th width="600">Ubicación (Opcional)</th>
+      <th width="150">Estado</th>
+      <th width="150">Imagen (Opcional)</th>  
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+	 <input  type="hidden" id="id_piso" name="id_piso" class="form-control"   Required > 
+    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="Escriba el nombre del riesgo" Required ></td>
+    <td><input type="date" id="inputFechaCarga" name="fecha_carga" class="form-control"  Required ></td>
+    <td><input type="date" id="inputFechaVenc" name="fecha_venc" class="form-control"  Required ></td>
+	<td><textarea  type="text" id="inputUbicacion" rows="5" cols="55"name="ubicacion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
+	<td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="Escriba el estado" Required ></td>
+	 <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen"  > </td>
+    <td><button onclick="TomarIdPiso()" class="success button" type="submit" name="submitextintor"  >Registrar</button></td>
+    </form>
+    </tr>
+  </tbody>
+</table>
+</div>
+ 
+<insertar>
+          </div> 
         </div>
       </div>
- 
+  
 </br>	
 <?php include 'Footer.php'; ?>
  
@@ -189,6 +221,28 @@ if (!isset($_SESSION['usuario'])){
     <script src="js/app.js"></script>
 	
    <link rel="stylesheet" href="css/estilogeneral.css" />
+   
+   
+ 
+   
+   <link rel="stylesheet" type="text/css" href="datatables/DataTables-1.10.20/css/jquery.dataTables.css"/>
+<link rel="stylesheet" type="text/css" href="datatables/Buttons-1.6.1/css/buttons.dataTables.css"/>
+ 
+
+
+<script type="text/javascript" src="datatables/JSZip-2.5.0/jszip.js"></script>
+<script type="text/javascript" src="datatables/pdfmake-0.1.36/pdfmake.js"></script>
+<script type="text/javascript" src="datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="datatables/DataTables-1.10.20/js/jquery.dataTables.js"></script>
+         <script type="text/javascript" src="datatables/Buttons-1.6.1/js/dataTables.buttons.js"></script>
+        <script type="text/javascript" src="datatables/Buttons-1.6.1/js/buttons.html5.js"></script>
+   
+   
+   
+   
+   
+   
+   
    </div> 
   </body>
 </html>
@@ -207,6 +261,7 @@ if(isset($_POST['submitextintor'])){
     $nuevo = new GuardarExtintor("tesis"); 
     $nuevo->NuevoExtintor($campos);
 }
+ 
 if(isset($_POST['eliminarextintor'])){
   
     $campos = array("id_extintor"=>$_POST['id_extintor']); 
@@ -256,4 +311,33 @@ function TomarIdPiso() {
 	
 	
 </script>
+     <script>
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+		
+        // 'pdfHtml5','excelHtml5'
+		{
+           extend: 'pdf',
+           footer: true,
+           exportOptions: {
+                columns: [0,1,2,3,4,5]
+            }
+       },
  
+       {
+           extend: 'excel',
+                      footer: true,
+           exportOptions: {
+                columns: [0,1,2,3,4,5]
+            }
+       }     
+		
+		
+		
+        ]  
+    } );
+} );
+
+</script>

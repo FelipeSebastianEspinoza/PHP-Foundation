@@ -4,7 +4,7 @@ if (!isset($_SESSION['usuario'])){
 	echo "<script>
            window.location.replace('index.php');					
 		  </script>";
-}
+}			 
  ?>
  
  <!doctype html>
@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario'])){
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <title>Accidentes</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -28,7 +28,7 @@ if (!isset($_SESSION['usuario'])){
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-            <?php include 'Top-Bar.php'; ?> 
+            <?php include 'Top-Bar.php'; ?>
  
             </br>
             <div class="row column">
@@ -39,13 +39,183 @@ if (!isset($_SESSION['usuario'])){
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
-<?php
-if(isset($_SESSION['usuario'])){?>
+            
+  
+  
+   <?php  
+			$conn = mysqli_connect("localhost","root","","tesis");
+			$result = mysqli_query($conn, 'SELECT e.id_edificio,e.nombre,a.id_accidente,a.fecha,a.tipo,a.numero, 
+                                       a.persona,a.descripcion,a.id_edificio,a.archivo1,a.archivo2,a.archivo3,a.archivo4				
+						        FROM accidente a,edificio e 
+						        WHERE a.eliminar!="1" 
+								AND e.id_edificio=a.id_edificio   
+										   ;');
+	                             
+										   ?>
+  <div class="row column">
+  <table id="example" class="scroll" >
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Código</th>
+        <th>Nombres_Apellidos</th>
+        <th>Descripción</th>
+        <th>Edificio</th>
+        <th>Diat</th>
+        <th>Invest..</th>
+        <th>InformeP</th>
+        <th>InformeC</th>
+        <th>Modificar</th>
+        <th>Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+	<?php while($row = mysqli_fetch_array($result)){ ?>
+      <tr>
+        <td><?php echo $row["id_accidente"];?></td>
+        <td><?php $date = date_create($row["fecha"]); echo date_format($date,"d/m/Y") ;?></td>
+        <td><?php echo $row["tipo"];?></td>
+        <td><?php echo $row["numero"];?></td>
+        <td><?php echo $row["persona"];?></td>
+        <td style="display:block; width:300px;"><?php echo $row["descripcion"];?></td>
+        <td ><?php echo $row["nombre"];?></td>
+		
+        <td>
+		<?php    
+ 		if(!empty($row["archivo1"])){
+		?>	
+	 	<a href="pdf/<?php  echo $row["archivo1"] ;?>" target="_blank"><img src="img/carpeta.png" alt="Archivo" border="0"style="width:30px;height:30px; "/></a>
+		<?php	
+		}else{
+        ?> 
+        <button type="" name=""><img src="img/sincarpeta.png" alt="" style="width:30px;height:30px; "></button>
+        <?php
+		} 
+		?>
+		</td>
+        <td>
+		<?php    
+ 		if(!empty($row["archivo2"])){
+		?>	
+	 	<a href="pdf/<?php  echo $row["archivo2"] ;?>" target="_blank"><img src="img/carpeta.png" alt="Archivo" border="0" style="width:30px;height:30px; "/></a>
+		<?php	
+		}else{
+        ?> 
+        <button type="" name=""><img src="img/sincarpeta.png" alt="" style="width:30px;height:30px; "></button>
+        <?php
+		} 
+		?>
+		</td>
+        
+		        <td>
+		<?php    
+ 		if(!empty($row["archivo3"])){
+		?>	
+	 	<a href="pdf/<?php  echo $row["archivo3"] ;?>" target="_blank"><img src="img/carpeta.png" alt="Archivo" border="0" style="width:30px;height:30px; "/></a>
+		<?php	
+		}else{
+        ?> 
+        <button type="" name=""><img src="img/sincarpeta.png" alt="" style="width:30px;height:30px; "></button>
+        <?php
+		} 
+		?>
+		</td>
+        
+		        <td>
+		<?php    
+ 		if(!empty($row["archivo4"])){
+		?>	
+	 	<a href="pdf/<?php  echo $row["archivo4"] ;?>" target="_blank"><img src="img/carpeta.png" alt="Archivo" border="0"style="width:30px;height:30px; "/></a>
+		<?php	
+		}else{
+        ?> 
+        <button type="" name=""><img src="img/sincarpeta.png" alt="" style="width:30px;height:30px; "></button>
+        <?php
+		} 
+		?>
+		</td>
+        
+		
+ 
+		<td>
+		<?php 
+		
+		echo '<form class="formulario" action="Maccidentes.php" method="post" id="usrform" enctype="multipart/form-data">';
+        echo '<input type="hidden" name="id_accidente" value='.$row["id_accidente"].' />';
+        echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />';
+   
+        ?>  
+        <button  class="success button" type="submit" name="modificaraccidente">Modificar</button> 
+        <?php
+ 
+        echo '</form>';
+
+		?>
+		</td>
+        <td>
+		<?php
+		
+		    echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+            echo '<input type="hidden" name="id_accidente" value='.$row["id_accidente"].' />';
+            echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />';
+            ?>  
+            <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminaraccidente">Eliminar</button> 
+            <?php
+            echo'</form>';
+		?>
+		</td>
+      </tr>
+	<?php }?>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+  
+  
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+                </div>
+                </div>
+				
+<insertar>
 <div class="titulo_boton">
   <a style='cursor: pointer;' onClick="accidentes_ocultos('nuevoaccidente')" title="" class="success button">Añadir Accidente</a>
 </div>
 <?php
-}
+ 
 ?>
 <div id="nuevoaccidente">
   <table>
@@ -53,7 +223,7 @@ if(isset($_SESSION['usuario'])){?>
     <tr>
       <th width="100">Fecha</th>
       <th width="100">Tipo</th>
-      <th width="100">Número</th>
+      <th width="100">Código</th>
 	  <th width="300">Persona</th>
       <th width="600">Descripción</th>
 	  <th width="200">Edificio</th>
@@ -93,161 +263,50 @@ if(isset($_SESSION['usuario'])){?>
 		?>
 	
 	
-	
-	    
-	<td><button class="success button" type="submit" name="submitaccidente">Registrar</button></td>
-      
-    </form>
-    </tr>
+<td><button class="success button" type="submit" name="submitaccidente">Registrar</button></td>
+	    </tr>
+     
+	</form>
   </tbody>
 </table>
-</div>        
- 
-  <div class="top-bar">
-<div class="row">
- 
- <form action="" method="post">
-<ul class="menu">
-<li><h5 style="padding-top:5px;padding-right:40px;padding-left:40px;">Buscar</h5></li>
-<li><input type="search" name="Busqueda" id="myInput" placeholder="Nombre"></li>
-<li><h5 style="padding-top:5px;padding-right:40px;padding-left:40px;">
-Haga click en el nombre de la columna para ordenar de manera ascendente o descendente
+</div> 
 
-</h5></li>
- 
-</form>
-</ul>
-</div>
-</div>
- 
-				<?php
- 
-		 	     
-				$link = mysql_connect('localhost', 'root','');
-	            if(!$link){
-		         echo'No Se Pudo Establecer Conexion Con El Servidor: '. mysql_error();
-	            }else{
-		         $base = mysql_select_db('tesis',$link);
-		            if(!$base){
-			        echo'No se encontro la base de datos: '.mysql_error();
-		            }else{	 
-		            	$sql = 'SELECT e.id_edificio,e.nombre,a.id_accidente,a.fecha,a.tipo,a.numero,
-                                       a.persona,a.descripcion,a.id_edificio						
-						        FROM accidente a,edificio e 
-						        WHERE a.eliminar!="1" 
-								AND e.id_edificio=a.id_edificio ';
-								
-	            		$ejecuta_sentencia = mysql_query($sql);
-	         		if(!$ejecuta_sentencia){
-		        		echo'hay un error en la sentencia de sql: '.$sql;
-		        	}else{
-	 
-			        	$row = mysql_fetch_array($ejecuta_sentencia);
-		         	}
-		         }
-	            }
-	            if($row['id_accidente']==""){
-				 echo "<script>
-					alert('No existen resultados de busqueda');
-				  </script>";   
-			  }
-			  
-			  
-			  
-			echo '<table>';
-  echo '<thead>';
-    echo '<tr>';
-      echo '<th style="cursor: pointer;" width="50">ID</th>';
-      echo '<th style="cursor: pointer;" width="50">Fecha</th>';
-      echo '<th style="cursor: pointer;" width="50">Tipo</th>';
-      echo '<th style="cursor: pointer;" width="50">Numero</th>';
-	  echo '<th style="cursor: pointer;" width="100">Persona</th>';
-      echo '<th style="cursor: pointer;" width="250">Descripción</th>';
-      echo '<th style="cursor: pointer;" width="50">Edificio</th>';
-	  echo '<th style="cursor: pointer;" width="50">Modificar</th>';
-	  echo '<th style="cursor: pointer;" width="50">Eliminar</th>';
-    echo '</tr>';
- echo ' </thead>';
-    echo '<tbody id="myTable"> ';
-      echo '<tr>  '; 
-					for($i=0; $i<$row; $i++){
-            echo'<form action="MAccidentes.php" method="post">';
-             echo '<td>'.$row["id_accidente"].'</td>';
-			 $date=date_create($row["fecha"]);
-			 echo '<td>';
-	        echo date_format($date,"d/m/Y") ;
-			echo '</td>';
-               echo '<td>'.$row["tipo"].'</td>';
-              echo '<td>'.$row["numero"].'</td>';
-	          echo '<td>' ;
-	          echo  utf8_encode($row["persona"]);
-	          echo '</td>';
-	           echo '<td>';
-	          echo  utf8_encode($row["descripcion"]);
-                echo '</td>';
-			  echo '<td>';
-	          echo  utf8_encode($row["nombre"]);
-                echo '</td>';
-				 echo '<td>';
-				echo'<input type="submit" class="success button"value="Modificar"></input>';
-           		echo '</td>';
-				echo'<input type="hidden" name="id_accidente" value='.$row["id_accidente"].'>';
-				echo'<input type="hidden" name="id_edificio" value='.$row["id_edificio"].'>';
-			    echo'</form>';
- 
-				
-				echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
-                echo '<input type="hidden" name="id_accidente" value='.$row["id_accidente"].' />';
-                echo '<td>' ;    
- 
-                ?>  
-                <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminaraccidentes">Eliminar</button> 
-                <?php 
-				echo '</td>' ;
-                echo'</form>';
-                echo '</tr>';
- 
-						$row = mysql_fetch_array($ejecuta_sentencia);
- 						
-					}
-            echo ' </tbody>';
-            echo '</table>';
-         
-       		
-		  				
- 
- 
-				?>
- 
- 
-          </div>
+
+<insertar>
+          </div> 
         </div>
       </div>
-        </div>
-      </div>
- 
+  
 </br>	
- <?php include 'Footer.php';	?>
-
+<?php include 'Footer.php'; ?>
+ 
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
 	
    <link rel="stylesheet" href="css/estilogeneral.css" />
-   </div> 
    
+   
+ 
+   
+ <link rel="stylesheet" type="text/css" href="datatables/DataTables-1.10.20/css/jquery.dataTables.css"/>
+<link rel="stylesheet" type="text/css" href="datatables/Buttons-1.6.1/css/buttons.dataTables.css"/>
+ 
+<script type="text/javascript" src="datatables/JSZip-2.5.0/jszip.js"></script>
+<script type="text/javascript" src="datatables/pdfmake-0.1.36/pdfmake.js"></script>
+<script type="text/javascript" src="datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="datatables/DataTables-1.10.20/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="datatables/Buttons-1.6.1/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="datatables/Buttons-1.6.1/js/buttons.html5.js"></script>
+ 
+   </div> 
   </body>
 </html>
 
 <?php
-  
  
- 
- 
-
 include("guardar.php");
-
  
 if(isset($_POST['submitaccidente'])){
  
@@ -261,7 +320,7 @@ if(isset($_POST['submitaccidente'])){
     $nuevo = new GuardarAccidente("tesis"); 
     $nuevo->NuevoAccidente($campos);
 }
-if(isset($_POST['eliminaraccidentes'])){
+if(isset($_POST['eliminaraccidente'])){
   
     $campos = array("id_accidente"=>$_POST['id_accidente']); 
   
@@ -270,32 +329,7 @@ if(isset($_POST['eliminaraccidentes'])){
 }
  
 ?>
- <script>
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-
-$('th').click(function(){
-    var table = $(this).parents('table').eq(0)
-    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-    this.asc = !this.asc
-    if (!this.asc){rows = rows.reverse()}
-    for (var i = 0; i < rows.length; i++){table.append(rows[i])}
-})
-function comparer(index) {
-    return function(a, b) {
-        var valA = getCellValue(a, index), valB = getCellValue(b, index)
-        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-    }
-}
-function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
-</script>
- <script>
+ <script type="text/javascript">
  
  
 function accidentes_ocultos(id){
@@ -309,4 +343,34 @@ window.onload = function(){
 accidentes_ocultos('nuevoaccidente');
  
 }
+</script>
+     <script>
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+		
+        // 'pdfHtml5','excelHtml5'
+		{
+           extend: 'pdf',
+           footer: true,
+           exportOptions: {
+                columns: [0,1,2,3,4,5,6]
+            }
+       },
+ 
+       {
+           extend: 'excel',
+                      footer: true,
+           exportOptions: {
+                columns: [0,1,2,3,4,5,6]
+            }
+       }     
+		
+		
+		
+        ]  
+    } );
+} );
+
 </script>

@@ -34,25 +34,7 @@
         <div class="large-12 cell">
 
  
- <div class="top-bar" id="realEstateMenu">
-<div class="top-bar-left">
-            <ul class="menu menu-hover-lines">
-            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Products</a></li>
-            <li><a href="#">Contact</a></li>
-            </ul>
-</div>
-<div class="top-bar-right">
-<ul class="menu">
-<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>          
-<li><a href="#">My Account</a></li>
-<li><a class="button">Login</a></li>
-</ul>
-</div>
-</div>
+  <?php include 'Top-Bar.php'; ?> 
  
 		
  

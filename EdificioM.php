@@ -52,33 +52,7 @@
         <div class="large-12 cell">
 
  
-  <div class="top-bar" id="realEstateMenu">
-                <div class="top-bar-left">
-                    <ul class="menu menu-hover-lines">
-                        <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Services</a></li>
-                        <li><a href="#">Products</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="top-bar-right">
-                    <ul class="menu">
-					    <?php 
-
-						if(isset($_SESSION['usuario'])){
-							echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						    echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-						}else{
-							echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-						}
-	
-						?>
-
-                    </ul>
-                </div>
-            </div>
+    <?php include 'Top-Bar.php'; ?> 
 
 
 
@@ -142,7 +116,17 @@
                 echo'<th style="font-weight: normal;"width="150">';
                  echo'<input type="text" id="area_total" name="area_total" class="form-control" value="'.$row["area_total"].'" >';
 				echo'</th>';
+				
+			    echo'<tr>';
+                echo'<th width="50">N°Docentes: </th>';
+                echo'<th style="font-weight: normal;"width="150">';
+                 echo'<input type="text" id="n_docentes" name="n_docentes" class="form-control" value="'.$row["n_docentes"].'"  >';
+				echo'</th>';
  
+                echo'<th width="50">N°Funcionarios: </th>';
+                echo'<th style="font-weight: normal;"width="150">';
+                 echo'<input type="text" id="n_funcionarios" name="n_funcionarios" class="form-control" value="'.$row["n_funcionarios"].'" >';
+				echo'</th>';
                
 				if(isset($_SESSION['usuario'])){
 					
@@ -397,7 +381,7 @@ if(isset($_POST['submitedificio'])){
  
     $campos = array("id_edificio"=> $_POST['id_edificio'] , 
 	"nombre"=>$_POST['nombre'],"estado"=>$_POST['estado'],
-	"n_departamentos"=>$_POST['n_departamentos'],"n_estudiantes"=>$_POST['n_estudiantes'],
+	"n_departamentos"=>$_POST['n_departamentos'],"n_docentes"=>$_POST['n_docentes'],"n_funcionarios"=>$_POST['n_funcionarios'],"n_estudiantes"=>$_POST['n_estudiantes'],
 	"porcentaje_hacinamiento"=>$_POST['porcentaje_hacinamiento'],"area_total"=>$_POST['area_total'],
 	"imagen"=>$_POST['ARCHIVO']); 
  

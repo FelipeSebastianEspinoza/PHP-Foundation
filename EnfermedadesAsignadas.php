@@ -4,8 +4,7 @@ if (!isset($_SESSION['usuario'])){
 	echo "<script>
            window.location.replace('index.php');					
 		  </script>";
-}
- 
+}			 
  ?>
  
  <!doctype html>
@@ -14,7 +13,7 @@ if (!isset($_SESSION['usuario'])){
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <title>Reportes de Enfermedades</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -29,30 +28,7 @@ if (!isset($_SESSION['usuario'])){
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+            <?php include 'Top-Bar.php'; ?>
  
             </br>
             <div class="row column">
@@ -63,14 +39,136 @@ if (!isset($_SESSION['usuario'])){
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
-<?php
-if(isset($_SESSION['usuario'])){?>
+            
+ 
+ 	 
+  <table id="example">
+  <thead>
+    <tr>
+      <th>ID</th>
+	  <th>Fecha reporte</th>
+	  <th>Fecha término</th>
+	  <th>Periodo de reposo hasta hoy</th>
+	  <th>Enfermedad</th>
+	  <th>Persona</th>
+	  <th>Edificio</th>
+	  <th>Modificar</th>
+	  <th>Eliminar</th>
+    </tr>
+  </thead> 
+  <tbody>
+ 
+  <?php  
+			$conn = mysqli_connect("localhost","root","","tesis");
+			$result = mysqli_query($conn, 'SELECT r.fecha_termino,r.id_enfermedad_reportada,r.fecha,r.persona,r.id_edificio,r.id_enfermedad,
+                                           n.id_enfermedad,n.nombre AS nombre2,
+                                           e.id_edificio,e.nombre									   
+						                   FROM enfermedades_profesionales n,
+								           enfermedades_reportadas r,
+								           edificio e 
+						                   WHERE n.id_enfermedad=r.id_enfermedad  
+								           AND r.eliminar!="1"
+							               AND r.id_edificio=e.id_edificio
+										   ;');
+ 						   
+										   
+		    while($row = mysqli_fetch_array($result)){
+ 
+            echo '<tr>';
+            echo '<td>'.$row["id_enfermedad_reportada"].'</td>';
+		    $date=date_create($row["fecha"]);
+		    echo '<td>';
+	        echo date_format($date,"d/m/Y") ;
+			echo '</td>';
+            $date2=date_create($row["fecha_termino"]);
+			$date2=date_format($date2,"d/m/Y");
+			if( $date2  =='30/11/-0001'){
+            echo '<td>';
+	        echo "Vigente";
+			echo '</td>';
+			echo '<td>';
+			$datetime1 = new DateTime($row["fecha"]);
+			$hoyfecha=getdate();
+			$datetime2=strftime( "%Y-%m-%d", time() );
+            $datetime2 = new DateTime($datetime2);
+			$interval = $datetime1->diff($datetime2);
+            echo floor(($interval->format('%a') / 7)) . ' semanas '
+            . ($interval->format('%a') % 7) . ' días';
+			echo '</td>';
+			}else if($row["fecha_termino"]!=null){
+		    echo '<td>';
+			echo  $date2  ;
+			echo '</td>';
+			echo '<td>';
+	        echo "Terminado";
+			echo '</td>';	
+			}else {
+		    echo '<td>';
+	        echo "Vigente";
+			echo '</td>';
+			echo '<td>';
+			$datetime1 = new DateTime($row["fecha"]);
+			$hoyfecha=getdate();
+			$datetime2=strftime( "%Y-%m-%d", time() );
+            $datetime2 = new DateTime($datetime2);
+			$interval = $datetime1->diff($datetime2);
+            echo floor(($interval->format('%a') / 7)) . ' semanas '
+            . ($interval->format('%a') % 7) . ' días';
+			echo '</td>';
+			}
+			echo '<td>' ;
+			  if($row["nombre2"]=="Sin Asignar"){
+		    echo '<font color="red">';
+		    echo utf8_encode($row["nombre2"]);
+		    echo '</font>';
+	        }else{
+	         echo  utf8_encode($row["nombre2"]);  
+	        } 
+	        echo '</td>';
+	        echo '<td>' ;
+	        echo  utf8_encode($row["persona"]);
+	        echo '</td>';
+	        echo '<td>';
+	        echo  utf8_encode($row["nombre"]);
+            echo '</td>';
+			
+			
+			
+			
+ 
+  echo'<form class="formulario" action="MEnfermedadesAsignadas.php" method="post" id="usrform" enctype="multipart/form-data">';
+  echo '<input type="hidden" name="id_enfermedad_reportada" value='.$row["id_enfermedad_reportada"].' />';
+  echo '<td>' ;    
+  ?>  
+  <button  class="success button" type="submit" name="modificarextintor">Modificar</button> 
+  <?php
+  echo '</td>' ;
+  echo'</form>';
+ 
+  echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+  echo '<input type="hidden" name="id_enfermedad_reportada" value='.$row["id_enfermedad_reportada"].' />';
+  echo '<td>' ;    
+  
+  ?>  
+  <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminarenfermedades">Eliminar</button> 
+  <?php
+  echo '</td>' ;
+  echo'</form>';
+  echo '</tr>';
+				}
+		  ?>
+ 
+  </tbody>
+</table>
+ 
+                </div>
+                </div>
+<insertar>
+
 <div class="titulo_boton">
   <a style='cursor: pointer;' onClick="accidentes_ocultos('nuevoaccidente')" title="" class="success button">Añadir Reporte</a>
 </div>
-<?php
-}
-?>
+ 
 <div id="nuevoaccidente">
   <table>
   <thead>
@@ -139,149 +237,51 @@ if(isset($_SESSION['usuario'])){?>
 </table>
 </div>        
  
-  <div class="top-bar">
-<div class="row">
  
- <form action="" method="post">
-<ul class="menu">
-<li><h5 style="padding-top:5px;padding-right:40px;padding-left:40px;">Buscar</h5></li>
-<li><input type="search" name="Busqueda" id="myInput" placeholder="Nombre"></li>
-<li><h5 style="padding-top:5px;padding-right:40px;padding-left:40px;">
-Haga click en el nombre de la columna para ordenar de manera ascendente o descendente
+<insertar>
 
-</h5></li>
- 
-</form>
-</ul>
-</div>
-</div>
- 
-				<?php
- 
-		 	     
-				$link = mysql_connect('localhost', 'root','');
-	            if(!$link){
-		         echo'No Se Pudo Establecer Conexion Con El Servidor: '. mysql_error();
-	            }else{
-		         $base = mysql_select_db('tesis',$link);
-		            if(!$base){
-			        echo'No se encontro la base de datos: '.mysql_error();
-		            }else{	 
-		            	$sql = "SELECT r.id_enfermedad_reportada,r.fecha,r.persona,r.id_edificio,r.id_enfermedad,
-                                       n.id_enfermedad,n.nombre AS nombre2,
-                                       e.id_edificio,e.nombre									   
-						        FROM enfermedades_profesionales n,
-								     enfermedades_reportadas r,
-								     edificio e 
-						        WHERE n.id_enfermedad=r.id_enfermedad  
-								AND r.eliminar!='1'
-								AND r.id_edificio=e.id_edificio  ";
-								
-	            		$ejecuta_sentencia = mysql_query($sql);
-	         		if(!$ejecuta_sentencia){
-		        		echo'hay un error en la sentencia de sql: '.$sql;
-		        	}else{
-	 
-			        	$row = mysql_fetch_array($ejecuta_sentencia);
-		         	}
-		         }
-	            }
-	            if($row['id_enfermedad_reportada']==""){
-				 echo "<script>
-					alert('No existen resultados de busqueda');
-				  </script>";   
-			  }
- 
-			echo '<table>';
-  echo '<thead>';
-    echo '<tr>';
-      echo '<th style="cursor: pointer;" width="50">ID</th>';
-      echo '<th style="cursor: pointer;" width="50">Fecha</th>';
-      echo '<th style="cursor: pointer;" width="50">Enfermedad</th>';
-      echo '<th style="cursor: pointer;" width="50">Persona</th>';
-	  echo '<th style="cursor: pointer;" width="100">Edificio</th>';
-	  echo '<th style="cursor: pointer;" width="100">Modificar</th>';
-	  echo '<th style="cursor: pointer;" width="100">Eliminar</th>';
-    echo '</tr>';
- echo ' </thead>';
-    echo '<tbody id="myTable"> ';
-      echo '<tr>  '; 
-					for($i=0; $i<$row; $i++){
-            echo'<form action="MEnfermedadesAsignadas.php" method="post">';
-             echo '<td>'.$row["id_enfermedad_reportada"].'</td>';
-			 $date=date_create($row["fecha"]);
-			 echo '<td>';
-	        echo date_format($date,"d/m/Y") ;
-			echo '</td>';
-	        echo '<td>' ;
-			  if($row["nombre2"]=="Sin Asignar"){
-		    echo '<font color="red">';
-		    echo utf8_encode($row["nombre2"]);
-		    echo '</font>';
-	        }else{
-	         echo  utf8_encode($row["nombre2"]);  
-	        } 
-	          echo '</td>';
-	          echo '<td>' ;
-	          echo  utf8_encode($row["persona"]);
-	          echo '</td>';
-	           echo '<td>';
-	          echo  utf8_encode($row["nombre"]);
-                echo '</td>';
- 
-				 echo '<td>';
-				echo'<input type="submit" class="success button"value="Modificar"></input>';
-           		echo '</td>';
-				echo'<input type="hidden" name="id_enfermedad_reportada" value='.$row["id_enfermedad_reportada"].'>';
-				echo'<input type="hidden" name="id_edificio" value='.$row["id_edificio"].'>';
- 
-                echo'</form>';
-				
-				 echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
-                 echo '<input type="hidden" name="id_enfermedad_reportada" value='.$row["id_enfermedad_reportada"].' />';
-                echo '<td>' ;
-                ?>  
-                <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminarenfermedades">Eliminar</button> 
-                <?php 
-                echo '</td>' ;
-				echo '</tr>';
-				echo'</form>';
-						$row = mysql_fetch_array($ejecuta_sentencia);
- 						
-					}
-            echo ' </tbody>';
-            echo '</table>';
- 
- 
-				?>
- 
- 
-          </div>
+
+          </div> 
         </div>
       </div>
-        </div>
-      </div>
- 
+  
 </br>	
- <?php include 'Footer.php';	?>
-
+<?php include 'Footer.php'; ?>
+ 
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
 	
    <link rel="stylesheet" href="css/estilogeneral.css" />
-   </div> 
    
+   
+ 
+   
+   <link rel="stylesheet" type="text/css" href="datatables/DataTables-1.10.20/css/jquery.dataTables.css"/>
+<link rel="stylesheet" type="text/css" href="datatables/Buttons-1.6.1/css/buttons.dataTables.css"/>
+ 
+
+
+<script type="text/javascript" src="datatables/JSZip-2.5.0/jszip.js"></script>
+<script type="text/javascript" src="datatables/pdfmake-0.1.36/pdfmake.js"></script>
+<script type="text/javascript" src="datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="datatables/DataTables-1.10.20/js/jquery.dataTables.js"></script>
+         <script type="text/javascript" src="datatables/Buttons-1.6.1/js/dataTables.buttons.js"></script>
+        <script type="text/javascript" src="datatables/Buttons-1.6.1/js/buttons.html5.js"></script>
+   
+   
+   
+   
+   
+   
+   
+   </div> 
   </body>
 </html>
 
 <?php
-  
  
- 
- 
-
 include("guardar.php");
 
  
@@ -305,33 +305,7 @@ if(isset($_POST['eliminarenfermedades'])){
 }
  
 ?>
- <script>
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-
-$('th').click(function(){
-    var table = $(this).parents('table').eq(0)
-    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-    this.asc = !this.asc
-    if (!this.asc){rows = rows.reverse()}
-    for (var i = 0; i < rows.length; i++){table.append(rows[i])}
-})
-function comparer(index) {
-    return function(a, b) {
-        var valA = getCellValue(a, index), valB = getCellValue(b, index)
-        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-    }
-}
-function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
-</script>
- <script>
- 
+ <script type="text/javascript">
  
 function accidentes_ocultos(id){
 if (document.getElementById){  
@@ -344,4 +318,34 @@ window.onload = function(){
 accidentes_ocultos('nuevoaccidente');
  
 }
+</script>
+     <script>
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+		
+        // 'pdfHtml5','excelHtml5'
+		{
+           extend: 'pdf',
+           footer: true,
+           exportOptions: {
+                columns: [0,1,2,3,4,5,6]
+            }
+       },
+ 
+       {
+           extend: 'excel',
+                      footer: true,
+           exportOptions: {
+                columns: [0,1,2,3,4,5,6]
+            }
+       }     
+		
+		
+		
+        ]  
+    } );
+} );
+
 </script>

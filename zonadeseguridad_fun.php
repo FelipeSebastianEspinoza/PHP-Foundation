@@ -39,25 +39,32 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
     <script src="js/zoom-marker.min.js"></script>
  	 <script src="js/jquery.mousewheel.min.js"></script>  
     <script>
- 
+	 
         $('#viewArea').zoomMarker({
             src: "img/mapa.jpg",
             rate: 0.2,
             markers: [
 			 
-		 
-				<?php foreach ($link->query('SELECT * from zonadeseguridad') as $row){ ?> 
-				{ 
-                    src: "img/marker1.png",
-                    x: <?php echo $row['posx'] ?>,
-                    y: <?php echo $row['posy'] ?>,
+				<?php foreach ($link->query('SELECT * from zonadeseguridad') as $row){  
+				if($row['eliminar']==0){ 	
+				?> 
+				{    
+                    src: "img/marker4.png",
+                    x: <?php echo $row['posx']?>,
+                    y: <?php echo $row['posy']?>,
                     size: 35,
+
                     click: function(obj){
-                        alert('esto es una prueba <?php echo $row['nombre'] ?>');
+ 
+                    document.getElementById("edGantes").style.display = "block";
+                    document.getElementById('edGantes').src='imagenes/<?php echo $row['imagen']?> ';
+                    document.getElementById('grifoTitulo').innerHTML = "<?php echo $row['nombre']?> "; 
+                    document.getElementById('grifoParrafo').innerHTML = "<?php echo $row['descripcion']?>"; 
+ 
                     }		
                 },
  <?php
-  }
+				}	 }
 ?>
             ]
         })

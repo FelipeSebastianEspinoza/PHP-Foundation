@@ -66,33 +66,7 @@ $id_edificio=$_POST['id_edificio'];
 
  
  
-  <div class="top-bar" id="realEstateMenu">
-                <div class="top-bar-left">
-                    <ul class="menu menu-hover-lines">
-                        <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Services</a></li>
-                        <li><a href="#">Products</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="top-bar-right">
-                    <ul class="menu">
-					    <?php 
-
-						if(isset($_SESSION['usuario'])){
-							echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						    echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-						}else{
-							echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-						}
-	
-						?>
-
-                    </ul>
-                </div>
-            </div>
+   <?php include 'Top-Bar.php'; ?> 
  
  
  </br>
@@ -197,12 +171,24 @@ echo '<input type=image class="thumbnail"
 		  <?php
 		  
 		  
-			 echo'<input type="submit" class="success button"value="Modificar"></input>';
+		    echo'<input type="submit" class="success button"value="Modificar"></input>';
+            echo'</form>';	
+		 		
+ 
+		    echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+            echo'<input type="hidden" name="id_piso" value="<?php echo $id_piso ?>"/>';
+	        echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
+            echo '<input type="hidden" name="id_laboratorio" value='.$row["id_laboratorio"].' />';
+            ?>  
+            <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="submitquitarlaboratorio">Eliminar</button> 
+            <?php 
+            echo '</form>';		
+				
+				}else{
+					  echo '</form>';	
 				}
-				
- echo'</form>';			
-				
-}									   
+ 				
+}				 					   
 ?>
  
  
@@ -256,5 +242,16 @@ echo '<input type=image class="thumbnail"
    </div> 
   </body>
 </html>
-
+ 
+<?php
+include("guardar.php");
+if(isset($_POST['submitquitarlaboratorio'])){
+	
+ $campos = array("id_edificio"=>$_POST['id_edificio'],
+ "id_laboratorio"=>$_POST['id_laboratorio']);  
+ 
+ $nuevo = new GuardarLaboratorio("tesis"); 
+ $nuevo->EliminarLaboratorio($campos);  
+}
+?>
  

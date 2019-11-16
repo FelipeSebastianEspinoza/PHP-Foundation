@@ -32,11 +32,7 @@ $id_edificio=$_POST['id_edificio'];
     $id_edificio = $_POST["id_edificio"];
 	$id_area = $_POST["id_area"]; 
 }
-  
-  
-  
-  
-  
+ 
  ?>
 
 <!doctype html>
@@ -51,10 +47,7 @@ $id_edificio=$_POST['id_edificio'];
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
   </head>
  
- 
  <body>
- 
- 
  
   <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
  
@@ -62,54 +55,12 @@ $id_edificio=$_POST['id_edificio'];
 
   </div>
  
-
-
   <div class="off-canvas-content" data-off-canvas-content>
      <div class="grid-x grid-padding-x">
         <div class="large-12 cell">
-
  
+  <?php include 'Top-Bar.php'; ?>
  
-  <div class="top-bar" id="realEstateMenu">
-                <div class="top-bar-left">
-                    <ul class="menu menu-hover-lines">
-                        <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Services</a></li>
-                        <li><a href="#">Products</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="top-bar-right">
-                    <ul class="menu">
-					    <?php 
-
-						if(isset($_SESSION['usuario'])){
-							echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						    echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-						}else{
-							echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-						}
-	
-						?>
-
-                    </ul>
-                </div>
-            </div>
-
- 
-	
-
-
-
-  
-
-
-
- 
-
-	
  
  </br>
  <div class="row column">
@@ -172,6 +123,8 @@ echo '<input type=image class="thumbnail"
 				echo'<th><th>'; 
 				echo'</th></th>'; 
 				echo'</tr>'; 
+				}else{
+				echo'<th></th><th></th>';	
 				}
                 echo'<tr>';
                 echo'<th width="50">Departamento: </th>';
@@ -207,51 +160,42 @@ echo '<input type=image class="thumbnail"
 		  <input type="hidden" name="id_area" value="<?php echo $id_area ?>"/>
 		  <?php
 		  
-		  
-			 echo'<input type="submit" class="success button"value="Modificar"></input>';
+          echo'<input type="submit" class="success button"value="Modificar"></input>';
+          echo'</form>';	 
+			 
+      echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+      echo'<input type="hidden" name="id_piso" value="<?php echo $id_piso ?>"/>';
+	  echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
+      echo '<input type="hidden" name="id_area" value='.$row["id_area"].' />';
+    ?>  
+    <button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="submitquitararea">Eliminar</button> 
+    <?php 
+      echo '</form>';
+ 
+				}else{
+					   echo '</form>';
 				}
-				
- echo'</form>';			
-				
+ 		
 }									   
 ?>
- 
-
-
-
+  
 </br>
  <form action="piso.php" method="post"> 
  <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>
  <input type="hidden" name="id_piso" value="<?php echo $id_piso ?>"/>
+  <input type="hidden" name="id_area" value="<?php echo $id_area ?>"/>
  <input type="submit" class="button primary"value="Volver a Áreas"></input>
  </form>
 </div>
 
 </div>
-
-
-			
-			 
  
           </div>
-		  
-		
-		  
-		  
-		  
-  
+ 
         </div>
       </div>
 	 
-	 
  
-  
- 
- 
-	
-
-	
-	
 	
 </br>	
 <?php include 'Footer.php'; ?>
@@ -265,5 +209,15 @@ echo '<input type=image class="thumbnail"
    </div> 
   </body>
 </html>
-
+<?php
+include("guardar.php");
+if(isset($_POST['submitquitararea'])){
+	
+ $campos = array("id_edificio"=>$_POST['id_edificio'],
+ "id_area"=>$_POST['id_area']);  
+ 
+ $nuevo = new GuardarArea("tesis"); 
+ $nuevo->EliminarArea($campos);  
+}
+?>
  

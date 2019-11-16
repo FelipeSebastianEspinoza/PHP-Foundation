@@ -30,35 +30,12 @@
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-                <div class="top-bar" id="realEstateMenu">
-                    <div class="top-bar-left">
-                        <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="MapaPrueba.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="top-bar-right">
-                        <ul class="menu">
-			 		        <?php 
-			         			if(isset($_SESSION['usuario'])){
-						        	echo '<li><a class="button secondary" data-open="offCanvasLeftOverlap">Menú</a></li>';          
-						            echo '<li><a href="cerrar_session.php">Cerrar Sesión</a></li>';
-					        	}else{
-					        		echo '<li><a href="index.php" class="button secondary">Login</a></li>';
-					        	}
-						    ?>
-                        </ul>
-                    </div>
-                </div>
+                 <?php include 'Top-Bar.php'; ?> 
  
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Exintores</h4>
+                <h4 style="margin: 0;" class="text-center">Red Húmeda</h4>
                 <hr>
             </div>
             <div class="callout">
@@ -73,7 +50,9 @@
     <tr>
       <th width="300">Nombre</th>
 	  <th width="300">Estado</th>
-      <th width="600">Ubicación</th>
+	  <th width="300">Imagen (Opcional)</th>
+ 
+      <th width="600">Ubicación (Opcional)</th>
       <th width="100"></th>
     </tr>
   </thead> 
@@ -106,6 +85,20 @@
 	  echo '<input type="text" id="estado"name="estado" class="form-control" value="'.$row["estado"].'" Required>';
 	  echo '</td>';
   
+  
+      	  echo '<td>' ;
+ if(!empty($row["imagen"])){
+	   ?><embed class="thumbnail" src="imagenes\<?php
+      echo $row["imagen"] ; 
+	  ?>" type="image/png" /> 
+ 
+	 <?php 
+ }
+	 echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >';
+	 echo '</td>';
+	 
+ 
+  
 	  echo '<td>' ;
 	   ?> <textarea name="ubicacion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['ubicacion']) ?></textarea><?php
       echo '</td>';
@@ -123,7 +116,6 @@
 				}
 		  ?>
  
-   
   </tbody>
 </table>
 
@@ -178,6 +170,10 @@
 		  
                 </div>
                 </div>
+				      <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <input type="hidden" name="id_redhumeda" value="<?php echo $id_redhumeda ?>"/> 		
+       <td><button onclick="return confirm('Quitar Imagen?');"class="alert button" type="submit" name="eliminararchivo1">Quitar imagen</button> </td>
+ </form>
           </div>
         </div>
       </div>
@@ -220,7 +216,13 @@ if(isset($_POST['modificarredhumeda'])){
     $nuevo = new GuardarRedHumeda("tesis");  
     $nuevo->ModificarRedHumeda($campos);
 }
+ if(isset($_POST['eliminararchivo1'])){
  
+    $campos = array("id_redhumeda"=> $_POST['id_redhumeda']);  
+ 
+    $nuevo = new GuardarRedHumeda("tesis"); 
+    $nuevo->EliminarArchivo1($campos);
+}
 ?>
  
  <script>
