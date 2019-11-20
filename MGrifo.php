@@ -1,12 +1,11 @@
   <?php  
- 
  session_start();
- if (!isset($_SESSION['usuario'])){
+if (!isset($_SESSION['usuario'])){
 	echo "<script>
            window.location.replace('index.php');					
-		  </script>"; 
-}
- $id_grifo = $_POST["id_grifo"]; 				 
+		  </script>";
+}			
+ $id_grifo = $_POST["id_grifo"]; 			 
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -14,7 +13,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <title>Modificar Grifo</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -30,7 +29,7 @@
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-            <?php include 'Top-Bar.php'; ?>
+               <?php include 'Top-Bar.php'; ?> 
  
             </br>
             <div class="row column">
@@ -41,23 +40,35 @@
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
-              
  
+ 
+          
+		  
+		  <div class="row">
 
-				 
-  <table>
-  <thead>
-    <tr>
-      <th width="400">Imagen</th>
-      <th width="400">Nombre</th>
-	  <th width="400">Descripción</th>
-      <th width="300">Modificar</th>
-    </tr>
-  </thead> 
+</div>
+  <div class="row">
+<div class="grid-x grid-margin-x expanded callout">
+  <div class="large-8 cell">
+<!--
+<img id="mapa" src="img/mapa.jpg" class="img-fluid" alt="..."
+style="width:678px;
+       height:100%;
+	   max-height:1012px;
+	   min-height:506px;">
+ -->
+<img id="mapa" src="img/mapa.jpg" class="img-fluid" alt="..."
+style="width:678px;
+       height:506px;
+	    position: relative; ">
  
-  <tbody>
+  
+
  
-  <?php  
+</div>
+<div class="large-3 cell">
+
+ <?php  
  
 			$conn = mysqli_connect("localhost","root","","tesis");
 
@@ -68,56 +79,74 @@
  
  	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
       echo '<input type="hidden" name="id_grifo" value='.$row["id_grifo"].' />'; 
-	  echo '<tr>';
  
-	  echo '<td>' ;
-	   ?><embed class="thumbnail" src="imagenes\<?php
+			 
+	  ?>
+
+<p>"De click en el mapa en el lugar que quiera añadir un grifo"</p>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	<table style="width:400px">
+   <tr>
+   <td>
+    Nombre: <input type="text" id="nombre" name="nombre" value="<?php echo $row["nombre"]; ?>"Required>
+   </td>
+  </tr> <tr>
+   <td>
+    Estado: <input type="text" id="estado" name="estado" value="<?php echo $row["estado"]; ?>"Required>
+   </td>
+ </tr>
+ <tr>
+  <td>
+   Cordenadas X: <input type="text" id="posx" name="posx" value="<?php echo $row["posx"]; ?>"Required> 
+   Cordenadas Y:  <input type="text" id="posy" name="posy" value="<?php echo $row["posy"]; ?>"Required> 
+    <?php  
+	$posicionoriginalx= $row["posx"];
+	$posicionoriginaly= $row["posy"];
+	
+	?>
+	</td>
+	
+  </tr>
+ 
+  <tr>
+	 <td> 
+	   <embed class="thumbnail" src="imagenes\<?php
       echo $row["imagen"] ; 
 	  ?>" type="image/png" /><?php
 	   echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 
-	  echo '</td>';
-	  
-	  echo '<td>' ;
-	  echo '<input type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required>';
-	  echo '</td>';
-	  
-	  echo '<td>' ;
-	   ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
-      echo '</td>';
-	   
-	  echo '<td>' ;
-	   if(isset($_SESSION['usuario'])){ 
-      echo'<button class="success button" type="submit" name="submitmodificargrifo">Registrar</button> ';
-	   }
-      echo '</td>';
- 
-      echo '</tr>';
-      echo '</form>';
-				}
-		  ?>
- 
-   
-  </tbody>
-</table>
+	  echo '</td>'; ?>
+ </tr>
+   </table>
+   </br>			
+Seleccione la resolución de su pantalla si la posición que eligio previamente no coincidió con lo seleccionado al momento de crear el grifo.
+ <select name="resolucion">
 
-
+<option value='R0' selected>Predeterminado</option> 
+<option value='R1'>1024x768->100%</option>
+<option value='R2'>1366x768->125%</option>
  
-          
+        
+</select>
+
+ <center></br><button class="success button" type="submit" name="submitmodificargrifo">Registrar</button>
+			<?php  }?>
+ 
+    </form>
+ 
+</div> 
+ </div>    
+  
+ 
+</div>
+		  
+ 
                 </div>
                 </div>
           </div>
         </div>
       </div>
 	 
-	 
  
-  
- 
- 
-	
-
-	
-	
 	
 </br>	
 <?php include 'Footer.php'; ?>
@@ -133,19 +162,42 @@
   </body>
 </html>
 
-<?php
+<script>
+$(document).ready(function () {//puede comentarse las lineas o poniendo el tamaño 0 si no se quiere que aparezca un punto
+      $(mapa).click(function (ev) {
+          mouseX = ev.pageX;
+          mouseY = ev.pageY
+          console.log(mouseX + ' ' + mouseY);  
+          document.getElementById("posx").value = mouseX;
+		  document.getElementById("posy").value = mouseY;
+          var color = '#000000';
+          var size = '5px';
+          $("body").append(
+          $('<div></div>')
+              .css('position', 'absolute')
+              .css('top', mouseY + 'px')
+              .css('left', mouseX + 'px')
+              .css('width', size)
+              .css('height', size)
+              .css('background-color', color));
+      });
+  });
+</script>
+
+ <?php
 include("guardar.php");
  
 if(isset($_POST['submitmodificargrifo'])){
  
-    $campos = array("id_grifo"=> $_POST['id_grifo'] ,
-	"nombre"=>$_POST['nombre'],
-	"descripcion"=>$_POST['descripcion'],
-	"imagen"=>$_POST['ARCHIVO']); 
+	$campos = array("id_grifo"=> $_POST['id_grifo'] ,
+	"nombre"=>$_POST['nombre'],"estado"=>$_POST['estado'],
+	"posx"=>$_POST['posx'],"posy"=>$_POST['posy'],
+	"descripcion"=>$_POST['descripcion'],"resolucion"=>$_POST['resolucion'] 
+	 );  
+	
+ 
  
     $nuevo = new Grifo("tesis"); 
     $nuevo->ModificarGrifo($campos);
 }
 ?>
- 
- 

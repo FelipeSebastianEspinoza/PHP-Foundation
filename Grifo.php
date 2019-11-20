@@ -49,14 +49,24 @@ if (!isset($_SESSION['usuario'])){
   <div class="row">
 <div class="grid-x grid-margin-x expanded callout">
   <div class="large-8 cell">
+<!--
 <img id="mapa" src="img/mapa.jpg" class="img-fluid" alt="..."
 style="width:678px;
        height:100%;
 	   max-height:1012px;
 	   min-height:506px;">
-
+ -->
+<img id="mapa" src="img/mapa.jpg" class="img-fluid" alt="..."
+style="width:678px;
+       height:506px;
+	    position: relative; ">
  
-
+ 
+ 
+ 
+ 
+ 
+ 
 
 
 
@@ -70,6 +80,9 @@ style="width:678px;
     Nombre: <input type="text" id="nombre" name="nombre" value=""Required>
  </tr>
  <tr>
+    Estado: <input type="text" id="estado" name="estado" value=""Required>
+ </tr>
+ <tr>
     <th>Cordenadas X: <input type="text" id="posx" name="posx" value=""Required></th>
      <th>Cordenadas Y:  <input type="text" id="posy" name="posy" value=""Required></th>
   </tr>
@@ -78,6 +91,7 @@ style="width:678px;
 	Breve descripci√≥n (Opcional): <input type="text" id="descripcion" name="descripcion" value="">
  </tr>
    </table>
+  
  <center></br><button class="success button" type="submit" name="submit">Registrar</button>
   
     </form>
@@ -144,6 +158,7 @@ $(document).ready(function () {//puede comentarse las lineas o poniendo el tama√
    "posx"=>$_POST['posx'],
    "posy"=>$_POST['posy'],
 	"nombre"=>$_POST['nombre'],
+	"estado"=>$_POST['estado'],
 	"descripcion"=>$_POST['descripcion']); 
  
    $a = new Grifo("tesis"); 

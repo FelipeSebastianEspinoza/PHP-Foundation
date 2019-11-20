@@ -142,7 +142,7 @@ if (!isset($_SESSION['usuario'])){
 		<td>
 		<?php 
 		
-		echo '<form class="formulario" action="Maccidentes.php" method="post" id="usrform" enctype="multipart/form-data">';
+		echo '<form class="formulario" action="MAccidentes.php" method="post" id="usrform" enctype="multipart/form-data">';
         echo '<input type="hidden" name="id_accidente" value='.$row["id_accidente"].' />';
         echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />';
    
@@ -357,7 +357,7 @@ $(document).ready(function() {
            exportOptions: {
                 columns: [0,1,2,3,4,5,6]
             }
-       },
+       }, 
  
        {
            extend: 'excel',

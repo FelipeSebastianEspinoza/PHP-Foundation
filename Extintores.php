@@ -96,13 +96,9 @@ if (!isset($_SESSION['usuario'])){
 	  
 	  
 	  echo '<td>' ;
-	  if($row["estado"]=="pendiente"||$row["estado"]=="Pendiente"){
-        echo '<font color="red">'; 
+	  
 		 echo  utf8_encode($row["estado"]);	   
-	    echo '</font> ' ;
-	  }else{
-		 echo  utf8_encode($row["estado"]);	   
-	  }
+	 
       echo '</td>';
 	   
  ?>	

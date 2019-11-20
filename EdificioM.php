@@ -127,6 +127,7 @@
                 echo'<th style="font-weight: normal;"width="150">';
                  echo'<input type="text" id="n_funcionarios" name="n_funcionarios" class="form-control" value="'.$row["n_funcionarios"].'" >';
 				echo'</th>';
+				
                
 				if(isset($_SESSION['usuario'])){
 					
@@ -136,6 +137,12 @@
                  echo'<input type="text" id="porcentaje_hacinamiento" name="porcentaje_hacinamiento" class="form-control" value="'.$row["porcentaje_hacinamiento"].'"  >';
 				echo'</th>';
                 
+			 
+                echo'<th width="50">Elementos Entregados:</th>';
+                echo'<th style="font-weight: normal;"width="150">';
+                 echo'<input type="text" id="nombre" name="elementos_entregados" class="form-control" value="'.$row["elementos_entregados"].'" >';
+				echo'</th>';
+				 echo'</tr>';
  
 				}
               
@@ -163,15 +170,15 @@
 </div>
  	  
 		  
-<ul class="tabs" data-active-collapse="true" data-tabs id="collapsing-tabs">
-  <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Protocolos</a></li>
+<!--<ul class="tabs" data-active-collapse="true" data-tabs id="collapsing-tabs">
+<!-- <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Protocolos</a></li>-->
 <!--<li class="tabs-title"><a href="#panel2c">Riesgos</a></li>-->
 <!--<li class="tabs-title"><a href="#panel3c">Accidentes</a></li>-->
 <!--<li class="tabs-title"><a href="#panel4c">Extintores</a></li>-->
 <!--<li class="tabs-title"><a href="#panel5c">Redes Humedas</a></li>-->
 </ul>
 
-<div class="tabs-content" data-tabs-content="collapsing-tabs">
+<!--<div class="tabs-content" data-tabs-content="collapsing-tabs">
   <div class="tabs-panel is-active" id="panel1c">
   <table>
   <thead>
@@ -187,7 +194,7 @@
     </tr>
   </thead>
   <tbody>
-  <?php  
+  <?php /* 
    echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
 			$conn = mysqli_connect("localhost","root","","tesis");
 
@@ -222,8 +229,8 @@
       echo '</tr>';
 	  echo '</form>';
 				}
-		  ?>
- 
+		  */?>
+ -->
   </tbody>
 </table>
  
@@ -382,7 +389,9 @@ if(isset($_POST['submitedificio'])){
     $campos = array("id_edificio"=> $_POST['id_edificio'] , 
 	"nombre"=>$_POST['nombre'],"estado"=>$_POST['estado'],
 	"n_departamentos"=>$_POST['n_departamentos'],"n_docentes"=>$_POST['n_docentes'],"n_funcionarios"=>$_POST['n_funcionarios'],"n_estudiantes"=>$_POST['n_estudiantes'],
-	"porcentaje_hacinamiento"=>$_POST['porcentaje_hacinamiento'],"area_total"=>$_POST['area_total'],
+	"porcentaje_hacinamiento"=>$_POST['porcentaje_hacinamiento'],
+	"elementos_entregados"=>$_POST['elementos_entregados'],
+	"area_total"=>$_POST['area_total'],
 	"imagen"=>$_POST['ARCHIVO']); 
  
     $nuevo = new GuardarEdificio("tesis"); 

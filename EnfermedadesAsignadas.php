@@ -52,6 +52,7 @@ if (!isset($_SESSION['usuario'])){
 	  <th>Enfermedad</th>
 	  <th>Persona</th>
 	  <th>Edificio</th>
+	  <th>Historial y Archivos</th>
 	  <th>Modificar</th>
 	  <th>Eliminar</th>
     </tr>
@@ -133,6 +134,14 @@ if (!isset($_SESSION['usuario'])){
             echo '</td>';
 			
 			
+		    echo '<td>' ;
+		    echo '<form class="formulario" action="ArchivosReportesEnfermedad.php" method="post" id="usrform" enctype="multipart/form-data">';
+            echo '<input type="hidden" name="id_enfermedad_reportada" value='.$row["id_enfermedad_reportada"].' />';
+	    	?>	
+		    <center><button   type="submit" name=""><img src="img/carpeta2.png" alt="Archivo" border="0"style="width:45px;height:45px; cursor:pointer;"/></button>  </center>
+		    <?php	
+            echo '</form>';
+            echo '</td>';
 			
 			
  
@@ -326,6 +335,7 @@ $(document).ready(function() {
         buttons: [
 		
         // 'pdfHtml5','excelHtml5'
+		
 		{
            extend: 'pdf',
            footer: true,
@@ -334,6 +344,7 @@ $(document).ready(function() {
             }
        },
  
+ 
        {
            extend: 'excel',
                       footer: true,
@@ -341,8 +352,7 @@ $(document).ready(function() {
                 columns: [0,1,2,3,4,5,6]
             }
        }     
-		
-		
+ 
 		
         ]  
     } );

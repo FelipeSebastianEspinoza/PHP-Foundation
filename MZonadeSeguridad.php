@@ -1,12 +1,11 @@
   <?php  
- 
  session_start();
- if (!isset($_SESSION['usuario'])){
+if (!isset($_SESSION['usuario'])){
 	echo "<script>
            window.location.replace('index.php');					
-		  </script>"; 
-}
- $id_zonadeseguridad = $_POST["id_zonadeseguridad"]; 				 
+		  </script>";
+}			
+ $id_zonadeseguridad = $_POST["id_zonadeseguridad"]; 			 
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -14,12 +13,11 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <title>Modificar Zona de Seguridad</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
   </head>
- 
  
  <body>
     <div class="off-canvas position-left" id="offCanvasLeftOverlap" data-off-canvas data-transition="overlap">
@@ -30,34 +28,34 @@
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
  
-            <?php include 'Top-Bar.php'; ?>
+               <?php include 'Top-Bar.php'; ?> 
  
-            </br>
+            </br> 
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Modificar Grifo</h4>
+                <h4 style="margin: 0;" class="text-center">Modificar Zona de Seguridad</h4>
                 <hr>
             </div>
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
-              
  
+		  <div class="row">
 
-				 
-  <table>
-  <thead>
-    <tr>
-      <th width="400">Imagen</th>
-      <th width="400">Nombre</th>
-	  <th width="400">Descripción</th>
-      <th width="300">Modificar</th>
-    </tr>
-  </thead> 
+</div>
+  <div class="row">
+<div class="grid-x grid-margin-x expanded callout">
+  <div class="large-8 cell">
  
-  <tbody>
+<img id="mapa" src="img/mapa.jpg" class="img-fluid" alt="..."
+style="width:678px;
+       height:506px;
+	    position: relative; ">
  
-  <?php  
+</div>
+<div class="large-3 cell">
+
+ <?php  
  
 			$conn = mysqli_connect("localhost","root","","tesis");
 
@@ -68,56 +66,69 @@
  
  	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
       echo '<input type="hidden" name="id_zonadeseguridad" value='.$row["id_zonadeseguridad"].' />'; 
-	  echo '<tr>';
+  
+	  ?>
+
+<p>"De click en el mapa en el lugar que quiera añadir una zona de seguridad"</p>
+	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	<table style="width:400px">
+   <tr>
+   <td>
+    Nombre: <input type="text" id="nombre" name="nombre" value="<?php echo $row["nombre"]; ?>"Required>
+   </td>
+  </tr>  
+     <tr>
+   <td>
+    Descripción: <input type="text" id="descripcion" name="descripcion" value="<?php echo $row["descripcion"]; ?>"Required>
+   </td>
+  </tr>
+ <tr>
+  <td>
+   Cordenadas X: <input type="text" id="posx" name="posx" value="<?php echo $row["posx"]; ?>"Required> 
+   Cordenadas Y:  <input type="text" id="posy" name="posy" value="<?php echo $row["posy"]; ?>"Required> 
+    </td>
+	
+  </tr>
  
-	  echo '<td>' ;
-	   ?><embed class="thumbnail" src="imagenes\<?php
+  <tr>
+	 <td> 
+	   <embed class="thumbnail" src="imagenes\<?php
       echo $row["imagen"] ; 
 	  ?>" type="image/png" /><?php
 	   echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >'; 
-	  echo '</td>';
-	  
-	  echo '<td>' ;
-	  echo '<input type="text" id="nombre"name="nombre" class="form-control" value="'.$row["nombre"].'" Required>';
-	  echo '</td>';
-	  
-	  echo '<td>' ;
-	   ?> <textarea name="descripcion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea><?php
-      echo '</td>';
-	   
-	  echo '<td>' ;
-	   if(isset($_SESSION['usuario'])){ 
-      echo'<button class="success button" type="submit" name="submitmodificargrifo">Registrar</button> ';
-	   }
-      echo '</td>';
- 
-      echo '</tr>';
-      echo '</form>';
-				}
-		  ?>
- 
-   
-  </tbody>
-</table>
+	  echo '</td>'; ?>
+ </tr>
+   </table>
+   </br>			
+Seleccione la resolución de su pantalla si la posición que eligio previamente no coincidió con lo seleccionado al momento de crear la zona de seguridad.
+ <select name="resolucion">
 
-
+<option value='R0' selected>Predeterminado</option> 
+<option value='R1'>1024x768->100%</option>
+<option value='R2'>1366x768->125%</option>
  
-          
+        
+</select>
+
+ <center></br><button class="success button" type="submit" name="submitmodificargrifo">Registrar</button>
+			<?php  }?>
+ 
+    </form>
+ 
+</div> 
+ </div>    
+  
+ 
+</div>
+		  
+ 
                 </div>
                 </div>
           </div>
         </div>
       </div>
 	 
-	 
  
-  
- 
- 
-	
-
-	
-	
 	
 </br>	
 <?php include 'Footer.php'; ?>
@@ -133,19 +144,40 @@
   </body>
 </html>
 
-<?php
+<script>
+$(document).ready(function () {//puede comentarse las lineas o poniendo el tamaño 0 si no se quiere que aparezca un punto
+      $(mapa).click(function (ev) {
+          mouseX = ev.pageX;
+          mouseY = ev.pageY
+          console.log(mouseX + ' ' + mouseY);  
+          document.getElementById("posx").value = mouseX;
+		  document.getElementById("posy").value = mouseY;
+          var color = '#000000';
+          var size = '5px';
+          $("body").append(
+          $('<div></div>')
+              .css('position', 'absolute')
+              .css('top', mouseY + 'px')
+              .css('left', mouseX + 'px')
+              .css('width', size)
+              .css('height', size)
+              .css('background-color', color));
+      });
+  });
+</script>
+
+ <?php
 include("guardar.php");
  
 if(isset($_POST['submitmodificargrifo'])){
  
     $campos = array("id_zonadeseguridad"=> $_POST['id_zonadeseguridad'] ,
-	"nombre"=>$_POST['nombre'],
-	"descripcion"=>$_POST['descripcion'],
-	"imagen"=>$_POST['ARCHIVO']); 
+	"nombre"=>$_POST['nombre'], 
+	"descripcion"=>$_POST['descripcion'],"resolucion"=>$_POST['resolucion'],
+	"posx"=>$_POST['posx'],"posy"=>$_POST['posy'] 
+	 ); 
  
     $nuevo = new ZonadeSeguridad("tesis"); 
     $nuevo->Modificar($campos);
 }
 ?>
- 
- 

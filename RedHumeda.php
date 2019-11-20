@@ -50,6 +50,8 @@ if (!isset($_SESSION['usuario'])){
 	  <th>Edificio</th>
 	  <th>Ubicación</th>
       <th>Imagen</th>
+      <th>Añadir/Modificar Posición(Opcional)</th>
+	  
       <th width="50">Modificar</th>
       <th width="50">Eliminar</th>
     </tr>
@@ -58,7 +60,7 @@ if (!isset($_SESSION['usuario'])){
  
   <?php  
 			$conn = mysqli_connect("localhost","root","","tesis");
-			$result = mysqli_query($conn, 'SELECT r.id_redhumeda,r.nombre,r.estado,r.id_piso,r.ubicacion,r.imagen,
+			$result = mysqli_query($conn, 'SELECT r.id_redhumeda,r.nombre,r.estado,r.id_piso,r.ubicacion,r.imagen,r.posx,r.posy,
 			                                      p.id_piso,p.id_edificio,
 												  e.id_edificio,e.nombre AS nombre2
 									  	   FROM red_humeda r,piso p,edificio e
@@ -99,6 +101,17 @@ if (!isset($_SESSION['usuario'])){
 		} 
 		?>
 		</td>
+		
+		 <td> 
+		 <form class="formulario" action="AdRedHumeda.php" method="post" id="usrform" enctype="multipart/form-data"> 
+         <input type="hidden" name="id_redhumeda" value='<?php echo $row["id_redhumeda"]?>' /> 
+		 <input type="hidden" name="posx" value='<?php echo $row["posx"]?>' /> 
+		 <input type="hidden" name="posy" value='<?php echo $row["posy"]?>' /> 
+		 <button   type="submit" name=""><img src="img/admapa.png" alt="Archivo" border="0"style="width:30px;height:30px; cursor:pointer;"/></button>   
+         </form> 
+        </td> 
+	  
+	  
 	    <?php
 
             echo '<form class="formulario" action="MRedHumeda.php" method="post" id="usrform" enctype="multipart/form-data">';
@@ -113,6 +126,8 @@ if (!isset($_SESSION['usuario'])){
  
             echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
             echo '<input type="hidden" name="id_redhumeda" value='.$row["id_redhumeda"].' />';
+
+				         
             echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />';
             echo '<td>';
 			

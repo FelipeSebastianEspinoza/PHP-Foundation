@@ -12,7 +12,7 @@ if (!isset($_SESSION['usuario'])){
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <title>Zona de Seguridad</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -33,7 +33,7 @@ if (!isset($_SESSION['usuario'])){
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Añadir Grifo</h4>
+                <h4 style="margin: 0;" class="text-center">Zona de Seguridad</h4>
                 <hr>
             </div>
             <div class="callout">
@@ -49,35 +49,31 @@ if (!isset($_SESSION['usuario'])){
   <div class="row">
 <div class="grid-x grid-margin-x expanded callout">
   <div class="large-8 cell">
+ 
 <img id="mapa" src="img/mapa.jpg" class="img-fluid" alt="..."
 style="width:678px;
-       height:100%;
-	   max-height:1012px;
-	   min-height:506px;">
-
- 
-
-
-
-
+       height:506px;
+	    position: relative; ">
  
 </div>
 <div class="large-3 cell">
-<p>"De click en el mapa en el lugar que quiera añadir un grifo"</p>
+<p>"De click en el mapa en el lugar que quiera añadir una zona de seguridad"</p>
 	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
 	<table>
    <tr>
     Nombre: <input type="text" id="nombre" name="nombre" value=""Required>
  </tr>
+ 
  <tr>
     <th>Cordenadas X: <input type="text" id="posx" name="posx" value=""Required></th>
-     <th>Cordenadas Y:  <input type="text" id="posy" name="posy" value=""Required></th>
+    <th>Cordenadas Y:  <input type="text" id="posy" name="posy" value=""Required></th>
   </tr>
   <tr>
 	Imagen: <input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" Required>  
 	Breve descripción (Opcional): <input type="text" id="descripcion" name="descripcion" value="">
  </tr>
    </table>
+  
  <center></br><button class="success button" type="submit" name="submit">Registrar</button>
   
     </form>
@@ -111,6 +107,25 @@ style="width:678px;
   </body>
 </html>
 
+ <?php
+ 
+ include("guardar.php");
+ if(isset($_POST['submit'])){
+    $valorx = $_POST["posx"];
+    $valory = $_POST["posy"];
+ 
+   $campos = array("id_zonadeseguridad"=> NULL ,
+   "posx"=>$_POST['posx'],
+   "posy"=>$_POST['posy'],
+   "nombre"=>$_POST['nombre'],
+   "descripcion"=>$_POST['descripcion']); 
+ 
+   $a = new ZonadeSeguridad("tesis"); 
+   $a->insertar($campos);
+ 
+ }
+ 
+?>
 <script>
 $(document).ready(function () {//puede comentarse las lineas o poniendo el tamaño 0 si no se quiere que aparezca un punto
       $(mapa).click(function (ev) {
@@ -133,22 +148,4 @@ $(document).ready(function () {//puede comentarse las lineas o poniendo el tama�
   });
 </script>
 
- <?php
  
- include("guardar.php");
- if(isset($_POST['submit'])){
-    $valorx = $_POST["posx"];
-    $valory = $_POST["posy"];
- 
-   $campos = array("id_zonadeseguridad"=> NULL ,
-   "posx"=>$_POST['posx'],
-   "posy"=>$_POST['posy'],
-	"nombre"=>$_POST['nombre'],
-	"descripcion"=>$_POST['descripcion']); 
- 
-   $a = new ZonadeSeguridad("tesis"); 
-   $a->insertar($campos);
- 
- }
- 
-?>

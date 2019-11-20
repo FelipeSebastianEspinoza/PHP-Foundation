@@ -1,5 +1,4 @@
   <?php  
- 
  session_start();
  if (!isset($_SESSION['usuario'])){
 	echo "<script>
@@ -15,7 +14,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <title>Procedimiento</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -42,21 +41,7 @@
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
-              
  
-
-				 
-  <table>
-  <thead>
-    <tr>
-      <th width="300">Reglamento interno</th>
-	  <th width="300">Elementos de protección personal</th>
-      <th width="300">Vestimenta</th>
-	  <th width="300">Herrammientas</th>
-    </tr>
-  </thead> 
- 
-  <tbody>
  
   <?php  
  
@@ -70,40 +55,40 @@
  	  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';	   
       echo '<input type="hidden" name="id_procedimiento" value='.$row["id_procedimiento"].' />'; 
 	  echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />'; 
-	  echo '<tr>';
+			 
 	  ?>
-	 <td> 
-	 <textarea name="reglamento_interno" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['reglamento_interno']) ?></textarea> 
-    </td> 
-     <?php
-	  ?>
-	 <td> 
-	 <textarea name="elementos_de_proteccion_personal" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['elementos_de_proteccion_personal']) ?></textarea> 
-    </td> 
-     <?php
-	  ?>
-	 <td> 
-	 <textarea name="vestimenta" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['vestimenta']) ?></textarea> 
-    </td> 
-     <?php
-	  ?>
-	 <td> 
-	 <textarea name="herramientas" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['herramientas']) ?></textarea> 
-    </td> 
-     <?php
+	 
+  
  
-	  echo '<td>' ;
-	   if(isset($_SESSION['usuario'])){ 
-      echo'<button class="success button" type="submit" name="submitprotocolo">Registrar</button> ';
-	   }
-      echo '</td>';
-      echo '</tr>';
-      echo '</form>';
-				}
-		  ?>
+ <table>
+<thead>
+ <tr>
+  <th>Nombre</th>
+  <th>Archivo (Opcional)</th>
+  <th>Nombre del Archivo (Opcional)</th>
+  <th>Descripción (Opcional)</th>
+  <th width="100">Registrar</th>
+ </tr>
+</thead>
+<tbody>  
+ <tr>
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+ <input type="hidden" name="id_historialyarchivos" value="<?php echo $id_historialyarchivos ?>"/>
+ <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/> 
+
  
-  </tbody>
+ <td><input type="text" id="inputNombre" name="titulo" class="form-control" value="<?php echo utf8_encode($row['titulo']) ?>" Required ></td>
+ <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" > </td>
+ <td><input type="text" id="inputNombreArchivo" name="nombre_de_archivo" class="form-control" value="<?php echo utf8_encode($row['nombre_de_archivo']) ?>"   ></td>
+ <td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción"  Required><?php echo utf8_encode($row['descripcion']) ?></textarea> 	</td>
+ <td><button class="success button" type="submit" name="submitprocedimiento">Registrar</button></td>
+ </form>
+ </tr>
+</tbody>
 </table>
+ 
+ <?php } ?>
+ 
  
                 </div>
                 </div>
@@ -128,11 +113,11 @@
 <?php
 include("guardar.php");
  
-if(isset($_POST['submitprotocolo'])){
+if(isset($_POST['submitprocedimiento'])){
  
-    $campos = array("id_procedimiento"=> $_POST['id_procedimiento'] ,
-	"reglamento_interno"=>$_POST['reglamento_interno'],"elementos_de_proteccion_personal"=>$_POST['elementos_de_proteccion_personal']
-	,"vestimenta"=>$_POST['vestimenta'],"herramientas"=>$_POST['herramientas']
+    $campos = array("id_procedimiento"=> $_POST['id_procedimiento']  
+	 ,"nombre_de_archivo"=>$_POST['nombre_de_archivo']
+	,"titulo"=>$_POST['titulo'],"descripcion"=>$_POST['descripcion']
 	,"id_edificio"=>$_POST['id_edificio'] ); 
  
     $nuevo = new GuardarProcedimiento("tesis"); 

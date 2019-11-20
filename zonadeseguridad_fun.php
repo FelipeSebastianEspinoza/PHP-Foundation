@@ -12,6 +12,8 @@
         img{
             width: 600px;
         }
+ 
+		
     </style>
  
  
@@ -49,7 +51,8 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
 				if($row['eliminar']==0){ 	
 				?> 
 				{    
-                    src: "img/marker4.png",
+                  //  src: "img/marker4.png",
+				    src: "img/marker4.png",
                     x: <?php echo $row['posx']?>,
                     y: <?php echo $row['posy']?>,
                     size: 35,

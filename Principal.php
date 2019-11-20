@@ -1,15 +1,14 @@
    <?php
  session_start();
 
-   
  ?>
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 ">
+    <title>Principal</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -20,9 +19,9 @@
         <?php include 'BarraLateral.php'; ?>
     </div>
  
-  <div class="off-canvas-content" data-off-canvas-content>
+  <div class="off-canvas-content " data-off-canvas-content  >
      <div class="grid-x grid-padding-x">
-        <div class="large-12 cell">
+        <div class="large-12 cell" >
  
         <?php include 'Top-Bar.php'; ?> 
  
@@ -40,20 +39,36 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
 */</script>
  
   <center>
-  <button class="button" onclick="MostrarEdificios()">Protocolos</button>
   <button class="button" onclick="MostrarEdificios()">Edificios</button>
-  <button class="button" onclick="MostrarGrifo()">Grifos</button>
-  <button class="button" onclick="MostrarZonadeEvacuacion()">Zona de Evacuacion</button>
+  
+   <?php if (isset($_SESSION['usuario'])){  ?>
+  <button class="button" onclick="MostrarEdificios2()">Estado de Edificios</button>
+   <?php } ?>
+   
+  <button class="button" onclick="MostrarGrifo()">Grifos y Redes </button>
   <button class="button" onclick="MostrarZonadeSeguridad()">Zona de Seguridad</button>
+  <button href="Mutual.php" class="button" onclick="window.location.href = 'Mutual.php';">Mutual</button>
+  
+  
+<?php
+$conn = mysqli_connect("localhost","root","","tesis");
+$result = mysqli_query($conn, 'SELECT * FROM  plandeemergencia ');
+while($row = mysqli_fetch_array($result)){  
+if(!empty($row["archivo"])){ ?>
+<a href="pdf/<?php  echo $row["archivo"] ;?>" target="_blank"><button class="button">Plan de Emergencia</button></a>
+  
+<?php }} ?>
+  
+  
   </center>
   
   
  
 <div class="grid-x grid-margin-x expanded">
-    <div class="large-6 cell">
+    <div class="large-7 cell">
         <div id="load_tweets"></div>
     </div>
-    <div class="large-2 cell" style="pointer-events:none"></div>
+    <div class="large-1 cell" style="pointer-events:none"></div>
         <div class="large-4 cell">
             <div class="large-6 cell">
 			
@@ -94,16 +109,17 @@ function MostrarGrifo() {
  $('#load_tweets').load('grifo_fun.php').fadeIn("slow");
  $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
 }
-function MostrarZonadeEvacuacion() {
- $('#load_tweets').load('zonadeevacuacion_fun.php').fadeIn("slow");
- $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
-}
+ 
 function MostrarZonadeSeguridad() {
  $('#load_tweets').load('zonadeseguridad_fun.php').fadeIn("slow");
  $('#load_tweets2').load('iconos_fun_comp.php').fadeIn("slow");
 }
 function MostrarEdificios() {
  $('#load_tweets').load('edificio_fun.php').fadeIn("slow");
+ $('#load_tweets2').load('edificio_fun_comp.php').fadeIn("slow");
+}
+function MostrarEdificios2() {
+ $('#load_tweets').load('edificio_fun2.php').fadeIn("slow");
  $('#load_tweets2').load('edificio_fun_comp.php').fadeIn("slow");
 }
 </script>

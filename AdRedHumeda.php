@@ -4,7 +4,10 @@ if (!isset($_SESSION['usuario'])){
 	echo "<script>
            window.location.replace('index.php');					
 		  </script>";
-}						 
+}	
+ $id_redhumeda = $_POST["id_redhumeda"];
+ $posx = $_POST["posx"];
+ $posy = $_POST["posy"];  					 
  ?>
  <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -12,7 +15,7 @@ if (!isset($_SESSION['usuario'])){
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zona de Evacuación</title>
+    <title>Red Húmeda</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -33,9 +36,9 @@ if (!isset($_SESSION['usuario'])){
             </br>
             <div class="row column">
                 <hr>
-                <h4 style="margin: 0;" class="text-center">Añadir Zona de Evacuación</h4>
+                <h4 style="margin: 0;" class="text-center">Red Húmeda</h4>
                 <hr>
-            </div>
+            </div> 
             <div class="callout">
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
@@ -49,37 +52,53 @@ if (!isset($_SESSION['usuario'])){
   <div class="row">
 <div class="grid-x grid-margin-x expanded callout">
   <div class="large-8 cell">
+<!--
 <img id="mapa" src="img/mapa.jpg" class="img-fluid" alt="..."
 style="width:678px;
        height:100%;
 	   max-height:1012px;
 	   min-height:506px;">
-
+ -->
+<img id="mapa" src="img/mapa.jpg" class="img-fluid" alt="..."
+style="width:678px;
+       height:506px;
+	    position: relative; ">
  
-
+ 
+ 
+ 
+ 
+ 
+ 
 
 
 
  
 </div>
 <div class="large-3 cell">
-<p>"De click en el mapa en el lugar que quiera añadir una zona de evacuacion"</p>
+<p>"De click en el mapa en el lugar que quiera añadir la posición de la red húmeda"</p>
 	<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+	<input type="hidden" name="id_redhumeda" value='<?php echo $id_redhumeda ?>' />
 	<table>
-   <tr>
-    Nombre: <input type="text" id="nombre" name="nombre" value=""Required>
- </tr>
+ 
  <tr>
-    <th>Cordenadas X: <input type="text" id="posx" name="posx" value=""Required></th>
-     <th>Cordenadas Y:  <input type="text" id="posy" name="posy" value=""Required></th>
+    <th>Cordenadas X: <input type="text" id="posx" name="posx" value="<?php echo $posx?>"Required></th>
+     <th>Cordenadas Y:  <input type="text" id="posy" name="posy" value="<?php echo $posy ?>"Required></th>
   </tr>
-  <tr>
-	Imagen: <input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" Required>  
-	Breve descripción (Opcional): <input type="text" id="descripcion" name="descripcion" value="">
- </tr>
+ 
    </table>
- <center></br><button class="success button" type="submit" name="submit">Registrar</button>
   
+ <center></br><button class="success button" type="submit" name="submit">Registrar</button>
+   </br>			
+Seleccione la resolución de su pantalla si la posición que eligio previamente no coincidió con lo seleccionado al momento de asignar la posición.
+ <select name="resolucion">
+
+<option value='R0' selected>Predeterminado</option> 
+<option value='R1'>1024x768->100%</option>
+<option value='R2'>1366x768->125%</option>
+ 
+        
+</select>
     </form>
  
 </div>
@@ -140,14 +159,12 @@ $(document).ready(function () {//puede comentarse las lineas o poniendo el tama�
     $valorx = $_POST["posx"];
     $valory = $_POST["posy"];
  
-   $campos = array("id_zonadeevacuacion"=> NULL ,
-   "posx"=>$_POST['posx'],
-   "posy"=>$_POST['posy'],
-	"nombre"=>$_POST['nombre'],
-	"descripcion"=>$_POST['descripcion']); 
+   $campos = array("id_redhumeda"=>$_POST['id_redhumeda'],
+   "posx"=>$_POST['posx'],"resolucion"=>$_POST['resolucion'],
+   "posy"=>$_POST['posy']); 
  
-   $a = new ZonadeEvacuacion("tesis"); 
-   $a->insertar($campos);
+   $a = new GuardarRedHumeda("tesis"); 
+   $a->ModificarPosicionRedHumeda($campos);
  
  }
  

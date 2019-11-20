@@ -21,7 +21,7 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
    <div class="mapaimagens" >
 
 	<img usemap="#edificiomap" style="width:678px;
-					 height:100%;max-height:1012px;min-height:506px;" src="img/mapa.jpg" name="viewArea" id="viewArea" draggable="false" />
+					 height:506px;max-height:506px;min-height:506px;" src="img/mapa.jpg" name="viewArea" id="viewArea" draggable="false" />
    
 	
  
@@ -54,6 +54,27 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
                     document.getElementById('edGantes').src='imagenes/<?php echo $row['imagen']?> ';
                     document.getElementById('grifoTitulo').innerHTML = "<?php echo $row['nombre']?> "; 
                     document.getElementById('grifoParrafo').innerHTML = "<?php echo $row['descripcion']?>"; 
+ 
+                    }		
+                },
+ <?php
+				}	 }
+?>
+				<?php foreach ($link->query('SELECT * FROM red_humeda WHERE posx !=0 && posy !=0 ') as $row){  
+				if($row['eliminar']==0){ 	
+				?> 
+				{    
+                    src: "img/marker1.png",
+                    x: <?php echo $row['posx']?>,
+                    y: <?php echo $row['posy']?>,
+                    size: 35,
+
+                    click: function(obj){
+ 
+                    document.getElementById("edGantes").style.display = "block";
+                    document.getElementById('edGantes').src='imagenes/<?php echo $row['imagen']?> ';
+                    document.getElementById('grifoTitulo').innerHTML = "<?php echo $row['nombre']?> "; 
+                    document.getElementById('grifoParrafo').innerHTML = "<?php echo $row['ubicacion']?>"; 
  
                     }		
                 },
