@@ -48,7 +48,7 @@ if (!isset($_SESSION['usuario'])){
       <th>Nombre</th>
 	  <th>Estado</th>
 	  <th>Edificio</th>
-	  <th>Ubicación</th>
+	  <th>Ubicación/Comentario(Si corresponde)</th>
       <th>Imagen</th>
       <th>Añadir/Modificar Posición(Opcional)</th>
 	  
@@ -182,7 +182,7 @@ if (!isset($_SESSION['usuario'])){
       <th width="250">Nombre</th>
       <th width="250">Imagen (Opcional)</th>
 	  <th width="250">Estado</th>
-      <th width="650">Ubicación (Opcional)</th>
+      <th width="650">Ubicación/Comentario(Opcional)</th>
 	  <th width="50"></th>
     </tr>
   </thead>

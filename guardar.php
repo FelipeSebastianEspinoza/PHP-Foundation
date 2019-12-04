@@ -1,6 +1,6 @@
 <?php
  
- class GuardarProtocolo{
+class GuardarProtocolo{
  
 	private $id_protocolo;
 	private $nombre;
@@ -13,56 +13,52 @@
 	
     function NuevoProtocolo($form_data){
         $fields = array_keys($form_data);
-		
-		$nombre = htmlentities($_POST['nombre']);
+        $nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
         
-		 
-		  if(strlen(trim($nombre))<3){
+		if(strlen(trim($nombre))<3){
 			echo "<script> 
-					 alert('el nombre no es válido');
-				  </script>";
 			
+					 alert('el nombre no es válido');
+					 
+				  </script>";	
 		}else{
- 	
-		
+			
         $consulta = "INSERT INTO `protocolo` (`id_protocolo`,`nombre`,`descripcion`) VALUES 
 		(NULL,'$nombre','$descripcion');";
-    
-		 
-		 
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible crear');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('protocolos.php');					
+                    window.location.replace('protocolos.php');	
+					
 			      </script>"; 
 		}
 		}
-	
 	}
    
     function ModificarProtocolo($form_data){
         $fields = array_keys($form_data);
-		
-		$id_protocolo = $_POST['id_protocolo'];
+        $id_protocolo = $_POST['id_protocolo'];
 		$nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
-
-				  if(strlen(trim($nombre))<3){
+		
+        if(strlen(trim($nombre))<3){
 			echo "<script> 
-					 alert('el nombre no es válido');
-				  </script>";
 			
+					 alert('el nombre no es válido');
+					 
+				  </script>";
 		}else{
-		
-		
+
         $consulta = "UPDATE `protocolo` SET `nombre`='$nombre',
 		`descripcion`='$descripcion' 
 		WHERE `id_protocolo`='$id_protocolo'"; 
@@ -72,13 +68,16 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible modificar');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha modificado con éxito'); 
-                    window.location.replace('protocolos.php');					
+                    window.location.replace('protocolos.php');
+					
 			      </script>"; 
 		}
 	}
@@ -86,8 +85,7 @@
 	
 	function EliminarProtocolo($form_data){
         $fields = array_keys($form_data);
-		
-		$id_protocolo = $_POST['id_protocolo'];
+        $id_protocolo = $_POST['id_protocolo'];
  
         $consulta = "UPDATE `protocolo` SET `eliminar`='1'
 		WHERE `id_protocolo`='$id_protocolo'"; 
@@ -100,106 +98,19 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible eliminar');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha eliminado con éxito'); 
-                    window.location.replace('protocolos.php');					
+                    window.location.replace('protocolos.php');	
+					
 			      </script>"; 
 		}
 		
-	
-	}
-	function EliminarAsignacionProtocolo($form_data){
-        $fields = array_keys($form_data);
-		
-		$id_protocolo = $_POST['id_protocolo'];
-        $id_edificio = $_POST['id_edificio'];
-		
-        $consulta = "UPDATE `asigna` SET `eliminar`='1'
-		WHERE `id_protocolo`='$id_protocolo'
-		AND `id_edificio`='$id_edificio' ";  
- 
-        $resultado_cons = mysqli_query($this->con,$consulta);
-	    
-        if($resultado_cons == false){
-			echo "<script> 
-					 alert('No es posible eliminar');
-					 
-				  </script>";
-		}else{
-			echo "<script>
-					alert('Se ha eliminado con éxito'); 
-                     window.location = window.location.pathname;					
-			      </script>"; 
-		}
-		 
-	
-	}
-	
-	
-	
-    function ModificarAsignacionProtocolo($form_data){
-        $fields = array_keys($form_data);
-		$id = htmlentities($_POST['id_edificio']);
-		$id_protocolo = $_POST['id_protocolo'];
-		$id_edificio = $_POST['id_edificio'];
-		$estado = htmlentities($_POST['estado']) ;
- 
-        $consulta = "UPDATE `asigna` SET `estado`='$estado'
-	                 WHERE `id_edificio`='$id_edificio' 
-		             AND `id_protocolo`='$id_protocolo'"; 
- 
-		 
-        $resultado_cons = mysqli_query($this->con,$consulta);
-	    
-        if($resultado_cons == false){
-			echo "<script> 
-					 alert('No es posible modificar');
-					 
-				  </script>";
-		}else{
-			echo "<script>
-					alert('Se ha modificado con éxito'); 
-                    window.location.replace('Edificio.php');					
-			      </script>"; 
-		}
-	
-	}
-	
-	
-	
-	
-	 
-	function AsignarProtocolo($form_data){
-        $fields = array_keys($form_data);
-		
-		$id_edificio = htmlentities($_POST['id_edificio']);
-		$id_protocolo =htmlentities($_POST['id_protocolo']);
-		$estado =htmlentities($_POST['estado']);
- 
-   
-		 echo $id_protocolo;
-	 
-        $consulta = "INSERT INTO `asigna` (`id_edificio`,`id_protocolo`,`estado`) VALUES 
-		('$id_edificio','$id_protocolo','$estado');";
-         
-		 
-		 
-        $resultado_cons = mysqli_query($this->con,$consulta);
-	    
-        if($resultado_cons == false){
-			echo "<script> 
-					 alert('No es posible asignar');
-				  </script>";
-		}else{
-			echo "<script>
-					alert('Se ha asignado con éxito'); 
-                     window.location.replace('Edificio.php');					
-			      </script>"; 
-		}
 	
 	}
  
@@ -209,16 +120,12 @@
  
  }
  
- 
- 
- 
   class GuardarEnfermedad{
- 
+	  
 	private $id_enfermedad;
 	private $nombre;
 	private $descripcion;
-   
-	
+ 
     function __construct($bd){
 	    $this->con = new mysqli('localhost','root','',$bd); 
 	}
@@ -227,8 +134,8 @@
         $fields = array_keys($form_data);
 		
 		$nombre = htmlentities($_POST['nombre']);
-		$descripcion =htmlentities($_POST['descripcion']);
-         if(strlen(trim($nombre))>1){
+		$descripcion = htmlentities($_POST['descripcion']);
+        if(strlen(trim($nombre))>1){
         $consulta = "INSERT INTO `enfermedades_profesionales` (`id_enfermedad`,`nombre`,`descripcion`) VALUES 
 		(NULL,'$nombre','$descripcion');";
  
@@ -236,18 +143,23 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible crear');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('EnfermedadesProfesionales.php');					
+                    window.location.replace('EnfermedadesProfesionales.php');	
+					
 			      </script>"; 
 		}
 		 }else{
 			echo "<script>
-					alert('el nombre es inválido'); 			
+			
+					alert('el nombre es inválido'); 
+					
 			      </script>"; 
 		}
 	}
@@ -258,7 +170,7 @@
 		$id_enfermedad = $_POST['id_enfermedad'];
 		$nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
-         if(strlen(trim($nombre))>1){
+        if(strlen(trim($nombre))>1){
         $consulta = "UPDATE `enfermedades_profesionales` SET `nombre`='$nombre',
 		`descripcion`='$descripcion' 
 		WHERE `id_enfermedad`='$id_enfermedad'"; 
@@ -267,22 +179,27 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible modificar');
+					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha modificado con éxito'); 
-                    window.location.replace('EnfermedadesProfesionales.php');					
+                    window.location.replace('EnfermedadesProfesionales.php');	
+					
 			      </script>"; 
 		}
 				 }else{
 			echo "<script>
-					alert('el nombre es inválido'); 			
+			
+					alert('el nombre es inválido'); 	
+					
 			      </script>"; 
 		}
 	}
-	
-    
+ 
 	function EliminarEnfermedad($form_data){
         $fields = array_keys($form_data); 
 		
@@ -299,23 +216,19 @@
 	    $resultado_cons = mysqli_query($this->con,$consulta);
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible eliminar');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha eliminado con éxito'); 
-                    window.location.replace('EnfermedadesProfesionales.php');					
+                    window.location.replace('EnfermedadesProfesionales.php');	
+					
 			      </script>"; 
 		}
-		
-	
 	}
-	
-	
-	
-	 
-	 
  
     public function cerrarBD(){
 		$this->con->close();
@@ -325,56 +238,21 @@
  
  
  
- 
- 
- class GuardarReporteEnfermedad{
+  class GuardarReporteEnfermedad{
  
 	private $id_enfermedad_reportada;
 	private $fecha;
 	private $persona;
     private $id_edificio;
     private $id_enfermedad;
-	
     private $id_historialyarchivos;
     private $titulo;    
 	private $descripcion;
-	
-	
-	
+ 
     function __construct($bd){
 	    $this->con = new mysqli('localhost','root','',$bd); 
 	}
-		/*
-    function NuevoReporteEnfermedad($form_data){
-        $fields = array_keys($form_data);
-		
-		$fecha = htmlentities($_POST['fecha']);
-		$persona =htmlentities($_POST['persona']);
-        $id_edificio =htmlentities($_POST['id_edificio']);
-		$id_enfermedad =htmlentities($_POST['id_enfermedad']);
- 
-        $consulta = "INSERT INTO `enfermedades_reportadas` 
-		(`id_enfermedad_reportada`,`fecha`,`persona`,`id_edificio`,`id_enfermedad`) 
-		VALUES 
-		(NULL,'$fecha','$persona','$id_edificio','$id_enfermedad');";
-    
-		 
-		 
-        $resultado_cons = mysqli_query($this->con,$consulta);
-	    
-        if($resultado_cons == false){
-			echo "<script> 
-					 alert('No es posible crear');
-					 
-				  </script>";
-		}else{
-			echo "<script>
-					alert('Se ha creado con éxito'); 
-                    window.location.replace('Edificio.php');					
-			      </script>"; 
-		}
-	}
- */
+	 
 	function NuevoReporteEnfermedad2($form_data){
         $fields = array_keys($form_data);
 		
@@ -394,53 +272,22 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible crear');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('EnfermedadesAsignadas.php');					
+                    window.location.replace('EnfermedadesAsignadas.php');
+					
 			      </script>"; 
 		}
 		   
 	}
  
-	
-	
- /*
-    function ModificarReporteEnfermedad($form_data){
-        $fields = array_keys($form_data);
-		
-		$id_enfermedad_reportada = htmlentities($_POST['id_enfermedad_reportada']);
-		$fecha = htmlentities($_POST['fecha']);
-		$persona =htmlentities($_POST['persona']);
-        $id_edificio =htmlentities($_POST['id_edificio']);
-		$id_enfermedad =htmlentities($_POST['id_enfermedad']);
- 
-        $consulta = "UPDATE `enfermedades_reportadas` SET `fecha`='$fecha' 
-	    ,`persona`='$persona',`id_edificio`='$id_edificio'
-        ,`id_enfermedad`='$id_enfermedad'     		
-		WHERE `id_enfermedad_reportada`='$id_enfermedad_reportada'"; 
- 
-		 
-        $resultado_cons = mysqli_query($this->con,$consulta);
-	    
-        if($resultado_cons == false){
-			echo "<script> 
-					 alert('No es posible modificar');
-					 
-				  </script>";
-		}else{
-			echo "<script>
-					alert('Se ha modificado con éxito'); 
-                    window.location.replace('Edificio.php');					
-			      </script>"; 
-		}
-	
-	}
- */
-	 function ModificarReporteEnfermedad2($form_data){
+	function ModificarReporteEnfermedad2($form_data){
         $fields = array_keys($form_data);
 		
 		$id_enfermedad_reportada = htmlentities($_POST['id_enfermedad_reportada']);
@@ -463,29 +310,26 @@
         ,`id_enfermedad`='$id_enfermedad'     		
 		WHERE `id_enfermedad_reportada`='$id_enfermedad_reportada'"; 
 		}
- 
- 
- 
- 
-		 
+  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible modificar');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha modificado con éxito'); 
-                    window.location.replace('EnfermedadesAsignadas.php');					
+                    window.location.replace('EnfermedadesAsignadas.php');
+					
 			      </script>"; 
 		}
-	
 	}
-	 
-	
- function EliminarReporteEnfermedad($form_data){ 
+ 
+    function EliminarReporteEnfermedad($form_data){ 
         $fields = array_keys($form_data);
 		
 		$id_enfermedad_reportada = $_POST['id_enfermedad_reportada'];  
@@ -497,21 +341,24 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible eliminar');
+					 
 				  </script>";
 		}else{
 			echo "<script>
-					alert('Se ha eliminado con éxito'); 
-                     window.location = window.location.pathname;					
+					alert('Se ha eliminado con éxito');
+					
+                     window.location = window.location.pathname;
+					 
 			      </script>"; 
 		}
 	}
-	
-	
-	 function NuevoArchivoYReporte($form_data){
-        $fields = array_keys($form_data);
+ 
+    function NuevoArchivoYReporte($form_data){
 		
-		$fecha = htmlentities($_POST['fecha']);
+        $fields = array_keys($form_data);
+        $fecha = htmlentities($_POST['fecha']);
 		$titulo =htmlentities($_POST['titulo']);
         $descripcion =htmlentities($_POST['descripcion']);
 		$id_enfermedad_reportada =htmlentities($_POST['id_enfermedad_reportada']);
@@ -527,32 +374,41 @@
         move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
         
         }else{
+			
             echo $_FILES['ARCHIVO']['size'];
             echo "El tamaño excede el límite establecido";
+			
         }
  	    if($nombre_archivo!=null){ 
+		
         $consulta = "INSERT INTO `historialyarchivos`  
 		(`id_historialyarchivos`,`archivo`,`titulo`,`fecha`,`descripcion`,`id_enfermedad_reportada`) 
 		VALUES  
 		(NULL,'$nnombre','$titulo','$fecha','$descripcion','$id_enfermedad_reportada');";
+		
 		}else{
+			
 			$consulta = "INSERT INTO `historialyarchivos`  
 		(`id_historialyarchivos`,`titulo`,`fecha`,`descripcion`,`id_enfermedad_reportada`) 
 		VALUES 
 		(NULL,'$titulo','$fecha','$descripcion','$id_enfermedad_reportada');";
+		
 		}
  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible crear');
 					 
 				  </script>";
 		}else{
 			echo "<script> 
+			
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('ArchivosReportesEnfermedad.php');					
+                    window.location.replace('ArchivosReportesEnfermedad.php');	
+					
 			      </script>"; 
 		}
 	}
@@ -571,13 +427,16 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible eliminar');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha eliminado con éxito'); 
-                     window.location = window.location.pathname;					
+                     window.location = window.location.pathname;	
+					 
 			      </script>"; 
 		}
 		
@@ -585,7 +444,7 @@
 	}
 	
 	
-	 function ModificarArchivoYReporte($form_data){
+	function ModificarArchivoYReporte($form_data){
         $fields = array_keys($form_data);
 		
 		$id_historialyarchivos = htmlentities($_POST['id_historialyarchivos']);
@@ -612,6 +471,7 @@
         $consulta = "UPDATE `historialyarchivos` SET `titulo`='$titulo' 
 	    ,`fecha`='$fecha',`descripcion`='$descripcion' 		
 		WHERE `id_historialyarchivos`='$id_historialyarchivos'"; 
+		
    }else{
 	          $consulta = "UPDATE `historialyarchivos` SET `archivo`='$nnombre' ,
 			  `titulo`='$titulo',`fecha`='$fecha',`descripcion`='$descripcion' 		
@@ -621,18 +481,23 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible modificar'); 
+					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha modificado con éxito'); 
-                 window.location.replace('ArchivosReportesEnfermedad.php');			
+					
+                 window.location.replace('ArchivosReportesEnfermedad.php');	
+				 
 			      </script>"; 
 		}
 	}
 	
 	
-	 function EliminarArchivoDeReporte($form_data){
+	function EliminarArchivoDeReporte($form_data){
         $fields = array_keys($form_data);
         $id_historialyarchivos = $_POST['id_historialyarchivos'];
  
@@ -644,19 +509,21 @@
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
         if($resultado_cons == false){
-			echo "<script> 
+			echo "<script>
+			
 					 alert('No es posible eliminar');
+					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha eliminado con éxito'); 
-                    window.location.replace('ArchivosReportesEnfermedad.php');					
+                    window.location.replace('ArchivosReportesEnfermedad.php');	
+					
 			      </script>"; 
 		}
 	}
  
-	
-	
  
     public function cerrarBD(){
 		$this->con->close();
@@ -687,7 +554,9 @@
 		$nombre = htmlentities($_POST['nombre']);
 		$fecha_act = htmlentities($_POST['fecha_act']);
 		$descripcion = htmlentities($_POST['descripcion']);
-		$estado = htmlentities($_POST['estado']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	
 		$id_protocolo = htmlentities($_POST['id_protocolo']);
 		 
  
@@ -700,12 +569,16 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible crear');
+					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('UnidadDeAnalisis.php');					
+                    window.location.replace('UnidadDeAnalisis.php');
+					
 			      </script>"; 
 		}
 	}
@@ -717,7 +590,9 @@
 		$nombre = htmlentities($_POST['nombre']);
 		$fecha_act =htmlentities($_POST['fecha_act']);
 		$descripcion =htmlentities($_POST['descripcion']);
-		$estado =htmlentities($_POST['estado']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	
 		$id_protocolo =htmlentities($_POST['id_protocolo']);
 
         $consulta = "UPDATE `unidad` SET `nombre`='$nombre', 
@@ -731,19 +606,21 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible modificar');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha modificado con éxito'); 
-                    window.location.replace('UnidadDeAnalisis.php');					
+                    window.location.replace('UnidadDeAnalisis.php');
+					
 			      </script>"; 
 		}
 	
 	}
-	
-	
+
 	function EliminarUnidad($form_data){ 
         $fields = array_keys($form_data);
 		
@@ -757,20 +634,22 @@
 	    
         if($resultado_cons == false){
 			echo "<script> 
+			
 					 alert('No es posible eliminar');
 					 
 				  </script>";
 		}else{
 			echo "<script>
+			
 					alert('Se ha eliminado con éxito'); 
-                     window.location = window.location.pathname;					
+                     window.location = window.location.pathname;
+					 
 			      </script>"; 
 		}
-		
-	
+
 	}
 	
-	 function Archivo1($form_data){
+	function Archivo1($form_data){
         $fields = array_keys($form_data);
         $id_unidad = $_POST['id_unidad'];
 		$nombre = htmlentities($_POST['nombre']);
@@ -810,9 +689,8 @@
   
 	}
     
-	 function Archivo2($form_data){
- 
-		
+	function Archivo2($form_data){
+
         $fields = array_keys($form_data);
         $id_unidad = $_POST['id_unidad'];
         $id_unidad_anexos = $_POST['id_unidad_anexos'];
@@ -859,7 +737,7 @@
   
 	}
 	
-	 function EliminarArchivo1($form_data){
+	function EliminarArchivo1($form_data){
         $fields = array_keys($form_data);
         $id_unidad = $_POST['id_unidad'];
 		$id_unidad_anexos = $_POST['id_unidad_anexos'];
@@ -888,8 +766,6 @@
  
  }
 
- 
- 
  
  class GuardarProcedimiento{
  
@@ -1648,7 +1524,10 @@
 		$fecha_carga =htmlentities($_POST['fecha_carga']);
 		$fecha_venc =htmlentities($_POST['fecha_venc']);
         $ubicacion =htmlentities($_POST['ubicacion']);
-        $estado =htmlentities($_POST['estado']);	
+	      
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);		
         $id_piso =htmlentities($_POST['id_piso']);
         $fechacarga = strtotime(date($fecha_carga));
         $fechavenc = strtotime(date($fecha_venc));
@@ -1703,7 +1582,7 @@
 		}else{
 			echo "<script>
 					alert('Se ha creado con éxito'); 
-                    window.location.replace('Extintores.php');					
+                     window.location = window.location.pathname;					
 			      </script>"; 
 		}
     }else{
@@ -1722,7 +1601,9 @@
 		$fecha_carga = htmlentities($_POST['fecha_carga']);
         $fecha_venc = htmlentities($_POST['fecha_venc']);
         $ubicacion = htmlentities($_POST['ubicacion']);
-        $estado = htmlentities($_POST['estado']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	
         $id_piso = htmlentities($_POST['id_piso']);
         $fechacarga = strtotime(date($fecha_carga));
         $fechavenc = strtotime(date($fecha_venc));
@@ -1846,7 +1727,9 @@
 		
 		$nombre = htmlentities($_POST['nombre']);
         $ubicacion =htmlentities($_POST['ubicacion']);
-        $estado =htmlentities($_POST['estado']);	
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);		
         $id_piso =htmlentities($_POST['id_piso']);
 		$nombre_imagen=$_FILES['ARCHIVO']['name'];
 	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
@@ -1909,7 +1792,9 @@
 		$id_redhumeda = $_POST['id_redhumeda'];
 		$nombre = htmlentities($_POST['nombre']);
         $ubicacion = htmlentities($_POST['ubicacion']);
-        $estado = htmlentities($_POST['estado']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	
         $id_piso = htmlentities($_POST['id_piso']);
 		$nombre_imagen=$_FILES['ARCHIVO']['name'];
 	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
@@ -2104,7 +1989,9 @@
 	    $id = htmlentities($_POST['id_edificio']);
 	    $id_edificio = htmlentities($_POST['id_edificio']);
 		$nombre = htmlentities($_POST['nombre']);
-		$estado = htmlentities($_POST['estado']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);
 		$n_departamentos = htmlentities($_POST['n_departamentos']);
 		$n_estudiantes = htmlentities($_POST['n_estudiantes']);	
 		$n_docentes = htmlentities($_POST['n_docentes']);		
@@ -2723,7 +2610,9 @@
  
 	    $nombre = htmlentities($_POST['nombre']);
  	    $descripcion =htmlentities($_POST['descripcion']);
- 	    $estado =htmlentities($_POST['estado']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	
    
  
 	  $consulta = "INSERT INTO `grifo` 
@@ -2784,7 +2673,9 @@
 		 
 		$nombre = htmlentities($_POST['nombre']);
 		$descripcion =htmlentities($_POST['descripcion']);
-		$estado =htmlentities($_POST['estado']); 
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	 
 
 		$nombre_imagen=$_FILES['ARCHIVO']['name'];
         $tipo_imagen=$_FILES['ARCHIVO']['type'];
@@ -3288,7 +3179,9 @@
 		$fecha = htmlentities($_POST['fecha']);
 		$titulo = htmlentities($_POST['titulo']);
         $descripcion = htmlentities($_POST['descripcion']);
-		$estado = htmlentities($_POST['estado']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	
 		$id_campus = "1";
      
         $nombre_imagen=$_FILES['ARCHIVO']['name'];
@@ -3309,12 +3202,12 @@
         $consulta = "INSERT INTO `historialmutual`  
 		(`id_historialmutual` ,`titulo`,`fecha`,`estado`,`descripcion`,`id_campus`) 
 		VALUES  
-		(NULL, '$titulo','$fecha','$descripcion','$estado','$id_campus');";
+		(NULL, '$titulo','$fecha','$estado','$descripcion','$id_campus');";
 		}else{
         $consulta = "INSERT INTO `historialmutual`  
 		(`id_historialmutual`,`archivo`,`titulo`,`fecha`,`estado`,`descripcion`,`id_campus`) 
 		VALUES  
-		(NULL,'$nnombre','$titulo','$fecha','$descripcion','$estado','$id_campus');";
+		(NULL,'$nnombre','$titulo','$fecha','$estado','$descripcion','$id_campus');"; 
 		}
  
         $resultado_cons = mysqli_query($this->con,$consulta);
@@ -3365,7 +3258,9 @@
 		$titulo =htmlentities($_POST['titulo']);
 		$fecha = htmlentities($_POST['fecha']);
         $descripcion =htmlentities($_POST['descripcion']);
-        $estado =htmlentities($_POST['estado']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado); 
 		
         $nombre_imagen=$_FILES['ARCHIVO']['name'];
 	    $nombre_archivo=($_FILES['ARCHIVO']['name']);

@@ -43,7 +43,19 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
 				if($row['eliminar']==0){ 	
 				?> 
 				{    
+				
+				<?php
+				if($row['estado']!="Pendiente"){
+				?> 
                     src: "img/marker4.png",
+				<?php	
+				}else{
+				?>
+				   src: "img/marker1.png",
+ 			    <?php
+				}	
+				?> 
+					
                     x: <?php echo $row['posx']?>,
                     y: <?php echo $row['posy']?>,
                     size: 35,
@@ -58,13 +70,27 @@ $link = new PDO('mysql:host=localhost;dbname=tesis', 'root', '');
                     }		
                 },
  <?php
-				}	 }
+				}	 
+				
+				}
 ?>
 				<?php foreach ($link->query('SELECT * FROM red_humeda WHERE posx !=0 && posy !=0 ') as $row){  
 				if($row['eliminar']==0){ 	
 				?> 
 				{    
-                    src: "img/marker1.png",
+				<?php
+				if($row['estado']!="Pendiente"){
+				?> 
+                    src: "img/marker4.png",
+				<?php	
+				}else{
+				?>
+				   src: "img/marker1.png",
+ 			    <?php
+				}	
+				?> 
+					
+					
                     x: <?php echo $row['posx']?>,
                     y: <?php echo $row['posy']?>,
                     size: 35,

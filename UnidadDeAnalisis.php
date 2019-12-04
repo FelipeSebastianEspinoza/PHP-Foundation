@@ -52,7 +52,7 @@ $_SESSION['id_protocolo']=$_POST['id_protocolo'];
 		        <div class="grid-x grid-margin-x">
                 <div class="show-for-large large-12 cell">  
  
-  <table>
+  <table >
   <thead>
     <tr>
       <th>Nombre de la Unidad </th>

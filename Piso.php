@@ -460,6 +460,7 @@ $id_edificio=$_POST['id_edificio'];
 
 <ELIMINARPISO>
 <?php
+if (isset($_SESSION['usuario'])){
  echo '<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
             echo '<input type="hidden" name="id_piso" value='.$id_piso.' />';
             echo '<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />';
@@ -470,6 +471,7 @@ $id_edificio=$_POST['id_edificio'];
             <?php
             echo '</td>' ;
             echo'</form>';
+}
 ?>
 </ELIMINARPISO>
 

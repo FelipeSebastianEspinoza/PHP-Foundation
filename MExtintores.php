@@ -153,7 +153,7 @@
                     while($row3=mysqli_fetch_assoc($result)) { 
               
 					if( $id_edificio2 == $row3[id_edificio]){
-						 echo "<option value='$row3[id_edificio]'Selected>$row3[nombre]</option>";  
+						 echo "<option value='$row3[id_edificio]'Selected> $row3[nombre] </option>";  
 					}else{
 						 echo "<option value='$row3[id_edificio]'>$row3[nombre]</option>";  
 					}	

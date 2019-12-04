@@ -23,7 +23,7 @@
      <div class="grid-x grid-padding-x">
         <div class="large-12 cell" >
  
-        <?php include 'Top-Bar.php'; ?> 
+        <?php include 'Top-Bar2.php'; ?> 
  
  
         
@@ -47,8 +47,9 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
    
   <button class="button" onclick="MostrarGrifo()">Grifos y Redes </button>
   <button class="button" onclick="MostrarZonadeSeguridad()">Zona de Seguridad</button>
+   <?php if (isset($_SESSION['usuario'])){  ?>
   <button href="Mutual.php" class="button" onclick="window.location.href = 'Mutual.php';">Mutual</button>
-  
+   <?php } ?>
   
 <?php
 $conn = mysqli_connect("localhost","root","","tesis");

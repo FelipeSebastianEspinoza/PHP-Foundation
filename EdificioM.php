@@ -24,7 +24,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <title>Modificar Edificio</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -74,8 +74,9 @@
 									       WHERE id_edificio ='.$id_edificio.';');
 
 			while($row = mysqli_fetch_array($result)){
-				echo '<h2>'.$row["nombre"].'</h2>'; 
- 
+                echo '<h2>';
+                echo utf8_encode($row["nombre"]);
+                echo '</h2>'; 
 				echo ' <div class="grid-x grid-margin-x">'; 
 		        echo ' <div class="show-for-large large-3 cell">'; 
 				echo '</br>';
@@ -90,8 +91,13 @@
 				 echo'<tr>';
                 echo'<th width="50">Nombre: </th>';
                 echo'<th style="font-weight: normal;"width="150">';
-                 echo'<input type="text" id="nombre" name="nombre" class="form-control" value="'.$row["nombre"].'" >';
+                 echo'<input type="text" id="nombre" name="nombre" class="form-control" value="';
+				   echo utf8_encode($row["nombre"]);
+				 
+				 echo '" >';
+				 
 				echo'</th>';
+				echo'<th></th><th></th>';
 				 echo'</tr>';
 				
                 echo'<tr>';

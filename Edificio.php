@@ -43,7 +43,9 @@ $result = mysqli_query($conn, 'SELECT *
 							   FROM edificio
 							   WHERE id_edificio ='.$id_edificio.';');
 while($row = mysqli_fetch_array($result)){
-  echo '<h2>'.$row["nombre"].'</h2>'; 
+  echo '<h2>';
+  echo utf8_encode($row["nombre"]);
+  echo '</h2>'; 
   echo '<input type="hidden" name="value" value='.$row["id_edificio"].'/>';
   echo '<div class="grid-x grid-margin-x">'; 
   echo '<div class="show-for-large large-3 cell">'; 
@@ -116,7 +118,13 @@ while($row = mysqli_fetch_array($result)){
 
 <div class="medium-5 large-3 cell">
 <?php 
-  $result = mysqli_query($conn, 'SELECT * FROM piso
+   
+		$result2 = mysqli_query($conn, 'SELECT * FROM piso
+                                       WHERE eliminar!="1"
+							           AND id_edificio ='.$id_edificio.';');
+	    if(mysqli_fetch_array($result2)>0){
+        
+		 $result = mysqli_query($conn, 'SELECT * FROM piso
                                  WHERE eliminar!="1"
 							     AND id_edificio ='.$id_edificio.';');
   if($result==null){
@@ -130,15 +138,25 @@ while($row = mysqli_fetch_array($result)){
   echo'<select class="form-control form-control-sm" name="id_piso">';
   while($row=mysqli_fetch_assoc($result)) { 
     echo "<option value='$row[id_piso]'>$row[nombre]</option>";  
-  } 
-  }	 
-  echo'</select>';
+  }  echo'</select>';
   echo '<input type="hidden" name="id_edificio" value='.$id_edificio.' />';
   echo'<input type="submit" class="button primary"value="IR"></input>';
   echo'</label>';
   echo'</div>';
   echo'</div>';
-  echo'</form>';
+  echo'</form>'; 
+  }	 
+		
+		
+        }else{
+			echo'</div>';
+		} 
+ 
+
+  
+ 
+  
+ 
 ?>
 <insertar>
 <div class="titulo_boton">
@@ -179,7 +197,7 @@ if(isset($_SESSION['usuario'])){
 <table>
 <thead>
 <tr>
-<th></th>
+<th width="200px" style="max-width:200px;"></th>
 <th>Nombre</th>
 <th>Descripción</th>
 <?php   if(isset($_SESSION['usuario'])){ ?>
@@ -484,7 +502,7 @@ if(isset($_SESSION['usuario'])){?>
    <td><input type="text" id="inputNombre" name="nombre" class="form-control" placeholder="" Required >	</td>
    <td><input type="date" id="inputFechaCarga" name="fecha_carga" class="form-control" placeholder="" Required >	</td>
    <td><input type="date" id="inputFechaVenc" name="fecha_venc" class="form-control" placeholder="" Required >	</td>
-   <td><input type="text" id="inputPersona" name="persona" class="form-control" placeholder="Escriba el nombre" Required >	</td>
+   <td><input type="text" id="inputUbicacion" name="ubicacion" class="form-control" placeholder="Escriba el nombre" Required >	</td>
    <td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="" Required >	</td>
    <td>
 <?php 

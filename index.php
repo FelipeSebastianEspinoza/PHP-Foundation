@@ -5,9 +5,9 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="css/foundation.css">
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
+    <link rel="stylesheet"   href="css/foundation.css">
+    <link rel="stylesheet"   href="css/app.css">
+    <link rel="stylesheet"   href="foundation-icons/foundation-icons.css" />
   </head>
 
 <body>
@@ -37,7 +37,7 @@
 			</br>
 		    <h4 class="text-center">Prevención de Riegos</h4>
             <label>Email
-            <input type="text" placeholder="alguien@example.com" name="login">
+            <input type="text" placeholder=" " name="login">
             </label>
             <label>Contraseña
             <input type="password" placeholder="Contraseña" name="password">
@@ -54,15 +54,15 @@
     <footer>
         <div class="grid-x grid-margin-y expanded">
         <div class="medium-6 cell">
-            <ul class="menu">
+            <ul class="menu"> <!--
                 <li><a href="#">Legal</a></li>
                 <li><a href="#">Partner</a></li>
-                <li><a href="#">Explore</a></li>
+                <li><a href="#">Explore</a></li>  -->
             </ul>
         </div>
     <div class="medium-6 cell">
         <ul class="menu align-right">
-            <li class="menu-text">Copyright © 2099 Random Mag</li>
+         <!--   <li class="menu-text">Copyright © 2099 Random Mag</li>     -->
         </ul>
     </div>
         </div>

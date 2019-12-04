@@ -117,6 +117,9 @@ style="width:678px;
 	  echo '</td>'; ?>
  </tr>
    </table>
+      <td>
+    Breve Descripción: <input type="text" id="descripcion" name="descripcion" value="<?php echo $row["descripcion"]; ?>"Required>
+   </td>
    </br>			
 Seleccione la resolución de su pantalla si la posición que eligio previamente no coincidió con lo seleccionado al momento de crear el grifo.
  <select name="resolucion">

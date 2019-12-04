@@ -47,7 +47,7 @@ $conn = mysqli_connect("localhost","root","","tesis");
 $result = mysqli_query($conn, 'SELECT *
                                FROM historialmutual  
                                WHERE 1
-                               AND eliminar!="1" ;');
+                               AND eliminar!="1" ORDER BY fecha DESC ;');
 while($row = mysqli_fetch_array($result)){
 ?>	
  <table>

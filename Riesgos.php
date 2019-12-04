@@ -45,7 +45,7 @@ if (!isset($_SESSION['usuario'])){
   <table id="example">
   <thead>
     <tr>
-      <th>Icono</th>
+      <th width="200px" style="max-width:200px;" >Icono</th>
 	  <th>Nombre</th>
 	  <th>Descripción</th>
 	  <th>Modificar</th>

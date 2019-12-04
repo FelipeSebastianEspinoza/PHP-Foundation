@@ -27,12 +27,14 @@ $d4 = explode("indiceobs :",  $nombre[7]);
 $d5 = explode("indicepron :",  $nombre[10]);
  
 
- 
+ if(!empty($nombre[12]) && !empty($nombre[11]) ){ 
 $d6 = explode("recomendacion :",  $nombre[11]);
- 
+
+
+
 $d7 = explode("888",  $nombre[12]);
  
-
+ }
  
 $d8 = explode("fechapron :",  $nombre[9]);
   $d8[1];
@@ -73,6 +75,8 @@ $Fecha2=str_replace('"','',$d8[1]);
     </tr>
   </tbody>
 </table>
+	<?php
+	if(!empty($nombre[12]) && !empty($nombre[11]) ){  ?>
 <table class="gridtable">
   <thead>
     <tr>
@@ -81,11 +85,14 @@ $Fecha2=str_replace('"','',$d8[1]);
   </thead>
   <tbody>
     <tr>
+ 
   <td><center><?php echo $d6[1],$d7[0]; ?></center></td>
-    </tr>
+ 
+
+   </tr>
   </tbody>
 </table>
-
+	<?php } ?>
 <style>
  
 table.gridtable {
