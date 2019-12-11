@@ -804,11 +804,22 @@ class GuardarProtocolo{
             echo "El tamaño excede el límite establecido";
         }
  
+         if($nombre_archivo==null){ 
+        $consulta = "INSERT INTO `procedimiento` 
+		(`id_procedimiento`, 
+		`titulo`,`descripcion`,`id_edificio`) 
+		VALUES 
+		(NULL,'$titulo','$descripcion','$id_edificio');";
+		 }else{
         $consulta = "INSERT INTO `procedimiento` 
 		(`id_procedimiento`,`archivo`,`nombre_de_archivo`,
 		`titulo`,`descripcion`,`id_edificio`) 
 		VALUES 
-		(NULL,'$nnombre','$nombre_de_archivo','$titulo','$descripcion','$id_edificio');";
+		(NULL,'$nnombre','$nombre_de_archivo','$titulo','$descripcion','$id_edificio');";	 
+		 }
+ 
+ 
+ 
  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    

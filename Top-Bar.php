@@ -1,12 +1,16 @@
                 <div class="top-bar" id="realEstateMenu">
                     <div class="top-bar-left">
                         <ul class="menu menu-hover-lines">
-                            <li class="active"><a href="Principal.php">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li class="active"><a href="Principal.php">Página Principal</a></li>
+							<?php 
+			         			if(isset($_SESSION['usuario'])){
+									
+                                echo '<li><a href="manual/Manual.pdf" target="_blank">Manual de Usuario</a></li>';          
+					  
+					        	}
+						    ?> 
+                           <!-- <li><a href="#">Blog</a></li> -->
+ 
                         </ul>
                     </div>
                     <div class="top-bar-right">

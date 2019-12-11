@@ -112,7 +112,7 @@
 			alt="EdificioGantes" onclick="FacultadCienciasOnClick()" onmouseover="FacultadCiencias()" onmouseout="normalImg()">
             <area style="cursor: pointer;"  shape="rect" coords="212,97,251,149" 
 			alt="EdificioGantes" onclick="VicerrectoriaOnClick()" onmouseover="Vicerrectoria()" onmouseout="normalImg()">
-            <area style="cursor: pointer;"  shape="rect" coords="188,68,211,129"
+            <area style="cursor: pointer;"  shape="rect" coords="188,69,212,148"
 			alt="EdificioGantes" onclick="RectoriaOnClick()" onmouseover="Rectoria()" onmouseout="normalImg()">
             <area style="cursor: pointer;"  shape="rect" coords="560,389,611,413" 
 			alt="EdificioGantes" onclick="RectoriaOnClick()" onmouseover="Rectoria()" onmouseout="normalImg()">
@@ -134,15 +134,23 @@
             <area style="cursor: pointer;"  shape="rect" coords="462,307,513,333"
 			alt="EdificioGantes" onclick="BiomaterialesOnClick()" onmouseover="Biomateriales()" onmouseout="normalImg()">
 			
- 
+            <area style="cursor: pointer;"  shape="rect" coords="411,375,420,399"
+			alt="EdificioGantes" onclick="NuevoEdificioOnClick()" onmouseover="NuevoEdificio()" onmouseout="normalImg()">
 			
+            <area style="cursor: pointer;"  shape="rect" coords="413,401,420,410"
+			alt="EdificioGantes" onclick="DepartamentoMatematicasOnClick()" onmouseover="DepartamentoMatematicas()" onmouseout="normalImg()">
+			
+            <area style="cursor: pointer;"  shape="rect" coords="412,412,421,422"
+			alt="EdificioGantes" onclick="LaboratorioEconomiaEspacialOnClick()" onmouseover="LaboratorioEconomiaEspacial()" onmouseout="normalImg()">
+			
+            <area style="cursor: pointer;"  shape="poly" coords="164,262,184,241,205,263,184,283" 
+			alt="EdificioGantes" onclick="EnConstruccionOnClick()" onmouseover="EnConstruccion()" onmouseout="normalImg()">
+			
+  
  
  
- 
- 
- 
- 
- 	
+ <!--EnConstruccion -->
+ <!--planetario -->
  
  	
 		

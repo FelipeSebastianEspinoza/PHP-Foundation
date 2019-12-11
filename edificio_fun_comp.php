@@ -147,7 +147,18 @@
 <form method="POST" action="Edificio.php" id="Biomateriales">
     <input type="hidden" name="id_edificio" value="48" />    
 </form>	
-
+<form method="POST" action="Edificio.php" id="NuevoEdificio">
+    <input type="hidden" name="id_edificio" value="49" />    
+</form>
+<form method="POST" action="Edificio.php" id="DepartamentoMatematicas">
+    <input type="hidden" name="id_edificio" value="50" />    
+</form>	
+<form method="POST" action="Edificio.php" id="LaboratorioEconomiaEspacial">
+    <input type="hidden" name="id_edificio" value="51" />    
+</form>		
+<form method="POST" action="Edificio.php" id="EnConstruccion">
+    <input type="hidden" name="id_edificio" value="52" />    
+</form>	
 <script>  
  
 function bigImg() {
@@ -543,15 +554,44 @@ document.getElementById('edGantes').src='img/Biomateriales.jpg';
 document.getElementById('titulo').innerHTML = "Centro de Biomateriales y Nanotecnología"; 
 } 
  
+function NuevoEdificioOnClick() {
+document.getElementById("NuevoEdificio").submit();  
+}
+function NuevoEdificio() {
+document.getElementById("edGantes").style.display = "block";
+document.getElementById('edGantes').src='img/NuevoEdificio.jpg';
+document.getElementById('titulo').innerHTML = "Nuevo Edificio"; 
+} 
+function DepartamentoMatematicasOnClick() {
+document.getElementById("DepartamentoMatematicas").submit();  
+}
+function DepartamentoMatematicas() {
+document.getElementById("edGantes").style.display = "block";
+document.getElementById('edGantes').src='img/DepartamentoMatematicas.jpg';
+document.getElementById('titulo').innerHTML = "Departamento de Matemáticas"; 
+} 
+ 
+function LaboratorioEconomiaEspacialOnClick() {
+document.getElementById("LaboratorioEconomiaEspacial").submit();  
+}
+function LaboratorioEconomiaEspacial() {
+document.getElementById("edGantes").style.display = "block";
+document.getElementById('edGantes').src='img/LaboratorioEconomiaEspacial.jpg';
+document.getElementById('titulo').innerHTML = "Laboratorio de Economía Espacial"; 
+} 
+ 
+function EnConstruccionOnClick() {
+document.getElementById("EnConstruccion").submit();  
+}
+function EnConstruccion() {
+document.getElementById("edGantes").style.display = "block";
+document.getElementById('edGantes').src='img/EnConstruccion.jpg';
+document.getElementById('titulo').innerHTML = "En Construcción"; 
+} 
+  
  
  
- 
- 
- 
- 
- 
- 
- 
+  
  
  
  

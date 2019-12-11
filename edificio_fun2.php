@@ -112,7 +112,7 @@
 			alt="EdificioGantes" onclick="FacultadCienciasOnClick()" onmouseover="FacultadCiencias()" onmouseout="normalImg()">
             <area style="cursor: pointer;"  shape="rect" coords="212,97,251,149" 
 			alt="EdificioGantes" onclick="VicerrectoriaOnClick()" onmouseover="Vicerrectoria()" onmouseout="normalImg()">
-            <area style="cursor: pointer;"  shape="rect" coords="188,68,211,129"
+            <area style="cursor: pointer;"  shape="rect" coords="188,69,212,148"
 			alt="EdificioGantes" onclick="RectoriaOnClick()" onmouseover="Rectoria()" onmouseout="normalImg()">
 			<area style="cursor: pointer;"  shape="rect" coords="527,210,554,256"
 			alt="EdificioGantes" onclick="AulasADOnClick()" onmouseover="AulasAD()" onmouseout="normalImg()">
@@ -130,11 +130,18 @@
 			alt="EdificioGantes" onclick="TecnologiaEmergenteOnClick()" onmouseover="TecnologiaEmergente()" onmouseout="normalImg()">
             <area style="cursor: pointer;"  shape="rect" coords="462,307,513,333"
 			alt="EdificioGantes" onclick="BiomaterialesOnClick()" onmouseover="Biomateriales()" onmouseout="normalImg()">
+            <area style="cursor: pointer;"  shape="rect" coords="411,375,420,399"
+			alt="EdificioGantes" onclick="NuevoEdificioOnClick()" onmouseover="NuevoEdificio()" onmouseout="normalImg()">
 			
- 	
+            <area style="cursor: pointer;"  shape="rect" coords="413,401,420,410"
+			alt="EdificioGantes" onclick="DepartamentoMatematicasOnClick()" onmouseover="DepartamentoMatematicas()" onmouseout="normalImg()">
+			
+            <area style="cursor: pointer;"  shape="rect" coords="412,412,421,422"
+			alt="EdificioGantes" onclick="LaboratorioEconomiaEspacialOnClick()" onmouseover="LaboratorioEconomiaEspacial()" onmouseout="normalImg()">
+			
+            <area style="cursor: pointer;"  shape="poly" coords="164,262,184,241,205,263,184,283" 
+			alt="EdificioGantes" onclick="EnConstruccionOnClick()" onmouseover="EnConstruccion()" onmouseout="normalImg()">
 		
-		
-
 
 
 		
@@ -586,21 +593,21 @@
 	  ?> 
       <img class="imgB1" src="img/iconos_edificios/39.png"alt="EdificioGantes" onclick="VicerrectoriaOnClick()" onmouseover="Vicerrectoria()" onmouseout="normalImg()" 
       style="position:absolute; 
-	   top: 91px;  
-	   left:269px;
+	   top: 95px;  
+	   left:270px;
 	   cursor:pointer;
 	   z-index: 3; 
-       width: 46px;"  >
+       width: 48px;"  >
 	   <?php
 	  }else if($row["id_edificio"]=='40' && $row["estado"]=="Pendiente" ){
 	  ?> 
       <img class="imgB1" src="img/iconos_edificios/40.png"alt="EdificioGantes" onclick="RectoriaOnClick()" onmouseover="Rectoria()" onmouseout="normalImg()" 
       style="position:absolute; 
-	   top: 68px;  
-	   left:247px;
+	   top: 69px;  
+	   left:248px;
 	   cursor:pointer;
 	   z-index: 3; 
-       width: 23px;"  >
+       width: 22px;"  >
 	   <?php
 	  }else if($row["id_edificio"]=='43' && $row["estado"]=="Pendiente" ){
 	  ?> 
@@ -661,6 +668,46 @@
 	   cursor:pointer;
 	   z-index: 3; 
        width: 52px;"  >
+	   <?php
+	  }else if($row["id_edificio"]=='49' && $row["estado"]=="Pendiente" ){
+	  ?> 
+      <img class="imgB1" src="img/iconos_edificios/49.png"alt="EdificioGantes" onclick="NuevoEdificioOnClick()" onmouseover="NuevoEdificio()" onmouseout="normalImg()" 
+      style="position:absolute; 
+	   top: 374px;  
+	   left:472px;
+	   cursor:pointer;
+	   z-index: 3; 
+       width: 11px;"  >
+	   <?php
+	  }else if($row["id_edificio"]=='50' && $row["estado"]=="Pendiente" ){
+	  ?> 
+      <img class="imgB1" src="img/iconos_edificios/50.png"alt="EdificioGantes" onclick="DepartamentoMatematicasOnClick()" onmouseover="DepartamentoMatematicas()" onmouseout="normalImg()" 
+      style="position:absolute; 
+	   top: 400px;  
+	   left:472px;
+	   cursor:pointer;
+	   z-index: 3; 
+       width: 11px;"  >
+	   <?php
+	  }else if($row["id_edificio"]=='51' && $row["estado"]=="Pendiente" ){
+	  ?> 
+      <img class="imgB1" src="img/iconos_edificios/51.png"alt="EdificioGantes" onclick="LaboratorioEconomiaEspacialOnClick()" onmouseover="LaboratorioEconomiaEspacial()" onmouseout="normalImg()" 
+      style="position:absolute; 
+	   top: 411px;  
+	   left:472px;
+	   cursor:pointer;
+	   z-index: 3; 
+       width: 11px;"  >
+	   <?php
+	  }else if($row["id_edificio"]=='52' && $row["estado"]=="Pendiente" ){
+	  ?> 
+      <img class="imgB1" src="img/iconos_edificios/52.png"alt="EdificioGantes" onclick="EnConstruccionOnClick()" onmouseover="EnConstruccion()" onmouseout="normalImg()" 
+      style="position:absolute; 
+	   top: 243px;  
+	   left:226px;
+	   cursor:pointer;
+	   z-index: 3; 
+       width: 38px;"  >
 	   <?php
 	  }
 	   
