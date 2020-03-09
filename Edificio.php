@@ -192,9 +192,13 @@ if(isset($_SESSION['usuario'])){
   <li class="tabs-title"><a href="#panel4c">Extintores</a></li>
   <li class="tabs-title"><a href="#panel5c">Redes Humedas</a></li>
   <li class="tabs-title"><a href="#panel7c">Procedimientos</a></li>
-  <li class="tabs-title"><a href="#panel8c">Documentos</a></li>  
+  <li class="tabs-title"><a href="#panel8c">Documentos</a></li>
+  <?php if(isset($_SESSION['usuario'])){ ?>
+  <li class="tabs-title"><a href="#panel9c">Comentarios</a></li> 
+  <li class="tabs-title"><a href="#panel20c">Listado de Herramientas</a></li> 
+  <?php } ?>  
 </ul>
-
+ 
 <div class="tabs-content" data-tabs-content="collapsing-tabs">
  
 
@@ -762,8 +766,8 @@ if(!empty($row["archivo"])){
  <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>  
  <td><input type="text" id="inputNombre" name="titulo" class="form-control" placeholder=" " Required ></td>
  <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen"  > </td>
-<td><input type="text" id="inputNombreArchivo" name="nombre_de_archivo" class="form-control" placeholder=" "   ></td>
- <td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
+ <td><input type="text" id="inputNombreArchivo" name="nombre_de_archivo" class="form-control" placeholder=" "   ></td>
+ <td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="descripcion" class="form-control" placeholder="Escriba la descripción"  Required></textarea></td>
  <td><button class="success button" type="submit" name="submitprocedimiento">Registrar</button></td>
  </form>
  </tr>
@@ -787,6 +791,7 @@ $conn = mysqli_connect("localhost","root","","tesis");
 $result = mysqli_query($conn, 'SELECT *
                                FROM documentoedificio  
                                WHERE id_edificio='.$id_edificio.'
+							   AND tipo!="1"   
                                AND eliminar!="1" ;');
 while($row = mysqli_fetch_array($result)){
 ?>	
@@ -845,16 +850,7 @@ echo'</form>';
 </br>
 
 
-
-
-
-   
-
-
-
-
-
-
+ 
 <?php 	
 }
 ?>		
@@ -889,14 +885,210 @@ echo'</form>';
 <?php } ?>
  
  
+</div>
  
+ 
+  <!-- xxxxxxxxxxxxxx  -->
+ 
+<div class="tabs-panel" id="panel20c">
+ 
+ 
+<tabla>
+<?php  
+$conn = mysqli_connect("localhost","root","","tesis");
+$result = mysqli_query($conn, 'SELECT *
+                               FROM documentoedificio  
+                               WHERE id_edificio='.$id_edificio.'
+                               AND tipo!="0"  
+							   AND eliminar!="1" ;');
+while($row = mysqli_fetch_array($result)){
+?>	
+<table>
+<thead>
+ <tr>
+ 
+ <th>
+ <!-- separador   -->
+ </th>
+<?phpif(isset($_SESSION['usuario'])){?>
+ <th width="10px">
+ <!-- separador   -->
+ </th>
+<?php}?>
+ </tr>
+</thead> 
+<tbody>
+<?php 
+ 
+if(!empty($row["archivo"])){
+ echo'<tr>';
+ echo'<td>';
+ ?>
+ <a href="pdf/<?php  echo $row["archivo"] ;?>" target="_blank"><img src="img/lista.png" alt="Archivo" border="0"style="width:80px;height:80px; "/></a>
+ <?php
+ echo utf8_encode($row["titulo"]);
+ echo'</td>';
+ echo'<td>';
+ 
+ 
+ 
+  
+if(isset($_SESSION['usuario'])){
+echo'<form class="formulario" action="MDocumentoEdificio.php" method="post" id="usrform" enctype="multipart/form-data">';
+echo'<input type="hidden" name="id_documentoedificio" value='.$row["id_documentoedificio"].' />';
+echo'<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />';
+?>  
+<button  class="success button" type="submit" name="modificarextintor">Modificar</button> 
+<?php
+echo'</form>';
+echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+echo '<input type="hidden" name="id_documentoedificio" value='.$row["id_documentoedificio"].' />';    
+?>  
+<button onclick="return confirm('Confimar eliminación');"class="alert button" type="submit" name="eliminardocumento" style="width:88px;">Eliminar</button> 
+<?php
+echo'</form>';
+}
+ 
+ echo'</td>';
+ echo'</tr>';
+}
+?>	
+  </tbody>
+  </table>
+</br>
+
+
+ 
+<?php 	
+}
+?>		
+<?php if(isset($_SESSION['usuario'])){ ?>
+</br>	
+<div class="titulo_boton">
+  <a style='cursor: pointer;' onClick="muestra_lista('nuevolista')" title="" class="success button">Añadir Documento</a>
+</div>
+
+<div id="nuevolista">
+<table>
+<thead>
+ <tr>
+  <th>Título</th>
+  <th>Archivo </th>
+  <th width="100">Registrar</th>
+ </tr>
+</thead>
+<tbody>  
+ <tr>
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+ <input type="hidden" name="id_documentoedificio" value="<?php echo $id_documentoedificio ?>"/>
+ <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>  
+ <td><input type="text" id="inputNombre" name="titulo" class="form-control" placeholder=" " Required ></td>
+ <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" Required  > </td>
+ <td><button class="success button" type="submit" name="submitlista">Registrar</button></td>
+ </form> 
+ </tr>
+</tbody>
+</table>
+</div>
+<?php } ?>
  
  
 </div>
  
+  <!-- xxxxxxxxxxxxx   -->
  
  
  
+ 
+ 
+<?php if(isset($_SESSION['usuario'])){ ?>
+<div class="tabs-panel" id="panel9c">
+<tabla>
+<?php  
+$conn = mysqli_connect("localhost","root","","tesis");
+$result = mysqli_query($conn, 'SELECT *
+                               FROM comentario  
+                               WHERE id_edificio='.$id_edificio.'
+                               AND eliminar!="1" ;');
+							   
+while($row = mysqli_fetch_array($result)){
+?>	
+<table>   
+<thead>
+ <tr>
+  <th height="10px">
+<?php 
+ $date=date_create($row["fecha"]);
+ echo date_format($date,"d/m/Y") ;
+?>	
+ </th>
+ <th width="10px">
+<?php  
+if(isset($_SESSION['usuario'])){
+echo'<form class="formulario" action="MComentario.php" method="post" id="usrform" enctype="multipart/form-data">';
+echo'<input type="hidden" name="id_comentario" value='.$row["id_comentario"].' />';
+echo'<input type="hidden" name="id_edificio" value='.$row["id_edificio"].' />';
+?>  
+<button style="width:88px;" class="success button small" type="submit" name="modificarcomentario">Modificar</button> 
+<?php
+echo'</form>';
+echo'<form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">';
+echo '<input type="hidden" name="id_comentario" value='.$row["id_comentario"].' />';    
+?>  
+<button onclick="return confirm('Confimar eliminación');"class="alert button small" type="submit" name="eliminarcomentario" style="width:88px;">Eliminar</button> 
+<?php
+echo'</form>';
+}
+?>   
+ </th>
+ </tr>
+</thead> 
+<tbody>
+<?php 
+ echo'<tr>';
+ echo'<td>';
+ echo utf8_encode($row["comentario"]);
+ echo'</td>';
+ echo'<td></td>';
+ echo'</tr>';
+?>	
+  </tbody>
+  </table>
+</br>
+<?php 	
+}
+?>		
+<?php if(isset($_SESSION['usuario'])){ ?>
+</br>	
+<div class="titulo_boton">
+  <a style='cursor: pointer;' onClick="muestra_comentarios('nuevocomentario')" title="" class="success button">Añadir Comentario</a>
+</div>
+
+<div id="nuevocomentario">
+<table>
+<thead>
+ <tr>
+  <th width="100">Fecha</th>
+  <th>Comentario</th>
+  <th width="100">Registrar</th>
+ </tr>
+</thead>
+<tbody>  
+ <tr> 
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data">
+ <input type="hidden" name="id_edificio" value="<?php echo $id_edificio ?>"/>  
+ <td><input type="date" id="inputFecha" name="fecha" class="form-control" placeholder=" " Required ></td>
+ <td><textarea  type="text" id="inputDescripcion" rows="5" cols="55"name="comentario" class="form-control" placeholder="Escriba un comentario"  Required></textarea></td>
+ <td><button class="success button" type="submit" name="submitcomentario">Registrar</button></td>
+ </form>
+ </tr>
+</tbody>
+</table>
+</div>
+<?php } ?>
+</div> 
+<?php } ?>
+
  
  
  
@@ -905,15 +1097,6 @@ echo'</form>';
 </div>
 
 
-
- 
-  
- 
- 
-  
- 
- 
-  
  
   
   </div>
@@ -931,6 +1114,23 @@ echo'</form>';
  
 <?php
 include("guardar.php"); 
+if(isset($_POST['submitcomentario'])){
+ 
+ $campos = array("id_comentario"=> NULL ,
+ "fecha"=>$_POST['fecha'],
+ "titulo"=>$_POST['titulo'],
+ "id_edificio"=>$_POST['id_edificio']); 
+ 
+ $nuevo = new GuardarComentariosEdificio("tesis"); 
+ $nuevo->NuevoComentarioEdificio($campos);
+}
+if(isset($_POST['eliminarcomentario'])){
+	 
+$campos = array("id_comentario"=>$_POST['id_comentario']); 
+  
+$nuevo = new GuardarComentariosEdificio("tesis"); 
+$nuevo->EliminarComentario($campos);  
+}
 if(isset($_POST['submitdocumento'])){
  
  $campos = array("id_documentoedificio"=> NULL ,
@@ -940,6 +1140,16 @@ if(isset($_POST['submitdocumento'])){
  
  $nuevo = new GuardarDocumentosEdificio("tesis"); 
  $nuevo->NuevoDocumentoEdificio($campos);
+}
+if(isset($_POST['submitlista'])){
+ 
+ $campos = array("id_documentoedificio"=> NULL ,
+  
+ "titulo"=>$_POST['titulo'],
+ "id_edificio"=>$_POST['id_edificio']); 
+ 
+ $nuevo = new GuardarDocumentosEdificio("tesis"); 
+ $nuevo->NuevoListaEdificio($campos);
 }
 if(isset($_POST['eliminardocumento'])){
 	
@@ -1087,6 +1297,18 @@ var el = document.getElementById(id);
 el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
 }
 }
+function muestra_lista(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
+function muestra_comentarios(id){
+if (document.getElementById){  
+var el = document.getElementById(id);  
+el.style.display = (el.style.display == 'none') ? 'block' : 'none';  
+}
+}
 window.onload = function(){ 
 piso_oculto('nuevopiso');        
 riesgos_ocultos('nuevoriesgo');
@@ -1095,6 +1317,8 @@ extintores_ocultos('nuevoextintor');
 rehumeda_ocultos('nuevaredhumeda');
 muestra_procedimientos('nuevoprocedimiento');
 muestra_documentos('nuevodocumento');
+muestra_lista('nuevolista'); 
+muestra_comentarios('nuevocomentario');
 }
 </script>
  

@@ -214,6 +214,7 @@ muestra_oculta('nuevoriesgo');
      <script>
 $(document).ready(function() {
     $('#example').DataTable( {
+		"pageLength": 5,
         dom: 'Bfrtip',
         buttons: [
 		

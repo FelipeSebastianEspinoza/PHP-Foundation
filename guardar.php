@@ -297,8 +297,11 @@ class GuardarProtocolo{
         $id_edificio =htmlentities($_POST['id_edificio']);
 		$id_enfermedad =htmlentities($_POST['id_enfermedad']);
   
- 
-		if($fecha_termino!='0000-00-00'){
+         if($fecha > $fecha_termino){ 
+			echo "<script> 
+					 alert('Error fecha de termino menor que fecha de inicio');
+				  </script>";
+         }else if($fecha_termino!='0000-00-00'){
 		 $consulta = "UPDATE `enfermedades_reportadas` SET `fecha`='$fecha' 
 		,`fecha_termino`='$fecha_termino' 
 	    ,`persona`='$persona',`id_edificio`='$id_edificio'
@@ -1522,6 +1525,7 @@ class GuardarProtocolo{
 	private $fecha_carga;
     private $fecha_venc;
     private $ubicacion;
+    private $comentario;
     private $estado;
     private $id_piso;
 	
@@ -1535,7 +1539,8 @@ class GuardarProtocolo{
 		$fecha_carga =htmlentities($_POST['fecha_carga']);
 		$fecha_venc =htmlentities($_POST['fecha_venc']);
         $ubicacion =htmlentities($_POST['ubicacion']);
-	      
+        $comentario =htmlentities($_POST['comentario']);
+		
         $estado =htmlentities($_POST['estado']);          
         $estado =trim($estado);
         $estado =ucfirst($estado);		
@@ -1569,15 +1574,15 @@ class GuardarProtocolo{
 	   
 	    if($nombre_archivo==null){ 
               $consulta = "INSERT INTO `extintor` (`id_extintor`,`nombre`,`fecha_carga`,
-		`fecha_venc`,`ubicacion`,`estado`,`id_piso`)
+		`fecha_venc`,`ubicacion`,`estado`,`comentario`,`id_piso`)
 		VALUES (NULL,'$nombre','$fecha_carga','$fecha_venc',
-		'$ubicacion','$estado','$id_piso');";
+		'$ubicacion','$estado','$comentario','$id_piso');";
  
 		}else{
 		    $consulta = "INSERT INTO `extintor` (`id_extintor`,`nombre`,`fecha_carga`,
-		`fecha_venc`,`ubicacion`,`estado`,`imagen`,`id_piso`)
+		`fecha_venc`,`ubicacion`,`estado`,`comentario`,`imagen`,`id_piso`)
 		VALUES (NULL,'$nombre','$fecha_carga','$fecha_venc',
-		'$ubicacion','$estado','$nnombre','$id_piso');";
+		'$ubicacion','$estado','$comentario','$nnombre','$id_piso');";
 		}
  
  
@@ -1612,6 +1617,7 @@ class GuardarProtocolo{
 		$fecha_carga = htmlentities($_POST['fecha_carga']);
         $fecha_venc = htmlentities($_POST['fecha_venc']);
         $ubicacion = htmlentities($_POST['ubicacion']);
+        $comentario = htmlentities($_POST['comentario']);
         $estado =htmlentities($_POST['estado']);          
         $estado =trim($estado);
         $estado =ucfirst($estado);	
@@ -1648,13 +1654,13 @@ class GuardarProtocolo{
 		if($nombre_archivo==null){ 	
                 $consulta = "UPDATE `extintor` SET `nombre`='$nombre',
 		`fecha_carga`='$fecha_carga',`fecha_venc`='$fecha_venc',
-		`ubicacion`='$ubicacion',`estado`='$estado',
+		`ubicacion`='$ubicacion',`estado`='$estado',`comentario`='$comentario',
 	    `id_piso`='$id_piso'
 		WHERE `id_extintor`='$id_extintor'"; 
 		}else{
 		        $consulta = "UPDATE `extintor` SET `nombre`='$nombre',
 		`fecha_carga`='$fecha_carga',`fecha_venc`='$fecha_venc',
-		`ubicacion`='$ubicacion',`estado`='$estado',`imagen`='$nnombre',
+		`ubicacion`='$ubicacion',`estado`='$estado',`comentario`='$comentario',`imagen`='$nnombre',
 	    `id_piso`='$id_piso'
 		WHERE `id_extintor`='$id_extintor'"; 	
 			
@@ -1706,7 +1712,29 @@ class GuardarProtocolo{
 	
 	}
 	
-	
+	 function EliminarArchivo1($form_data){
+        $fields = array_keys($form_data);
+        $id_extintor = $_POST['id_extintor'];
+ 
+         $consulta = "UPDATE `extintor` 
+		             SET `imagen`= NULL 
+		             WHERE `id_extintor`='$id_extintor'";
+  
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                   window.location.replace('Extintores.php');
+                   // window.location = window.location.pathname; 					
+			      </script>"; 
+		}
+  
+	}	
 	
 	
 
@@ -2957,14 +2985,14 @@ class GuardarProtocolo{
  
  
  
- 
+  
  
   class GuardarDocumentosEdificio{
  
 	private $id_documentoedificio;
 	private $titulo;
 	private $id_edificio;
- 
+	private $tipo; 
 	
     function __construct($bd){
 	    $this->con = new mysqli('localhost','root','',$bd); 
@@ -2993,9 +3021,9 @@ class GuardarProtocolo{
  
         $consulta = "INSERT INTO `documentoedificio` 
 		(`id_documentoedificio`,`titulo`,`archivo`,
-		`id_edificio`) 
+		`id_edificio`,`tipo`)  
 		VALUES 
-		(NULL,'$titulo','$nnombre','$id_edificio');";
+		(NULL,'$titulo','$nnombre','$id_edificio','0');";
  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
@@ -3010,7 +3038,47 @@ class GuardarProtocolo{
 			      </script>"; 
 		}
 	}
-   
+    function NuevoListaEdificio($form_data){
+        $fields = array_keys($form_data);
+		
+        $titulo = htmlentities($_POST['titulo']);
+        $id_edificio = htmlentities($_POST['id_edificio']);
+ 
+        $nombre_imagen=$_FILES['ARCHIVO']['name'];
+		$nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/pdf/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+        $consulta = "INSERT INTO `documentoedificio` 
+		(`id_documentoedificio`,`titulo`,`archivo`,
+		`id_edificio`,`tipo`)  
+		VALUES 
+		(NULL,'$titulo','$nnombre','$id_edificio','1');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	}
+	
     function ModificarDocumentoEdificio($form_data){
         $fields = array_keys($form_data);
 		
@@ -3171,31 +3239,106 @@ class GuardarProtocolo{
  
  
  
- class GuardarHistorialMutual{
+class GuardarHistorialMutual{
  
 	private $id_historialmutual;
-	private $titulo;
+	private $titulo; 
 	private $fecha;
 	private $descripcion;
 	private $estado;
-	private $id_campus;
- 
+	
     function __construct($bd){
 	    $this->con = new mysqli('localhost','root','',$bd); 
 	}
- 
-	 function NuevoArchivoMutual($form_data){
+	 
+    function NuevoHistorialMutual($form_data){
         $fields = array_keys($form_data);
 		
-		$fecha = htmlentities($_POST['fecha']);
 		$titulo = htmlentities($_POST['titulo']);
-        $descripcion = htmlentities($_POST['descripcion']);
+		$fecha = htmlentities($_POST['fecha']);
+		$descripcion = htmlentities($_POST['descripcion']);
         $estado =htmlentities($_POST['estado']);          
         $estado =trim($estado);
         $estado =ucfirst($estado);	
-		$id_campus = "1";
-     
-        $nombre_imagen=$_FILES['ARCHIVO']['name'];
+ 
+        $consulta = "INSERT INTO `historialmutual` 
+		(`id_historialmutual`,`titulo`,`fecha`,`descripcion`,`estado`,`id_campus`) 
+		VALUES 
+		(NULL,'$titulo','$fecha','$descripcion','$estado','1');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Mutual.php');
+			      </script>"; 
+		}
+	}
+   
+    function ModificarHistorialMutual($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_historialmutual = htmlentities($_POST['id_historialmutual']);
+		$titulo = htmlentities($_POST['titulo']);
+		$fecha = htmlentities($_POST['fecha']);
+		$descripcion =htmlentities($_POST['descripcion']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	
+		 
+
+        $consulta = "UPDATE `historialmutual` SET `titulo`='$titulo', 
+	    `fecha`='$fecha',
+		`descripcion`='$descripcion',
+		`estado`='$estado'    		
+		 WHERE `id_historialmutual`='$id_historialmutual'"; 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Mutual.php');
+			      </script>"; 
+		}
+	}
+
+	function EliminarHistorialMutual($form_data){ 
+        $fields = array_keys($form_data);
+		
+		$id_historialmutual = $_POST['id_historialmutual'];  
+ 
+        $consulta = "UPDATE `historialmutual` SET `eliminar`='1'
+		WHERE `id_historialmutual`='$id_historialmutual'";  
+
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;
+			      </script>"; 
+		}
+	}
+	
+	function Archivo1($form_data){
+        $fields = array_keys($form_data); 
+        $id_historialmutual = $_POST['id_historialmutual'];
+		$nombre = htmlentities($_POST['nombre']);
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
 	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
         $tipo_imagen=$_FILES['ARCHIVO']['type'];
         $tamano_imagen=$_FILES['ARCHIVO']['size'];
@@ -3209,71 +3352,32 @@ class GuardarProtocolo{
             echo $_FILES['ARCHIVO']['size'];
             echo "El tamaño excede el límite establecido";
         }
- 	    if($nombre_archivo==null){ 
-        $consulta = "INSERT INTO `historialmutual`  
-		(`id_historialmutual` ,`titulo`,`fecha`,`estado`,`descripcion`,`id_campus`) 
-		VALUES  
-		(NULL, '$titulo','$fecha','$estado','$descripcion','$id_campus');";
-		}else{
-        $consulta = "INSERT INTO `historialmutual`  
-		(`id_historialmutual`,`archivo`,`titulo`,`fecha`,`estado`,`descripcion`,`id_campus`) 
-		VALUES  
-		(NULL,'$nnombre','$titulo','$fecha','$estado','$descripcion','$id_campus');"; 
-		}
+ 
+          $consulta = "INSERT INTO `mutual_anexos` 
+		(`id_mutualanexos`,`nombre`,`archivo`,`id_historialmutual`) 
+		VALUES (NULL,'$nombre','$nnombre','$id_historialmutual');";
  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
         if($resultado_cons == false){
 			echo "<script> 
 					 alert('No es posible crear');
-					 
 				  </script>";
 		}else{
-			echo "<script> 
+			echo "<script>
 					alert('Se ha creado con éxito'); 
                     window.location.replace('Mutual.php');					
 			      </script>"; 
 		}
 	}
-	
-	
-	function EliminarHistorialMutual($form_data){ 
+    
+	function Archivo2($form_data){
+
         $fields = array_keys($form_data);
-		
-		$id_historialmutual = $_POST['id_historialmutual'];  
- 
-        $consulta = "UPDATE `historialmutual` SET `eliminar`='1'
-		WHERE `id_historialmutual`='$id_historialmutual'";  
- 
-        $resultado_cons = mysqli_query($this->con,$consulta);
-	    
-        if($resultado_cons == false){
-			echo "<script> 
-					 alert('No es posible eliminar');
-					 
-				  </script>";
-		}else{
-			echo "<script>
-					alert('Se ha eliminado con éxito'); 
-                    window.location.replace('Mutual.php');					
-			      </script>"; 
-		}
- 
-	}
-	
-	
-	 function ModificarArchivoMutual($form_data){
-        $fields = array_keys($form_data);
-		
-		$id_historialmutual = htmlentities($_POST['id_historialmutual']);
-		$titulo =htmlentities($_POST['titulo']);
-		$fecha = htmlentities($_POST['fecha']);
-        $descripcion =htmlentities($_POST['descripcion']);
-        $estado =htmlentities($_POST['estado']);          
-        $estado =trim($estado);
-        $estado =ucfirst($estado); 
-		
-        $nombre_imagen=$_FILES['ARCHIVO']['name'];
+        $id_historialmutual = $_POST['id_historialmutual'];
+        $id_mutualanexos = $_POST['id_mutualanexos']; 
+		$nombre = htmlentities($_POST['nombre']);
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
 	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
         $tipo_imagen=$_FILES['ARCHIVO']['type'];
         $tamano_imagen=$_FILES['ARCHIVO']['size'];
@@ -3287,40 +3391,36 @@ class GuardarProtocolo{
             echo $_FILES['ARCHIVO']['size'];
             echo "El tamaño excede el límite establecido";
         }
+ 	    if($nombre_archivo==null){ 
+			  $consulta = "UPDATE `mutual_anexos` SET `nombre` = '$nombre' 
+	                 	WHERE `id_mutualanexos`='$id_mutualanexos'";  
+        }else{
  
-   if($nombre_archivo==null){ 
-   
-        $consulta = "UPDATE `historialmutual` SET `titulo`='$titulo' 
-	    ,`fecha`='$fecha',`descripcion`='$descripcion' ,`estado`='$estado'		
-		WHERE `id_historialmutual`='$id_historialmutual'"; 
-   }else{
-	          $consulta = "UPDATE `historialmutual` SET `archivo`='$nnombre' ,
-			  `titulo`='$titulo',`fecha`='$fecha',`descripcion`='$descripcion',`estado`='$estado' 		
-		WHERE `id_historialmutual`='$id_historialmutual'";     
-   }
+         $consulta = "UPDATE `mutual_anexos` SET `nombre` = '$nombre', 
+		                      `archivo`='$nnombre'
+	                 	WHERE `id_mutualanexos`='$id_mutualanexos'"; 					
+		}  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
         if($resultado_cons == false){
 			echo "<script> 
-					 alert('No es posible modificar'); 
+					 alert('No es posible actualizar');
 				  </script>";
 		}else{
 			echo "<script>
-					alert('Se ha modificado con éxito'); 
-                    window.location.replace('Mutual.php');			
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Mutual.php');					
 			      </script>"; 
 		}
 	}
 	
-		
-	 function EliminarArchivoMutual($form_data){
+	function EliminarArchivo1($form_data){
         $fields = array_keys($form_data);
         $id_historialmutual = $_POST['id_historialmutual'];
+		$id_mutualanexos = $_POST['id_mutualanexos'];
  
- 
-        $consulta = "UPDATE `historialmutual` SET `archivo`=NULL
-		WHERE `id_historialmutual`='$id_historialmutual'"; 
- 		 
+        $consulta = "UPDATE `mutual_anexos` SET `eliminar`='1'
+		WHERE `id_mutualanexos`='$id_mutualanexos'"; 
  
         $resultado_cons = mysqli_query($this->con,$consulta);
 	    
@@ -3331,15 +3431,10 @@ class GuardarProtocolo{
 		}else{
 			echo "<script>
 					alert('Se ha eliminado con éxito'); 
-                    window.location.replace('Mutual.php');						
+                    window.location.replace('Mutual.php');					
 			      </script>"; 
 		}
 	}
- 
-	 
- 
-	
-	
  
     public function cerrarBD(){
 		$this->con->close();
@@ -3351,6 +3446,304 @@ class GuardarProtocolo{
  
  
  
+ 
+class GuardarHistorialSeremi{
+ 
+	private $id_historialseremi;
+	private $titulo; 
+	private $fecha;
+	private $descripcion;
+	private $estado;
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	 
+    function NuevoHistorialSeremi($form_data){
+        $fields = array_keys($form_data);
+		
+		$titulo = htmlentities($_POST['titulo']);
+		$fecha = htmlentities($_POST['fecha']);
+		$descripcion = htmlentities($_POST['descripcion']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	
+ 
+        $consulta = "INSERT INTO `historialseremi` 
+		(`id_historialseremi`,`titulo`,`fecha`,`descripcion`,`estado`,`id_campus`) 
+		VALUES 
+		(NULL,'$titulo','$fecha','$descripcion','$estado','1');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear'); 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Seremi.php');
+			      </script>"; 
+		}
+	}
+   
+    function ModificarHistorialSeremi($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_historialseremi = htmlentities($_POST['id_historialseremi']);
+		$titulo = htmlentities($_POST['titulo']);
+		$fecha = htmlentities($_POST['fecha']);
+		$descripcion =htmlentities($_POST['descripcion']);
+        $estado =htmlentities($_POST['estado']);          
+        $estado =trim($estado);
+        $estado =ucfirst($estado);	
+		 
+
+        $consulta = "UPDATE `historialseremi` SET `titulo`='$titulo', 
+	    `fecha`='$fecha',
+		`descripcion`='$descripcion',
+		`estado`='$estado'    		
+		 WHERE `id_historialseremi`='$id_historialseremi'"; 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Seremi.php');
+			      </script>"; 
+		}
+	}
+
+	function EliminarHistorialSeremi($form_data){ 
+        $fields = array_keys($form_data);
+		
+		$id_historialseremi = $_POST['id_historialseremi'];  
+ 
+        $consulta = "UPDATE `historialseremi` SET `eliminar`='1'
+		WHERE `id_historialseremi`='$id_historialseremi'";  
+
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;
+			      </script>"; 
+		}
+	}
+	
+	function Archivo1($form_data){
+        $fields = array_keys($form_data); 
+        $id_historialseremi = $_POST['id_historialseremi'];
+		$nombre = htmlentities($_POST['nombre']);
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/pdf/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);  
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 
+          $consulta = "INSERT INTO `seremi_anexos` 
+		(`id_seremianexos`,`nombre`,`archivo`,`id_historialseremi`) 
+		VALUES (NULL,'$nombre','$nnombre','$id_historialseremi');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible crear');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Seremi.php');					
+			      </script>"; 
+		}
+	}
+    
+	function Archivo2($form_data){
+
+        $fields = array_keys($form_data);
+        $id_historialseremi = $_POST['id_historialseremi'];
+        $id_seremianexos = $_POST['id_seremianexos']; 
+		$nombre = htmlentities($_POST['nombre']);
+		$nombre_imagen=$_FILES['ARCHIVO']['name'];
+	    $nombre_archivo=($_FILES['ARCHIVO']['name']);
+        $tipo_imagen=$_FILES['ARCHIVO']['type'];
+        $tamano_imagen=$_FILES['ARCHIVO']['size'];
+		if($tamano_imagen<=20000000){ //archivos hasta 5 megas 
+        $carpeta_destino=$_SERVER['DOCUMENT_ROOT'] . '/FoundationR/pdf/'; 
+        $info = pathinfo($_FILES['ARCHIVO']['name']); 
+        $nnombre = md5(rand().time()).".".$info['extension']; 
+        move_uploaded_file($_FILES['ARCHIVO']['tmp_name'],$carpeta_destino.$nnombre);   
+        
+        }else{
+            echo $_FILES['ARCHIVO']['size'];
+            echo "El tamaño excede el límite establecido";
+        }
+ 	    if($nombre_archivo==null){ 
+			  $consulta = "UPDATE `seremi_anexos` SET `nombre` = '$nombre' 
+	                 	WHERE `id_seremianexos`='$id_seremianexos'";  
+        }else{
+ 
+         $consulta = "UPDATE `seremi_anexos` SET `nombre` = '$nombre', 
+		                      `archivo`='$nnombre'
+	                 	WHERE `id_seremianexos`='$id_seremianexos'"; 					
+		}  
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible actualizar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha creado con éxito'); 
+                    window.location.replace('Seremi.php');					
+			      </script>"; 
+		}
+	}
+	
+	function EliminarArchivo1($form_data){
+        $fields = array_keys($form_data);
+        $id_historialseremi = $_POST['id_historialseremi'];
+		$id_seremianexos = $_POST['id_seremianexos'];
+ 
+        $consulta = "UPDATE `seremi_anexos` SET `eliminar`='1'
+		WHERE `id_seremianexos`='$id_seremianexos'"; 
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                    window.location.replace('Seremi.php');					
+			      </script>"; 
+		}
+	}
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+class GuardarComentariosEdificio{
+ 
+	private $id_comentario;
+	private $comentario;
+	private $fecha;
+    private $id_edificio;
+	
+    function __construct($bd){
+	    $this->con = new mysqli('localhost','root','',$bd); 
+	}
+	 
+    function NuevoComentarioEdificio($form_data){
+        $fields = array_keys($form_data);
+		$fecha = htmlentities($_POST['fecha']);
+		$comentario =htmlentities($_POST['comentario']);
+		$id_edificio =htmlentities($_POST['id_edificio']);
+ 
+        $consulta = "INSERT INTO `comentario` (`id_comentario`,`fecha`,`comentario`,`id_edificio`)
+		VALUES (NULL,'$fecha','$comentario','$id_edificio');";
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('Error al añadir');
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha añadido con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	
+	}
+    function ModificarComentario($form_data){
+        $fields = array_keys($form_data);
+		$id_comentario =htmlentities($_POST['id_comentario']);
+		$fecha = htmlentities($_POST['fecha']);
+		$comentario =htmlentities($_POST['comentario']);
+		$id_edificio =htmlentities($_POST['id_edificio']);
+
+        $consulta = "UPDATE `comentario` SET `fecha`='$fecha',
+		`comentario`='$comentario'
+		WHERE `id_comentario`='$id_comentario'";  
+  
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible modificar');	 
+				  </script>";
+		}else{
+			echo "<script>
+					alert('Se ha modificado con éxito'); 
+                    window.location.replace('Edificio.php');					
+			      </script>"; 
+		}
+	}
+	
+       function EliminarComentario($form_data){
+        $fields = array_keys($form_data);
+		
+		$id_comentario = $_POST['id_comentario'];
+ 
+        $consulta = "UPDATE `comentario` SET `eliminar`='1'
+		WHERE `id_comentario`='$id_comentario'";  
+ 
+        $resultado_cons = mysqli_query($this->con,$consulta);
+	    
+        if($resultado_cons == false){
+			echo "<script> 
+					 alert('No es posible eliminar'); 
+				  </script>"; 
+		}else{
+			echo "<script>
+					alert('Se ha eliminado con éxito'); 
+                     window.location = window.location.pathname;
+                    //location.reload(); 					
+			      </script>"; 
+		}
+	}
+ 
+    public function cerrarBD(){
+		$this->con->close();
+	}
+ 
+ }
  
  
  

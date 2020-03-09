@@ -48,7 +48,7 @@ $('#load_tweets').load('pruebamap.php').fadeIn("slow");
   <button class="button" onclick="MostrarGrifo()">Grifos y Redes </button>
   <button class="button" onclick="MostrarZonadeSeguridad()">Zona de Seguridad</button>
    <?php if (isset($_SESSION['usuario'])){  ?>
-  <button href="Mutual.php" class="button" onclick="window.location.href = 'Mutual.php';">Mutual</button>
+  <button href="Mutual.php" class="button" onclick="window.location.href = 'Mutual.php';">Actividades y Mutual</button>
    <?php } ?>
   
 <?php
@@ -87,18 +87,18 @@ if(!empty($row["archivo"])){ ?>
         </div>
 		
 </div>
-		
+		 <?php
+  
+     require 'footer.php';
+	   
+?>	
         </div>
 	 
  
  
  
 
- <?php
-  
-     require 'footer.php';
-	   
-?>		
+ 	
  
 	
 <script>

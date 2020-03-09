@@ -49,6 +49,7 @@ if (!isset($_SESSION['usuario'])){
 	  <th>Fecha de Carga</th>
 	  <th>Fecha Vencimiento</th>
 	  <th>Ubicación</th>
+	  <th>Comentario</th>
 	  <th>Edificio</th>
 	  <th>Estado</th>
       <th>Imagen</th>
@@ -60,7 +61,7 @@ if (!isset($_SESSION['usuario'])){
  
   <?php  
 			$conn = mysqli_connect("localhost","root","","tesis");
-			$result = mysqli_query($conn, 'SELECT x.id_extintor,x.nombre,x.fecha_carga,x.fecha_venc,x.ubicacion,x.estado,x.id_piso,x.imagen,
+			$result = mysqli_query($conn, 'SELECT x.id_extintor,x.nombre,x.fecha_carga,x.fecha_venc,x.ubicacion,x.comentario,x.estado,x.id_piso,x.imagen,
 			                                      e.id_edificio,e.nombre AS nombre2,p.id_piso,p.id_edificio
 									  	   FROM extintor x,edificio e,piso p
 										   WHERE x.id_piso=p.id_piso 
@@ -89,6 +90,9 @@ if (!isset($_SESSION['usuario'])){
       echo '</td>';
 	  echo '<td>' ;
 	  echo  utf8_encode($row["ubicacion"]);
+      echo '</td>';
+	  echo '<td>' ;
+	  echo  utf8_encode($row["comentario"]);
       echo '</td>';
 	  echo '<td>' ;
 	  echo  utf8_encode($row["nombre2"]);
@@ -176,15 +180,14 @@ if (!isset($_SESSION['usuario'])){
                 echo'</td></select>';
 			  ?>
 			 <td><div id="select2lista"></div></td> </tr>
-			<table>
+<table>
   <thead>
     <tr>
       <th width="150">Nombre</th>
-      <th width="100">Fecha de Carga</th>
-      <th width="100">Fecha de Vencimiento</th>
-      <th width="600">Ubicación (Opcional)</th>
-      <th width="150">Estado</th>
-      <th width="150">Imagen (Opcional)</th>  
+      <th width="90">Fecha de Carga</th>
+      <th width="90">Fecha de Vencimiento</th>
+      <th width="200">Ubicación (Opcional)</th>
+      <th width="200">Estado</th>
     </tr>
   </thead>
   <tbody>  
@@ -195,12 +198,28 @@ if (!isset($_SESSION['usuario'])){
     <td><input type="date" id="inputFechaVenc" name="fecha_venc" class="form-control"  Required ></td>
 	<td><textarea  type="text" id="inputUbicacion" rows="5" cols="55"name="ubicacion" class="form-control" placeholder="Escriba la descripción"  Required> </textarea> 	</td>
 	<td><input type="text" id="inputEstado" name="estado" class="form-control" placeholder="Escriba el estado" Required ></td>
-	 <td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen"  > </td>
+    </tr>
+  </tbody>
+</table>
+
+ <table>
+  <thead>
+    <tr>
+      <th width="200">Comentario (Opcional)</th>
+      <th width="300">Imagen (Opcional)</th> 
+      <th width="500"> </th>	  
+    </tr>
+  </thead>
+  <tbody>  
+    <tr>
+    <td><textarea  type="text" id="inputComentario" rows="5" cols="55"name="comentario" class="form-control" placeholder="Escriba un comentario"  Required> </textarea> 	</td>
+	<td><input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen"  > </td>
     <td><button onclick="TomarIdPiso()" class="success button" type="submit" name="submitextintor"  >Registrar</button></td>
     </form>
     </tr>
   </tbody>
 </table>
+
 </div>
  
 <insertar>
@@ -252,6 +271,7 @@ if(isset($_POST['submitextintor'])){
 	"nombre"=>$_POST['nombre'],
     "fecha_carga"=>$_POST['fecha_carga'],
     "fecha_venc"=>$_POST['fecha_venc'],
+	"comentario"=>$_POST['comentario'],
     "id_piso"=>$_POST['id_piso']); 
  
     $nuevo = new GuardarExtintor("tesis"); 

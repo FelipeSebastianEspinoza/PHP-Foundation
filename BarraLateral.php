@@ -1,6 +1,7 @@
  
-     <b>Menú Administrador</b> 
-    <ul class="vertical menu">
+     <b>Menú Administrador</b><br>	 
+  
+    <ul class="vertical menu"><br>	
 	  <li><a href="Protocolos.php">Administrar Protocolos</a></li>
       <li><a href="Riesgos.php">Administrar Riesgos</a></li>
 	  <li><a href="Extintores.php">Administrar Extintores</a></li>
@@ -10,7 +11,8 @@
       <li><a href="EnfermedadesAsignadas.php">Enfermedades Reportadas</a></li>
 	  <li><a href="NGrifo.php">Administrar Grifos</a></li>
 	  <li><a href="NZonadeSeguridad.php">Administrar Zonas de Seguridad</a></li>
-	  <li><a href="PlandeEmergencia.php">Administrar Plan de Emergencia</a></li>
+	  <li><a href="PlandeEmergencia.php">Administrar Plan de Emergencia</a></li> 
+	  <li><a href="Seremi.php">Historial SEREMI</a></li>
 	 
 	  <div class="cell shrink">
 	  </br>

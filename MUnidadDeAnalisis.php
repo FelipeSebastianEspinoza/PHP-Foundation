@@ -134,7 +134,8 @@
 <?php
  $result = mysqli_query($conn, 'SELECT *
 							    FROM unidad_anexos
-								WHERE id_unidad='.$id_unidad.';');
+								WHERE eliminar!="1" 
+								AND id_unidad='.$id_unidad.';');
 		    while($row = mysqli_fetch_array($result)){ 
 ?>
  

@@ -14,7 +14,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foundation for Sites</title>
+    <title>Modificar Extintor</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
@@ -48,12 +48,11 @@
   <table>
   <thead>
     <tr>
-      <th width="250">Nombre</th>
+      <th width="200">Nombre</th>
       <th width="150">Fecha de Carga</th>
 	  <th width="150">Fecha de Vencimiento</th>
-      <th width="450">Ubicación (Opcional)</th>
 	  <th width="150">Estado</th>
-	  <th width="150">imagen</th>
+	  <th width="250">imagen</th>
     </tr>
   </thead> 
   
@@ -88,11 +87,7 @@
 	  echo '<td>' ;
 	  echo '<input type="date" id="fecha_venc"name="fecha_venc" class="form-control" value="'.$row["fecha_venc"].'" Required>';
 	  echo '</td>';
-  
-	  echo '<td>' ;
-	   ?> <textarea name="ubicacion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['ubicacion']) ?></textarea><?php
-      echo '</td>';
-	  
+ 
       echo '<td>' ;
 	  echo '<input type="text" id="estado"name="estado" class="form-control" value="'.$row["estado"].'" Required>';
 	  echo '</td>';
@@ -108,23 +103,46 @@
  }
 	 echo '<input type="file" id="inputImagen" name="ARCHIVO" size="20" class="form-control" placeholder="Imagen" >';
 	 echo '</td>';
-	  
-	  
-	  echo '<td>' ;
+	?>  
+<table>
+<thead>
+    <tr>
+	  <th width="250">Ubicación (Opcional)</th>
+      <th width="250">Comentario (Opcional)</th>
+	   <th width="800"> </th>
+    </tr>
+  </thead> 
+  
+   
+  <tbody>
+ 	 <td> 
+	    <textarea name="ubicacion" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['ubicacion']) ?></textarea> 
+     </td> 
+ 	 <td> 
+	    <textarea name="comentario" type="text"rows="5" cols="55"  Required><?php echo utf8_encode($row['comentario']) ?></textarea> 
+     </td>
+	 
+	  <td> 
  
-      echo'<button onclick="TomarIdPiso()" class="success button" type="submitmodificarextintor" name="submitmodificarextintor">Registrar</button> ';
+     <button onclick="TomarIdPiso()" class="success button" type="submitmodificarextintor" name="submitmodificarextintor">Registrar</button>  
  
-      echo '</td>';
+   </td> 
+	 
+ </tbody>
+</table>
+ <?php
  
       echo '</tr>';
     
 				}
-				include("desconexion.php");
+				//include("desconexion.php");
 		  ?>
  
    
   </tbody>
 </table>
+
+ 
 
 
 <?php 
@@ -177,9 +195,9 @@
 		  
                 </div>
                 </div>
-								      <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
+ <form class="formulario" action="" method="post" id="usrform" enctype="multipart/form-data"> 
  <input type="hidden" name="id_extintor" value="<?php echo $id_extintor ?>"/> 		
-       <td><button onclick="return confirm('Quitar Imagen?');"class="alert button" type="submit" name="eliminararchivo1">Quitar imagen</button> </td>
+ <td><button onclick="return confirm('Quitar Imagen?');"class="alert button" type="submit" name="eliminararchivo1">Quitar imagen</button> </td>
  </form>
           </div>
         </div>
@@ -219,13 +237,20 @@ if(isset($_POST['submitmodificarextintor'])){
 	"fecha_carga"=>$_POST['fecha_carga'],
     "fecha_venc"=>$_POST['fecha_venc'],
 	"ubicacion"=>$_POST['ubicacion'],
+	"comentario"=>$_POST['comentario'],
 	"estado"=>$_POST['estado'],
 	"id_piso"=>$_POST['id_piso']); 
   
     $nuevo = new GuardarExtintor("tesis"); 
     $nuevo->ModificarExtintor($campos);
 }
+ if(isset($_POST['eliminararchivo1'])){
  
+    $campos = array("id_extintor"=> $_POST['id_extintor']);  
+ 
+    $nuevo = new GuardarExtintor("tesis"); 
+    $nuevo->EliminarArchivo1($campos);
+}
 ?>
  
  <script>

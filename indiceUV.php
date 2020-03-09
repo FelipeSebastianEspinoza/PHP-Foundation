@@ -8,8 +8,10 @@
 
 include('simple_html_dom.php');
  
- $html = file_get_html('http://archivos.meteochile.gob.cl/portaldmc/meteochile/js/indice_radiacion.js')->plaintext;  
  
+   
+ $html = file_get_html('http://archivos.meteochile.gob.cl/portaldmc/meteochile/js/indice_radiacion.js')->plaintext;  
+
  $Ciudad = explode("});",  $html);
  
  
@@ -92,7 +94,7 @@ $Fecha2=str_replace('"','',$d8[1]);
    </tr>
   </tbody>
 </table>
-	<?php } ?>
+	<?php }  ?>
 <style>
  
 table.gridtable {
